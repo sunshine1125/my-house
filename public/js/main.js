@@ -8,7 +8,8 @@ const vm = new Vue({
     //   "date"  : new Date().toLocaleDateString(),
     //   "action": "remove"
     // },
-    apiRequestUrl: 'http://localhost:3000/data'
+    apiRequestUrl: 'http://localhost:3000/data',
+    isDisplay : false
   },
   mounted: function () {
     this.$http.get(this.apiRequestUrl).then(function (res) {
@@ -24,7 +25,7 @@ const vm = new Vue({
       })
     },
     add   : function () {
-      this.lists.push();
+      this.isDisplay = true;
       console.log(this.lists.length);
       let data = {
         "id"    : 7,
@@ -38,7 +39,7 @@ const vm = new Vue({
 
     },
     save  : function () {
-
+      this.isDisplay = false;
     }
 
   }
