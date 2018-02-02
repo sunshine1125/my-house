@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*ul li {*/
+  /*list-style-type: none;*/
+/*}*/
+
+#app {
+  width: 50%;
+  height: 100%;
+  margin: 50px auto;
+}
+table tr{
+  border: 1px solid #666;
+}
+td{
+  width:100px;
+  height:30px;
+  text-align: center;
+}
