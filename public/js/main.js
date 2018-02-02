@@ -1,47 +1,46 @@
 const vm = new Vue({
-  el     : "#app",
-  data   : {
-    lists        : [],
-    // displayData:{
-    //   "id"    : id,
-    //   "title" : title,
-    //   "date"  : new Date().toLocaleDateString(),
-    //   "action": "remove"
-    // },
-    apiRequestUrl: 'http://localhost:3000/data',
-    isDisplay : false
-  },
-  mounted: function () {
-    this.$http.get(this.apiRequestUrl).then(function (res) {
-      this.lists = res.data.data;
-      console.log(res.data.data);
-    })
-  },
-  methods: {
-    get   : function () {
-      this.$http.get(this.apiRequestUrl).then(function (res) {
-        this.lists = res.data.data;
-        console.log(res.data.data);
-      })
+    el     : "#app",
+    data   : {
+      lists        : [],
+      apiRequestUrl: 'http://localhost:3000/data',
+      isDisplay    : false,
+      newTitle     : '',
+      id           : 0
     },
-    add   : function () {
-      this.isDisplay = true;
-      console.log(this.lists.length);
-      let data = {
-        "id"    : 7,
-        "title" : "test",
-        "date"  : "2018-02-07",
-        "action": "remove"
-      };
-      this.$http.post('http://localhost:3000/data', data);
+    mounted: function () {
+      // this.$http.get(this.apiRequestUrl).then(function (res) {
+      //   this.lists = res.data.data;
+      //   console.log(res.data.data);
+      // })
     },
-    remove: function () {
+    methods: {
+      addData: function () {
+        this.isDisplay = true;
+        this.newTitle = '';
+      },
+      removeData : function (id) {
+        // return this.lists.find(function(item) {
+        //   if(item.id === id) {
+        //    this.lists.splice(id, 1);
+        //   }
+        // })
+        this.$http.delete(this.apiRequestUrl);
+      }
+      ,
+      saveData   : function () {
+        let displayData = {
+          "id"    : this.id,
+          "title" : this.newTitle,
+          "date"  : new Date().toLocaleDateString(),
+          "action": "删除数据"
+        };
+        this.lists.push(displayData);
+        this.id++;
+        this.isDisplay = false;
+        this.$http.post(this.apiRequestUrl, displayData);
+      }
 
-    },
-    save  : function () {
-      this.isDisplay = false;
     }
 
-  }
-
-});
+  })
+;

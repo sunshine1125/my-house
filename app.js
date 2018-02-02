@@ -13,16 +13,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
 app.get('/data', function (req, res) {
-  res.status(200).json(data);
+  // res.status(200).json(data);
+  res.send("get success");
 });
 app.post('/data', function (req, res) {
   //TODO
   console.log(req.body);
-  res.send('success');
+  res.send('post success');
 });
 
 app.delete('/data', function (req, res) {
-  res.send('delete');
+  console.log(req.body);
+  res.send('delete success');
 });
 app.listen(3000, function () {
   console.log('Listening on port 3000')

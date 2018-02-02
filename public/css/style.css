@@ -4,7 +4,7 @@
 }
 
 /*ul li {*/
-  /*list-style-type: none;*/
+/*list-style-type: none;*/
 /*}*/
 
 #app {
@@ -12,11 +12,22 @@
   height: 100%;
   margin: 50px auto;
 }
-table tr{
-  border: 1px solid #666;
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 30px;
 }
-td{
+
+table tr {
+  width: 400px;
+  height: 30px;
+
+}
+
+td,th {
   width:100px;
   height:30px;
   text-align: center;
+  border: 1px solid #666;
+
 }
