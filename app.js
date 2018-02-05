@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const mongoose = require('mongoose');
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -7,7 +8,8 @@ const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
 
-let data = require('./data.json');
+// let data = require('./data.json');
+mongoose.connect("mongodb://localhost:27017/test");
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
