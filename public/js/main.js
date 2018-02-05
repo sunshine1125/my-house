@@ -10,23 +10,22 @@ const vm = new Vue({
     mounted: function () {
       this.$http.get(this.apiRequestUrl).then(function (res) {
         this.lists = res.data;
-         console.log(res.data);
-        // console.log(res.data[res.data.length]);
-        // this.id = res.data[res.data.length].id || 0;
-        //console.log(this.id);
+        let len = res.data.length;
+        let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+        this.id = dataId ? parseInt(dataId) + 1 : 0;
       })
     },
     methods: {
-      addData: function () {
+      addData   : function () {
         this.isDisplay = true;
         this.newTitle = '';
       },
-      removeData : function (id) {
+      removeData: function (id) {
 
         this.$http.delete(this.apiRequestUrl);
       }
       ,
-      saveData   : function () {
+      saveData  : function () {
         let displayData = {
           "id"    : this.id,
           "title" : this.newTitle,

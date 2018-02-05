@@ -43,7 +43,6 @@ app.post('/data', function (req, res, next) {
   let id = req.body.id;
   let title = req.body.title;
   let date = req.body.date;
-  let action = req.action;
   User.findOne({id: id}, function (err, user) {
     if (err) {
       return next(err);
