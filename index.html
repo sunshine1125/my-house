@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>vue-express</title>
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="public/css/style.css">
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.5"></script>
 </head>
@@ -23,7 +23,7 @@
         <td>{{list.id}}</td>
         <td>{{list.title}}</td>
         <td>{{list.date}}</td>
-        <td><button @click="removeData(list.id)">{{list.action}}</button></td>
+        <td><button @click="removeData(list.id)">删除数据</button></td>
       </tr>
     </tbody>
   </table>
@@ -35,5 +35,5 @@
   </div>
 </div>
 </body>
-<script src="./js/main.js"></script>
+<script src="public/js/main.js"></script>
 </html>

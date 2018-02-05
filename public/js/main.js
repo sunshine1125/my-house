@@ -8,10 +8,13 @@ const vm = new Vue({
       id           : 0
     },
     mounted: function () {
-      // this.$http.get(this.apiRequestUrl).then(function (res) {
-      //   this.lists = res.data.data;
-      //   console.log(res.data.data);
-      // })
+      this.$http.get(this.apiRequestUrl).then(function (res) {
+        this.lists = res.data;
+         console.log(res.data);
+        // console.log(res.data[res.data.length]);
+        // this.id = res.data[res.data.length].id || 0;
+        //console.log(this.id);
+      })
     },
     methods: {
       addData: function () {
@@ -19,11 +22,7 @@ const vm = new Vue({
         this.newTitle = '';
       },
       removeData : function (id) {
-        // return this.lists.find(function(item) {
-        //   if(item.id === id) {
-        //    this.lists.splice(id, 1);
-        //   }
-        // })
+
         this.$http.delete(this.apiRequestUrl);
       }
       ,
