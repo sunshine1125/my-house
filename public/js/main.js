@@ -5,7 +5,10 @@ const vm = new Vue({
       apiRequestUrl: 'http://localhost:3000/data',
       isDisplay    : false,
       newTitle     : '',
-      id           : 0
+      id           : 0,
+      isEdit       : false,
+      changeTitle  : '',
+      editId       : ''
     },
     mounted: function () {
       this.$http.get(this.apiRequestUrl).then(function (res) {
@@ -21,8 +24,13 @@ const vm = new Vue({
         this.newTitle = '';
       },
       removeData: function (id) {
-
-        this.$http.delete(this.apiRequestUrl);
+        this.$http.delete(this.apiRequestUrl + '/' + id);
+        window.location.reload();
+      }
+      ,
+      editData  : function (id) {
+        this.isEdit = true;
+        this.editId = id;
       }
       ,
       saveData  : function () {
@@ -36,6 +44,13 @@ const vm = new Vue({
         this.id++;
         this.isDisplay = false;
         this.$http.post(this.apiRequestUrl, displayData);
+      },
+      sureEdit  : function () {
+        let changeTitle = {
+          title: this.changeTitle
+        };
+        this.isEdit = false;
+        this.$http.put(this.apiRequestUrl + '/' + this.editId, changeTitle);
       }
 
     }

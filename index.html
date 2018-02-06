@@ -21,9 +21,12 @@
     <tbody>
       <tr v-for="list in lists">
         <td>{{list.id}}</td>
-        <td>{{list.title}}</td>
+        <td><input type="text" v-model="list.title"></td>
         <td>{{list.date}}</td>
-        <td><button @click="removeData(list.id)">删除数据</button></td>
+        <td>
+          <button @click="editData(list.id, list.title)">编辑数据</button>
+          <button @click="removeData(list.id)">删除数据</button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -32,6 +35,11 @@
     <label for="title">Title</label>
     <input type="text" id="title" v-model="newTitle">
     <button @click="saveData()">确定</button>
+  </div>
+  <div v-show="isEdit">
+    <label for="changetitle">Title</label>
+    <input type="text" id="changetitle" v-model="changeTitle">
+    <button @click="sureEdit()">确认修改</button>
   </div>
 </div>
 </body>

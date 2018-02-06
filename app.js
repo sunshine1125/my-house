@@ -12,9 +12,9 @@ const urlencodedParser = bodyParser.urlencoded({extended: false});
 let db = mongoose.createConnection("mongodb://localhost:27017/test");
 
 const userSchema = mongoose.Schema({
-  id    : {type: String, require: true, unique: true},
-  title : {type: String},
-  date  : {type: Date}
+  id   : {type: String, require: true, unique: true},
+  title: {type: String},
+  date : {type: Date}
 });
 
 let User = db.model('mongoose', userSchema);
@@ -39,7 +39,6 @@ app.get('/data', function (req, res) {
   // res.send("get success");
 });
 app.post('/data', function (req, res, next) {
-  console.log(req.body);
   let id = req.body.id;
   let title = req.body.title;
   let date = req.body.date;
@@ -47,14 +46,13 @@ app.post('/data', function (req, res, next) {
     if (err) {
       return next(err);
     }
-    console.log(user);
     if (user) {
       res.status('200').json({code: 100, msg: '数据已经存在'})
     }
     let newUser = new User({
-      id    : id,
-      title : title,
-      date  : date
+      id   : id,
+      title: title,
+      date : date
     });
 
     newUser.save(next);
@@ -64,9 +62,25 @@ app.post('/data', function (req, res, next) {
   res.status('200').json({code: 0, msg: 'success'})
 });
 
-app.delete('/data', function (req, res) {
-  console.log(req.body);
-  res.send('delete success');
+app.put('/data/:id', function (req, res) {
+  console.log(req.params.id);
+  console.log(req.body.title);
+  User.update({id: req.params.id}, {title: req.body.title}, function (err, docs) {
+    if (err) {
+      console.log(err);
+    }
+    res.status('200').json({code: 2000, msg: 'update success' + docs})
+  });
+});
+
+app.delete('/data/:id', function (req, res) {
+  User.remove({id: req.params.id}, function (err, docs) {
+    if (err) {
+      console.log(err);
+    }
+    res.status('200').json({code: 1000, msg: 'delete success' + docs})
+  })
+
 });
 
 
