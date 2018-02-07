@@ -24,8 +24,15 @@ const vm = new Vue({
         this.newTitle = '';
       },
       removeData: function (id) {
-        this.$http.delete(this.apiRequestUrl + '/' + id);
-        window.location.reload();
+        let _this = this;
+        this.$http.delete(this.apiRequestUrl + '/' + id).then(function () {
+          _this.$http.get(_this.apiRequestUrl).then(function (res) {
+            this.lists = res.data;
+            let len = res.data.length;
+            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+            this.id = dataId ? parseInt(dataId) + 1 : 0;
+          })
+        });
       }
       ,
       editData  : function (id) {
@@ -34,6 +41,7 @@ const vm = new Vue({
       }
       ,
       saveData  : function () {
+        let _this = this;
         let displayData = {
           "id"    : this.id,
           "title" : this.newTitle,
@@ -43,14 +51,29 @@ const vm = new Vue({
         this.lists.push(displayData);
         this.id++;
         this.isDisplay = false;
-        this.$http.post(this.apiRequestUrl, displayData);
+        this.$http.post(this.apiRequestUrl, displayData).then(function () {
+          _this.$http.get(_this.apiRequestUrl).then(function (res) {
+            _this.lists = res.data;
+            let len = res.data.length;
+            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+            _this.id = dataId ? parseInt(dataId) + 1 : 0;
+          })
+        });
       },
       sureEdit  : function () {
+        let _this = this;
         let changeTitle = {
           title: this.changeTitle
         };
         this.isEdit = false;
-        this.$http.put(this.apiRequestUrl + '/' + this.editId, changeTitle);
+        this.$http.put(this.apiRequestUrl + '/' + this.editId, changeTitle).then(function () {
+          _this.$http.get(_this.apiRequestUrl).then(function (res) {
+            _this.lists = res.data;
+            let len = res.data.length;
+            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+            _this.id = dataId ? parseInt(dataId) + 1 : 0;
+          })
+        });
       }
 
     }
