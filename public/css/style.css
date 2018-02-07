@@ -24,13 +24,18 @@ table tr {
 
 }
 
-td,th {
-  width:100px;
-  height:30px;
+td, th {
+  width: 100px;
+  height: 30px;
   text-align: center;
   border: 1px solid #666;
 
 }
-button, input{
+
+button, input {
   outline: none;
+}
+
+.container {
+  margin-top: 25px;
 }

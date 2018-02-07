@@ -37,22 +37,24 @@
     </tbody>
   </table>
   <button class="btn btn-success" @click="addData()">增加数据</button>
-  <div v-show="isDisplay">
+  <div class="container" v-show="isDisplay">
     <div class="form-group row">
       <label class="col-sm-2 col-form-label" for="title">Title</label>
       <input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">
       <span class="col-sm-1"></span>
       <button class="btn btn-primary col-sm-1" @click="saveData()">确定</button>
+      <span class="col-sm-1"></span>
+      <button class="btn btn-secondary col-sm-1" @click="cancelData()">取消</button>
     </div>
   </div>
-  <div v-show="isEdit">
+  <div class="container" v-show="isEdit">
     <div class="form-group row" >
       <label class="col-sm-2 col-form-label" for="changeTitle">Title</label>
       <input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">
       <span class="col-sm-1"></span>
       <button class="btn btn-primary col-sm-1" @click="sureEdit()">确认修改</button>
       <span class="col-sm-1"></span>
-      <button class="btn btn-primary col-sm-1" @click="cancelEdit()">取消修改</button>
+      <button class="btn btn-secondary col-sm-1" @click="cancelEdit()">取消修改</button>
     </div>
   </div>
 </div>
