@@ -30,7 +30,7 @@ app.use('*', function (req, res, next) {
   next();
 });
 
-app.get('/data', function (req, res) {
+app.get('/', function (req, res) {
   // res.status(200).json(data);
   User.find()
     .exec(function (err, users) {
@@ -38,7 +38,7 @@ app.get('/data', function (req, res) {
     });
   // res.send("get success");
 });
-app.post('/data', function (req, res, next) {
+app.post('/', function (req, res, next) {
   let id = req.body.id;
   let title = req.body.title;
   let date = req.body.date;
@@ -62,7 +62,7 @@ app.post('/data', function (req, res, next) {
   res.status('200').json({code: 0, msg: 'success'})
 });
 
-app.put('/data/:id', function (req, res) {
+app.put('/:id', function (req, res) {
   console.log(req.params.id);
   console.log(req.body.title);
   User.update({id: req.params.id}, {title: req.body.title}, function (err, docs) {
@@ -73,7 +73,7 @@ app.put('/data/:id', function (req, res) {
   });
 });
 
-app.delete('/data/:id', function (req, res) {
+app.delete('/:id', function (req, res) {
   User.remove({id: req.params.id}, function (err, docs) {
     if (err) {
       console.log(err);

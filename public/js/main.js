@@ -2,7 +2,7 @@ const vm = new Vue({
     el     : "#app",
     data   : {
       lists        : [],
-      apiRequestUrl: 'http://localhost:3000/data',
+      apiRequestUrl: 'http://localhost:3000',
       isDisplay    : false,
       newTitle     : '',
       id           : 0,

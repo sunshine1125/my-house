@@ -22,8 +22,8 @@
     <tbody>
       <tr v-for="list in lists">
         <td scope="row">{{list.id}}</td>
-        <td><input type="text" v-model="list.title"></td>
-        <td>{{list.date}}</td>
+        <td>{{list.title}}</td>
+        <td>{{list.date.substring(0, 10)}}</td>
         <td>
           <button class="btn btn-info" @click="editData(list.id, list.title)">编辑数据</button>
           <button class="btn btn-danger" @click="removeData(list.id)">删除数据</button>
