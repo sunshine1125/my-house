@@ -50,20 +50,24 @@
         </tbody>
       </table>
       <button class="btn btn-success" @click="addData()">增加数据</button>
-      <div v-show="isDisplay">
+      <div class="container" v-show="isDisplay">
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="title">Title</label>
           <input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">
           <span class="col-sm-1"></span>
           <button class="btn btn-primary col-sm-1" @click="saveData()">确定</button>
+          <span class="col-sm-1"></span>
+          <button class="btn btn-secondary col-sm-1" @click="cancelData()">取消</button>
         </div>
       </div>
-      <div v-show="isEdit">
+      <div class="container" v-show="isEdit">
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="changeTitle">Title</label>
           <input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">
           <span class="col-sm-1"></span>
           <button class="btn btn-primary col-sm-1" @click="sureEdit()">确认修改</button>
+          <span class="col-sm-1"></span>
+          <button class="btn btn-secondary col-sm-1" @click="cancelEdit()">取消修改</button>
         </div>
       </div>
     </div>
@@ -71,6 +75,7 @@
 </template>
 
 <script>
+  import swal from 'sweetalert2'
   export default {
     name   : 'home',
     data() {
@@ -98,15 +103,27 @@
         this.newTitle = '';
       },
       removeData(id) {
-        let _this = this;
-        this.$http.delete('/api/forms/removeData/' + id).then(function () {
-          _this.$http.get('/api/forms/getData').then(function (res) {
-            this.lists = res.data;
-            let len = res.data.length;
-            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-            this.id = dataId ? parseInt(dataId) + 1 : 0;
-          })
-        });
+        swal({
+          title            : '确定要删除吗？',
+          type             : 'warning',
+          showCancelButton : true,
+          confirmButtonText: '确定',
+          cancelButtonText : '取消'
+        }).then((result) => {
+          if (result.value) {
+            let _this = this;
+            this.$http.delete('/api/forms/removeData/' + id).then(function () {
+              _this.$http.get('/api/forms/getData').then(function (res) {
+                this.lists = res.data;
+                let len = res.data.length;
+                let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+                this.id = dataId ? parseInt(dataId) + 1 : 0;
+              })
+            }).then(function () {
+              swal('删除成功！')
+            });
+          }
+        })
       }
       ,
       editData(id) {
@@ -116,45 +133,62 @@
       ,
       saveData() {
         let _this = this;
-        let displayData = {
-          "id"    : this.id,
-          "title" : this.newTitle,
-          "date"  : new Date().toLocaleDateString(),
-          "action": "删除数据"
-        };
-        this.lists.push(displayData);
-        this.id++;
-        this.isDisplay = false;
-        this.$http.post('/api/forms/addData', displayData).then(function () {
-          _this.$http.get('/api/forms/getData').then(function (res) {
-            _this.lists = res.data;
-            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-            _this.id = dataId ? parseInt(dataId) + 1 : 0;
-          })
-        });
+        if (this.newTitle) {
+          let displayData = {
+            "id"    : this.id,
+            "title" : this.newTitle,
+            "date"  : new Date().toLocaleDateString(),
+            "action": "删除数据"
+          };
+          this.lists.push(displayData);
+          this.id++;
+          this.isDisplay = false;
+          this.$http.post('/api/forms/addData', displayData).then(function () {
+            _this.$http.get('/api/forms/getData').then(function (res) {
+              _this.lists = res.data;
+              let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+              _this.id = dataId ? parseInt(dataId) + 1 : 0;
+            })
+          });
+        } else {
+          swal('Title不能为空！');
+        }
+
       },
       sureEdit() {
         let _this = this;
-        let changeTitle = {
-          title: this.changeTitle
-        };
+        if (this.changeTitle) {
+          let changeTitle = {
+            title: this.changeTitle
+          };
+          this.isEdit = false;
+          this.$http.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
+            _this.$http.get('/api/forms/getData').then(function (res) {
+              _this.lists = res.data;
+              let len = res.data.length;
+              let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+              _this.id = dataId ? parseInt(dataId) + 1 : 0;
+            })
+          });
+        } else {
+          swal('Title不能为空！');
+        }
+
+      },
+      cancelEdit:function () {
         this.isEdit = false;
-        this.$http.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
-          _this.$http.get('/api/forms/getData').then(function (res) {
-            _this.lists = res.data;
-            let len = res.data.length;
-            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-            _this.id = dataId ? parseInt(dataId) + 1 : 0;
-          })
-        });
+        this.changeTitle = '';
       }
     }
   }
 </script>
 <style scoped>
-  #table{
+  #table {
     width: 56%;
     height: 100%;
     margin: 50px auto;
+  }
+  .container {
+    margin-top: 25px;
   }
 </style>
