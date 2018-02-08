@@ -48,7 +48,7 @@ router.post('/forms/addData', (req, res, next)=> {
       date : date
     });
 
-    newUser.save(next);
+    newForm.save(next);
 
   });
 }, (req, res)=> {
