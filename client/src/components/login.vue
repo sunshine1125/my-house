@@ -25,6 +25,8 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  import swal from 'sweetalert2'
   export default {
     name   : 'login',
     data() {
@@ -35,20 +37,32 @@
     },
     methods: {
       login() {
-        this.$http.get('/api/login/getAccount')
-          .then(function (res) {
-            let userInfo = {
-              "username": this.username,
-              "password": this.password
-            };
-            return this.$http.post('/api/login/createAccount', userInfo);
-          })
-          .then(function (res) {
-            console.log(res);
-          })
-          .catch(function (reject) {
-            console.log(reject);
-          })
+        if (this.username && this.password) {
+          let userInfo = {
+            "username": this.username,
+            "password": this.password
+          };
+          axios.post('/api/login/createAccount', userInfo).then(()=> {
+            this.$router.push('/home');
+            localStorage.setItem('username', this.username);
+          });
+        } else {
+          swal('用户名和密码都不能为空！')
+        }
+
+
+
+//        axios.get('/api/login/getAccount')
+//          .then(function (res) {
+//
+//            return axios.post('/api/login/createAccount', userInfo);
+//          })
+//          .then(function (res) {
+//            console.log(res);
+//          })
+//          .catch(function (reject) {
+//            console.log(reject);
+//          })
       }
     }
   }

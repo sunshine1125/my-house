@@ -4,25 +4,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">欢迎 <span>(current)</span></a>
+            <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-               aria-haspopup="true" aria-expanded="false">
-              Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Action</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" href="#">Disabled</a>
+            <router-link class="nav-link" to="/">退出</router-link>
           </li>
         </ul>
       </div>
@@ -76,10 +61,13 @@
 
 <script>
   import swal from 'sweetalert2'
+  import axios from 'axios'
+
   export default {
     name   : 'home',
     data() {
       return {
+        username   : '',
         lists      : [],
         isDisplay  : false,
         newTitle   : '',
@@ -90,11 +78,18 @@
       }
     },
     mounted: function () {
-      this.$http.get('/api/forms/getData').then(function (res) {
+      let _this = this;
+      this.username = localStorage.getItem('username');
+      axios.get('/api/forms/getData').then(function (res) {
         console.log(res);
-        this.lists = res.data;
-        let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-        this.id = dataId ? parseInt(dataId) + 1 : 0;
+        if (res.data.length > 0) {
+          _this.lists = res.data;
+          let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+          _this.id = dataId ? parseInt(dataId) + 1 : 0;
+        } else {
+
+        }
+
       })
     },
     methods: {
@@ -112,12 +107,11 @@
         }).then((result) => {
           if (result.value) {
             let _this = this;
-            this.$http.delete('/api/forms/removeData/' + id).then(function () {
-              _this.$http.get('/api/forms/getData').then(function (res) {
-                this.lists = res.data;
-                let len = res.data.length;
+            axios.delete('/api/forms/removeData/' + id).then(function () {
+              axios.get('/api/forms/getData').then(function (res) {
+                _this.lists = res.data;
                 let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-                this.id = dataId ? parseInt(dataId) + 1 : 0;
+                _this.id = dataId ? parseInt(dataId) + 1 : 0;
               })
             }).then(function () {
               swal('删除成功！')
@@ -143,8 +137,8 @@
           this.lists.push(displayData);
           this.id++;
           this.isDisplay = false;
-          this.$http.post('/api/forms/addData', displayData).then(function () {
-            _this.$http.get('/api/forms/getData').then(function (res) {
+          axios.post('/api/forms/addData', displayData).then(function () {
+            axios.get('/api/forms/getData').then(function (res) {
               _this.lists = res.data;
               let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
               _this.id = dataId ? parseInt(dataId) + 1 : 0;
@@ -155,6 +149,10 @@
         }
 
       },
+      cancelData() {
+        this.isDisplay = false;
+        this.newTitle = '';
+      },
       sureEdit() {
         let _this = this;
         if (this.changeTitle) {
@@ -162,8 +160,8 @@
             title: this.changeTitle
           };
           this.isEdit = false;
-          this.$http.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
-            _this.$http.get('/api/forms/getData').then(function (res) {
+          axios.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
+            axios.get('/api/forms/getData').then(function (res) {
               _this.lists = res.data;
               let len = res.data.length;
               let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
@@ -175,7 +173,7 @@
         }
 
       },
-      cancelEdit:function () {
+      cancelEdit: function () {
         this.isEdit = false;
         this.changeTitle = '';
       }
@@ -188,7 +186,13 @@
     height: 100%;
     margin: 50px auto;
   }
+
   .container {
     margin-top: 25px;
+  }
+
+  #navbarSupportedContent ul {
+    margin-left: auto !important;
+    margin-right: 100px !important;
   }
 </style>

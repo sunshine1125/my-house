@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/form_mange');
+mongoose.connect('mongodb://localhost/tables');
 
 const db = mongoose.connection;
 db.once('error', function () {
