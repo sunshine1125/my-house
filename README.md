@@ -1,6 +1,6 @@
 # vue-express
 
-> vue+node+mongodb
+> vue+mongodb+express+node
 
 ## 前端启动
 

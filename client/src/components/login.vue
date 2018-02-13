@@ -47,7 +47,7 @@
           };
           this.$http.post('/api/authentication', userInfo)
             .then((res) => {
-              if(res.data.success) {
+              if (res.data.success) {
                 if (res.data.token) {
                   let userInfo = {
                     'username': this.username,
@@ -90,7 +90,8 @@
   input, button {
     outline: none;
   }
-  a{
+
+  a {
     display: block;
     width: 100%;
     text-decoration: none;
