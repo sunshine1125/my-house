@@ -7,13 +7,13 @@
             <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/">退出</router-link>
+            <a style="cursor: pointer;" class="nav-link" @click="logout()">退出</a>
           </li>
         </ul>
       </div>
     </nav>
     <div id="table">
-      <table class="table table-hover table-bordered">
+      <table v-show="lists.length>0" class="table table-hover table-bordered">
         <thead class="table-dark">
         <tr>
           <th scope="col">ID</th>
@@ -61,7 +61,6 @@
 
 <script>
   import swal from 'sweetalert2'
-  import axios from 'axios'
 
   export default {
     name   : 'home',
@@ -79,20 +78,25 @@
     },
     mounted: function () {
       let _this = this;
-      this.username = localStorage.getItem('username');
-      axios.get('/api/forms/getData').then(function (res) {
-        console.log(res);
-        if (res.data.length > 0) {
-          _this.lists = res.data;
-          let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-          _this.id = dataId ? parseInt(dataId) + 1 : 0;
-        } else {
+      if (localStorage.getItem('username')) {
+        this.username = JSON.parse(localStorage.getItem('username')).username;
+        _this.refreshData();
+      } else {
+        this.$router.push('/login');
+      }
 
-        }
-
-      })
     },
     methods: {
+      refreshData() {
+        let _this = this;
+        this.$http.get('/api/forms/getData').then(function (res) {
+          if (res.data.length > 0) {
+            _this.lists = res.data;
+            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
+            _this.id = dataId ? parseInt(dataId) + 1 : 0;
+          }
+        })
+      },
       addData() {
         this.isDisplay = true;
         this.newTitle = '';
@@ -107,12 +111,8 @@
         }).then((result) => {
           if (result.value) {
             let _this = this;
-            axios.delete('/api/forms/removeData/' + id).then(function () {
-              axios.get('/api/forms/getData').then(function (res) {
-                _this.lists = res.data;
-                let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-                _this.id = dataId ? parseInt(dataId) + 1 : 0;
-              })
+            this.$http.delete('/api/forms/removeData/' + id).then(function () {
+              _this.refreshData()
             }).then(function () {
               swal('删除成功！')
             });
@@ -129,20 +129,15 @@
         let _this = this;
         if (this.newTitle) {
           let displayData = {
-            "id"    : this.id,
-            "title" : this.newTitle,
-            "date"  : new Date().toLocaleDateString(),
-            "action": "删除数据"
+            "id"   : this.id,
+            "title": this.newTitle,
+            "date" : new Date().toLocaleDateString(),
           };
           this.lists.push(displayData);
           this.id++;
           this.isDisplay = false;
-          axios.post('/api/forms/addData', displayData).then(function () {
-            axios.get('/api/forms/getData').then(function (res) {
-              _this.lists = res.data;
-              let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-              _this.id = dataId ? parseInt(dataId) + 1 : 0;
-            })
+          this.$http.post('/api/forms/addData', displayData).then(function () {
+            _this.refreshData();
           });
         } else {
           swal('Title不能为空！');
@@ -160,13 +155,8 @@
             title: this.changeTitle
           };
           this.isEdit = false;
-          axios.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
-            axios.get('/api/forms/getData').then(function (res) {
-              _this.lists = res.data;
-              let len = res.data.length;
-              let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-              _this.id = dataId ? parseInt(dataId) + 1 : 0;
-            })
+          this.$http.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
+            _this.refreshData();
           });
         } else {
           swal('Title不能为空！');
@@ -176,6 +166,10 @@
       cancelEdit: function () {
         this.isEdit = false;
         this.changeTitle = '';
+      },
+      logout    : function () {
+        this.$router.push('/login');
+        localStorage.removeItem('username');
       }
     }
   }

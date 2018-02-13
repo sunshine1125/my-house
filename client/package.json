@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@websanova/vue-auth": "^2.21.2-beta",
     "axios": "^0.17.1",
     "bootstrap": "^4.0.0",
     "express": "^4.16.2",

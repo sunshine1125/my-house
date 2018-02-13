@@ -26,7 +26,7 @@ npm run build --report
 
 ## 打开终端 输入
 
- * cd C:\Program Files\MongoDB\Server\3.6
+ * cd C:\Program Files\MongoDB\Server\3.6\bin
  
  * mongod.exe --dbpath D:\liu.com\database
  
@@ -37,6 +37,8 @@ npm run build --report
  * mongo.exe
  
  * show dbs 查看所有数据库
+ 
+ * use tables 进入名为tables的数据库中
  
  * show collections 查看所有集合
  
