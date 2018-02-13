@@ -63,7 +63,7 @@
   import swal from 'sweetalert2'
 
   export default {
-    name   : 'home',
+    name   : 'index',
     data() {
       return {
         username   : '',

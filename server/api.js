@@ -10,6 +10,37 @@ const Forms = require('./models/form');
 mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret);// secret variable
 
+apiRoutes.post('/register', (req, res) => {
+    let newUser = new User({
+        username: req.body.username,
+        password: req.body.password,
+        admin   : true
+    })
+    newUser.save((err, data) => {
+        if (err) {
+            res.status('405').json({code: 405, msg: err})
+        } else {
+            // res.status('200').json({code: 0, msg: 'register success'})
+            const payload = {
+                admin: newUser.admin
+            };
+
+            let token = jwt.sign(payload, app.get('superSecret'), {
+                // expiresInMinutes: 1440  // expires in 24 hours
+            });
+
+            // return the information including token as JSON
+
+            return res.json({
+                success: true,
+                message: 'register success',
+                token  : token
+            })
+        }
+    })
+
+});
+
 apiRoutes.post('/authentication', (req, res) => {
     console.log(req.body.username);
     User.findOne({
@@ -33,9 +64,9 @@ apiRoutes.post('/authentication', (req, res) => {
 
                 // return the information including token as JSON
 
-                res.json({
+                return res.json({
                     success: true,
-                    message: 'Enjoy your token!',
+                    message: 'login success',
                     token  : token
                 })
             }
