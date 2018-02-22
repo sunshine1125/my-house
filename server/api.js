@@ -116,15 +116,14 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
     let id = req.body.id;
     let title = req.body.title;
     let date = req.body.date;
-    Forms.findOne({id: id}, (err, user) => {
+    Forms.findOne({title: title}, (err, data) => {
         if (err) {
             return next(err);
         }
-        if (user) {
+        if (data) {
             res.status('200').json({code: 100, msg: '数据已经存在'})
         }
         let newForm = new Forms({
-            id   : id,
             title: title,
             date : date
         });
@@ -137,16 +136,23 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
 });
 
 apiRoutes.put('/forms/editData/:id', (req, res) => {
-    Forms.update({id: req.params.id}, {title: req.body.title}, (err, docs) => {
+
+    Forms.findByIdAndUpdate(req.params.id, {title: req.body.title}, (err, docs) => {
         if (err) {
             console.log(err);
         }
         res.status('200').json({code: 2000, msg: 'update success' + docs})
     });
+    // Forms.update({_id: req.params.id}, {title: req.body.title}, (err, docs) => {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    //     res.status('200').json({code: 2000, msg: 'update success' + docs})
+    // });
 });
 
 apiRoutes.delete('/forms/removeData/:id', (req, res) => {
-    Forms.remove({id: req.params.id}, (err, docs) => {
+    Forms.remove({_id: req.params.id}, (err, docs) => {
         if (err) {
             console.log(err);
         }
