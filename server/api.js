@@ -113,7 +113,6 @@ apiRoutes.get('/forms/getData', (req, res) => {
 });
 
 apiRoutes.post('/forms/addData', (req, res, next) => {
-    let id = req.body.id;
     let title = req.body.title;
     let date = req.body.date;
     Forms.findOne({title: title}, (err, data) => {
@@ -128,7 +127,12 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
             date : date
         });
 
-        newForm.save(next);
+        newForm.save().then(record => {
+            Forms.find().exec((err, data) => {
+                console.log(data)
+                res.status('200').json(data);
+            })
+        })
 
     });
 }, (req, res) => {

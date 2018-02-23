@@ -84,11 +84,9 @@
       } else {
         this.$router.push('/login');
       }
-
     },
     methods: {
       refreshData() {
-        let _this = this;
         this.$http.get('/api/forms/getData').then(res => this.lists = res.data);
       },
       addData() {
@@ -109,27 +107,23 @@
             .then(() => swal('删除成功！'));
           }
         })
-      }
-      ,
+      },
       editData(id) {
         this.isEdit = true;
         this.editId = id;
-      }
-      ,
+      },
       saveData() {
         if (this.newTitle) {
           let displayData = {
             "title": this.newTitle,
             "date" : new Date().toLocaleDateString(),
           };
-          this.lists.push(displayData);
           this.isDisplay = false;
           this.$http.post('/api/forms/addData', displayData)
-          .then(this.refreshData());
+          .then(res => this.lists = res.data);
         } else {
           swal('Title不能为空！');
         }
-
       },
       cancelData() {
         this.isDisplay = false;
