@@ -6,6 +6,15 @@ const mongoose = require('mongoose');
 const config = require('./config');
 const User = require('./models/user');
 const Forms = require('./models/form');
+const nodemailer = require('nodemailer');
+let mailTransport = nodemailer.createTransport({
+    host            : 'smtp.qq.com',
+    secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
+    auth            : {
+        user: '371262808@qq.com',
+        pass: 'xxxxx'
+    },
+});
 
 mongoose.connect(config.database); // connect to database
 app.set('superSecret', config.secret);// secret variable
@@ -41,6 +50,27 @@ apiRoutes.post('/register', (req, res) => {
 
 });
 
+apiRoutes.get('/sendEmail', (req, res) => {
+    let options = {
+        from   : '"测试" <371262808@qq.com>',
+        to     : '"测试" <371262808@qq.com>',
+        subject: '一封来自sunshine1125的邮件',
+        text   : '一封来自sunshine1125的邮件',
+        html   : '<h1>你好，欢迎加入我们！</h1>' +
+                 '<p>请点击下面的按钮激活你的账户</p>' +
+                 '<a href="http://localhost:8080">点击激活账号</a>'
+
+    };
+    mailTransport.sendMail(options, (err, msg) => {
+        if (err) {
+            console.log(err);
+            res.send('发送失败' + err);
+        } else {
+            console.log(msg);
+            res.send('发送成功' + msg);
+        }
+    })
+});
 apiRoutes.post('/authentication', (req, res) => {
     console.log(req.body.username);
     User.findOne({
