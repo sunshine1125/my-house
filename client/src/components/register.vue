@@ -30,7 +30,12 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-8">
           <button class="btn btn-primary btn-block" type="button" @click="register()">注册</button>
-          <!--<button class="btn btn-primary btn-block" type="button" @click="goCheck()">去邮箱验证</button>-->
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-8">
+          已有账号，去<a href="/#/login">登录</a>
         </div>
       </div>
     </form>
@@ -52,36 +57,35 @@
     },
     methods: {
       register() {
-        if (this.username && this.password && this.mail && this.passAgain) {
+        let flag = false;
+        if (this.password !== this.passAgain) {
+          flag = false;
+        } else {
+          flag = true;
+        }
+        if (this.username && this.password && this.mail && this.passAgain && flag) {
           let userInfo = {
             "username": this.username,
-            "password": this.password
+            "password": this.password,
+            'email'   : this.mail
           };
           this.$http.post('/api/register', userInfo)
             .then((res) => {
               if (res.data.success) {
-                if (res.data.token) {
-                  let userInfo = {
-                    'username': this.username,
-                    'token'   : res.data.token,
-                    'email'   : this.mail,
+                  let email = {
+                    "email": this.mail
                   };
-                  localStorage.setItem('username', JSON.stringify(userInfo));
-                  this.$http.get('/api/sendEmail');
-                  this.$router.push('/checkEmail');
-//                  this.$router.push('/');
-                }
+                  this.$http.post('/api/sendEmail', email).then(res => {
+                    this.$router.push('/checkEmail');
+                  });
               } else {
                 swal(res.data.message);
               }
 
             })
         } else {
-          swal('用户名,邮箱和密码都不能为空！')
+          swal('用户名,邮箱和密码都不能为空且两次输入密码应一致！')
         }
-      },
-      goCheck() {
-
       }
     }
   }
@@ -104,5 +108,8 @@
 
   input, button {
     outline: none;
+  }
+  a {
+    cursor: pointer;
   }
 </style>

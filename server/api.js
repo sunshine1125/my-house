@@ -6,61 +6,51 @@ const mongoose = require('mongoose');
 const config = require('./config');
 const User = require('./models/user');
 const Forms = require('./models/form');
-const nodemailer = require('nodemailer');
-let mailTransport = nodemailer.createTransport({
-    host            : 'smtp.qq.com',
-    secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
-    auth            : {
-        user: '371262808@qq.com',
-        pass: 'xxxxxxxxxxx你的授权码'
-    },
-});
 
-mongoose.connect(config.database); // connect to database
-app.set('superSecret', config.secret);// secret variable
+mongoose.connect(config().databaseConnect().database); // connect to database
+app.set('superSecret', config().databaseConnect().secret);// secret variable
 
 apiRoutes.post('/register', (req, res) => {
     let newUser = new User({
-        username: req.body.username,
-        password: req.body.password,
-        admin   : true
-    })
-    newUser.save((err, data) => {
-        if (err) {
-            res.status('405').json({code: 405, msg: err})
+        username          : req.body.username,
+        password          : req.body.password,
+        email             : req.body.email,
+        confirmation_token: config().getconfirToken(),
+        admin             : true
+    });
+    User.findOne({
+        email: req.body.email
+    }, function (err, user) {
+        if (user) {
+            res.json({success: false, message: '该邮箱已经注册，请直接登录！'})
         } else {
-            // res.status('200').json({code: 0, msg: 'register success'})
-            const payload = {
-                admin: newUser.admin
-            };
-
-            let token = jwt.sign(payload, app.get('superSecret'), {
-                // expiresInMinutes: 1440  // expires in 24 hours
-            });
-
-            // return the information including token as JSON
-
-            return res.json({
-                success: true,
-                message: 'register success',
-                token  : token
+            newUser.save((err, data) => {
+                if (err) {
+                    res.status('405').json({code: 405, msg: err})
+                } else {
+                    return res.json({
+                        success: true,
+                        message: 'register success',
+                    })
+                }
             })
         }
-    })
+    });
 
 });
 
-apiRoutes.get('/sendEmail', (req, res) => {
+apiRoutes.post('/sendEmail', (req, res) => {
     let options = {
         from   : '"测试" <371262808@qq.com>',
-        to     : '"测试" <371262808@qq.com>',
+        to     : '"测试"' + req.body.email,
         subject: '一封来自sunshine1125的邮件',
         text   : '一封来自sunshine1125的邮件',
-        html   : '<h1>你好，欢迎加入我们！</h1>' +
-                 '<p>请点击下面的按钮激活你的账户</p>' +
-                 '<a href="http://localhost:8080">点击激活账号</a>'
-
+        html   : `<h1>你好，欢迎加入我们！</h1>
+                  <p>请点击下面的按钮激活你的账户</p>
+                  <a href="http://localhost:3000/checkActive/?email=${req.body.email}">点击激活账号</a>`
     };
+
+    let mailTransport = config().emailConfig();
     mailTransport.sendMail(options, (err, msg) => {
         if (err) {
             console.log(err);
@@ -71,18 +61,30 @@ apiRoutes.get('/sendEmail', (req, res) => {
         }
     })
 });
+
+
+apiRoutes.get('/checkActive', (req, res) => {
+    User.update({email: req.query.email}, {confirmation_token: null}, (err, doc) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.redirect('http://localhost:8080/#/login')
+        }
+    })
+});
+
 apiRoutes.post('/authentication', (req, res) => {
-    console.log(req.body.username);
     User.findOne({
-        username: req.body.username
+        email: req.body.username
     }, function (err, user) {
         if (err) throw err;
-
         if (!user) {
-            res.json({success: false, message: '验证失败，没有找到用户！'})
+            res.json({success: false, check: true, message: '验证失败，没有找到用户！'})
         } else if (user) {
             if (user.password != req.body.password) {
-                res.json({success: false, message: '密码输入错误'})
+                res.json({success: false, check: true, message: '密码输入错误'})
+            } else if (user.confirmation_token) {
+                res.json({success: false, check: false, message: '邮箱验证失败，请重新验证！'});
             } else {
                 const payload = {
                     admin: user.admin
@@ -93,7 +95,6 @@ apiRoutes.post('/authentication', (req, res) => {
                 });
 
                 // return the information including token as JSON
-
                 return res.json({
                     success: true,
                     message: 'login success',
