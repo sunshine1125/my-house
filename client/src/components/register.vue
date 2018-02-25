@@ -78,6 +78,7 @@
                   this.$http.post('/api/sendEmail', email).then(res => {
                     this.$router.push('/checkEmail');
                   });
+                  swal(res.data.message);
               } else {
                 swal(res.data.message);
               }

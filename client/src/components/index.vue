@@ -6,6 +6,9 @@
           <li class="nav-item active">
             <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
           </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/#/setPassword">重置密码</a>
+          </li>
           <li class="nav-item">
             <a style="cursor: pointer;" class="nav-link" @click="logout()">退出</a>
           </li>

@@ -16,6 +16,7 @@ apiRoutes.post('/register', (req, res) => {
         password          : req.body.password,
         email             : req.body.email,
         confirmation_token: config().getconfirToken(),
+        changePassword    : false,
         admin             : true
     });
     User.findOne({
@@ -54,14 +55,36 @@ apiRoutes.post('/sendEmail', (req, res) => {
     mailTransport.sendMail(options, (err, msg) => {
         if (err) {
             console.log(err);
-            res.send('发送失败' + err);
+            res.json({success: false, message: '发送失败！'})
         } else {
             console.log(msg);
-            res.send('发送成功' + msg);
+            res.json({success: true, message: '发送成功！'})
         }
     })
 });
 
+apiRoutes.post('/setPassword', (req, res) => {
+    let options = {
+        from   : '"测试" <371262808@qq.com>',
+        to     : '"测试"' + req.body.email,
+        subject: '一封来自sunshine1125的邮件',
+        text   : '一封来自sunshine1125的邮件',
+        html   : `<h1>修改密码</h1>
+                  <p>确认修改密码吗？</p>
+                  <a href="http://localhost:3000/checkPassword/?email=${req.body.email}">修改密码</a>`
+    };
+
+    let mailTransport = config().emailConfig();
+    mailTransport.sendMail(options, (err, msg) => {
+        if (err) {
+            console.log(err);
+            res.json({success: false, message: '发送失败！'});
+        } else {
+            console.log(msg);
+            res.json({success: true, message: '发送成功！'});
+        }
+    })
+});
 
 apiRoutes.get('/checkActive', (req, res) => {
     User.update({email: req.query.email}, {confirmation_token: null}, (err, doc) => {
@@ -69,6 +92,45 @@ apiRoutes.get('/checkActive', (req, res) => {
             res.send(err);
         } else {
             res.redirect('http://localhost:8080/#/login')
+        }
+    })
+});
+
+apiRoutes.get('/checkPassword', (req, res) => {
+    User.update({email: req.query.email}, {changePassword: true}, (err, doc) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.redirect('http://localhost:8080/#/setPassword')
+        }
+    })
+});
+
+apiRoutes.post('/singleUser', (req, res) => {
+    User.update({email: req.body.email}, {password: req.body.password}, (err, docs) => {
+        if (err) {
+            console.log(err);
+        }
+        res.status('200').json({code: 200, success: true, msg: 'password change success'})
+    });
+});
+
+apiRoutes.get('/canChangePassword/:email', (req, res) => {
+    User.findOne({
+        email: req.params.email
+    }, function (err, user) {
+        if (!user.changePassword) {
+            res.json({success: false, message: '邮箱验证失败！'})
+        } else {
+            res.json({success: true, message: '邮箱验证成功！'})
+        }
+    })
+});
+
+apiRoutes.put('/canChangePassword', (req, res) => {
+    User.update({email: req.body.email}, {changePassword: false}, (err, doc) => {
+        if (err) {
+            res.send(err);
         }
     })
 });
@@ -152,7 +214,7 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
             return next(err);
         }
         if (user) {
-            res.status('200').json({code: 100, msg: '数据已经存在'})
+            res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
         }
         let newForm = new Forms({
             id   : id,
@@ -164,7 +226,7 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
 
     });
 }, (req, res) => {
-    res.status('200').json({code: 0, msg: 'success'})
+    res.status('200').json({success: true, code: 0, msg: 'success'})
 });
 
 apiRoutes.put('/forms/editData/:id', (req, res) => {
@@ -172,7 +234,7 @@ apiRoutes.put('/forms/editData/:id', (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.status('200').json({code: 2000, msg: 'update success' + docs})
+        res.status('200').json({success: true, code: 200, msg: 'update success'})
     });
 });
 
@@ -181,7 +243,7 @@ apiRoutes.delete('/forms/removeData/:id', (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.status('200').json({code: 1000, msg: 'delete success' + docs})
+        res.status('200').json({success:true, code: 200, msg: 'delete success'})
     })
 
 });

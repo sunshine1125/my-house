@@ -4,6 +4,7 @@ import login from '@/components/login'
 import index from '@/components/index'
 import register from '@/components/register'
 import checkEmail from '@/components/checkEmail'
+import setPassword from '@/components/setPassword'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path     : '/checkEmail',
       name     : 'checkEmail',
       component: checkEmail
+    },
+    {
+      path     : '/setPassword',
+      name     : 'setPassword',
+      component: setPassword
     }
   ]
 })

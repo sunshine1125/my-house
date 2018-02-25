@@ -26,6 +26,12 @@
           还没有账号，快去<a href="/#/register">创建</a>一个吧！
         </div>
       </div>
+      <div class="form-group row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+          <a @click="setPassword()">忘记密码？</a>
+        </div>
+      </div>
     </form>
   </div>
 </template>
@@ -59,6 +65,7 @@
                   localStorage.setItem('username', JSON.stringify(userInfo));
                   this.$router.push('/');
                 }
+                swal(res.data.message);
               } else {
                 if (!res.data.check) {
                   swal({
@@ -80,6 +87,9 @@
         } else {
           swal('用户名和密码都不能为空！')
         }
+      },
+      setPassword() {
+        this.$router.push('/setPassword');
       }
     }
   }
