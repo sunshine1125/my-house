@@ -26,13 +26,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="list in lists">
-          <td scope="row">{{list.id}}</td>
+        <tr v-for="(list, index) in lists">
+          <td scope="row">{{index+1}}</td>
           <td>{{list.title}}</td>
           <td>{{list.date.substring(0, 10)}}</td>
           <td>
-            <button class="btn btn-info" @click="editData(list.id, list.title)">编辑数据</button>
-            <button class="btn btn-danger" @click="removeData(list.id)">删除数据</button>
+            <button class="btn btn-info" @click="editData(list._id, list.title)">编辑数据</button>
+            <button class="btn btn-danger" @click="removeData(list._id)">删除数据</button>
           </td>
         </tr>
         </tbody>
@@ -87,18 +87,10 @@
       } else {
         this.$router.push('/login');
       }
-
     },
     methods: {
       refreshData() {
-        let _this = this;
-        this.$http.get('/api/forms/getData').then(function (res) {
-          if (res.data.length > 0) {
-            _this.lists = res.data;
-            let dataId = res.data[Object.keys(res.data)[Object.keys(res.data).length - 1]].id;
-            _this.id = dataId ? parseInt(dataId) + 1 : 0;
-          }
-        })
+        this.$http.get('/api/forms/getData').then(res => this.lists = res.data);
       },
       addData() {
         this.isDisplay = true;
@@ -113,54 +105,41 @@
           cancelButtonText : '取消'
         }).then((result) => {
           if (result.value) {
-            let _this = this;
-            this.$http.delete('/api/forms/removeData/' + id).then(function () {
-              _this.refreshData()
-            }).then(function () {
-              swal('删除成功！')
-            });
+            this.$http.delete('/api/forms/removeData/' + id)
+            .then(() => this.refreshData())
+            .then(() => swal('删除成功！'));
           }
         })
-      }
-      ,
+      },
       editData(id) {
         this.isEdit = true;
         this.editId = id;
-      }
-      ,
+      },
       saveData() {
-        let _this = this;
         if (this.newTitle) {
           let displayData = {
-            "id"   : this.id,
             "title": this.newTitle,
             "date" : new Date().toLocaleDateString(),
           };
-          this.lists.push(displayData);
-          this.id++;
           this.isDisplay = false;
-          this.$http.post('/api/forms/addData', displayData).then(function () {
-            _this.refreshData();
-          });
+          this.$http.post('/api/forms/addData', displayData)
+          .then(res => this.lists = res.data);
         } else {
           swal('Title不能为空！');
         }
-
       },
       cancelData() {
         this.isDisplay = false;
         this.newTitle = '';
       },
       sureEdit() {
-        let _this = this;
         if (this.changeTitle) {
-          let changeTitle = {
+          let payload = {
             title: this.changeTitle
           };
           this.isEdit = false;
-          this.$http.put('/api/forms/editData/' + this.editId, changeTitle).then(function () {
-            _this.refreshData();
-          });
+          this.$http.put('/api/forms/editData/' + this.editId, payload)
+          .then(this.refreshData());
         } else {
           swal('Title不能为空！');
         }
