@@ -200,24 +200,22 @@ apiRoutes.use((req, res, next) => {
 
 apiRoutes.get('/forms/getData', (req, res) => {
     Forms.find()
-        .exec(function (err, users) {
-            res.status('200').json(users);
+        .exec(function (err, data) {
+            res.status('200').json(data);
         });
 });
 
 apiRoutes.post('/forms/addData', (req, res, next) => {
-    let id = req.body.id;
     let title = req.body.title;
     let date = req.body.date;
-    Forms.findOne({id: id}, (err, user) => {
+    Forms.findOne({title: title}, (err, data) => {
         if (err) {
             return next(err);
         }
-        if (user) {
+        if (data) {
             res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
         }
         let newForm = new Forms({
-            id   : id,
             title: title,
             date : date
         });
@@ -226,20 +224,28 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
 
     });
 }, (req, res) => {
-    res.status('200').json({success: true, code: 0, msg: 'success'})
-});
-
-apiRoutes.put('/forms/editData/:id', (req, res) => {
-    Forms.update({id: req.params.id}, {title: req.body.title}, (err, docs) => {
-        if (err) {
-            console.log(err);
-        }
-        res.status('200').json({success: true, code: 200, msg: 'update success'})
+    Forms.find().exec((err, data) => {
+        res.status('200').json(data);
     });
 });
 
+apiRoutes.put('/forms/editData/:id', (req, res) => {
+    Forms.findByIdAndUpdate(req.params.id, {title: req.body.title}, (err, docs) => {
+        if (err) {
+            console.log(err);
+        }
+        res.status('200').json({code: 2000, msg: 'update success'})
+    });
+    // Forms.update({id: req.params.id}, {title: req.body.title}, (err, docs) => {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    //     res.status('200').json({success: true, code: 200, msg: 'update success'})
+    // });
+});
+
 apiRoutes.delete('/forms/removeData/:id', (req, res) => {
-    Forms.remove({id: req.params.id}, (err, docs) => {
+    Forms.remove({_id: req.params.id}, (err, docs) => {
         if (err) {
             console.log(err);
         }
