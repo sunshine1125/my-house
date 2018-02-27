@@ -1,5 +1,6 @@
 <template>
   <div class="login container">
+    <h5 v-show="isChecked">邮箱验证成功，请登录</h5>
     <h2>登录</h2>
     <form>
       <div class="form-group row">
@@ -44,7 +45,13 @@
     data() {
       return {
         useremail: '',
-        password : ''
+        password : '',
+        isChecked: false
+      }
+    },
+    mounted: function () {
+      if (this.$route.query.passedCheck) {
+        this.isChecked = true;
       }
     },
     methods: {
@@ -100,7 +107,7 @@
     /*height: 300px;*/
     margin: auto;
     background: #eee;
-    padding-top: 40px;
+    padding-top: 20px;
     padding-bottom: 40px;
     margin-top: 200px;
   }
@@ -116,5 +123,8 @@
 
   a {
     cursor: pointer;
+  }
+  h5 {
+    margin-bottom: 20px;
   }
 </style>

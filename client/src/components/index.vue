@@ -27,37 +27,17 @@
         </thead>
         <tbody>
         <tr v-for="(list, index) in lists">
-          <td scope="row">{{index+1}}</td>
+          <td scope="row">{{index + 1}}</td>
           <td>{{list.title}}</td>
           <td>{{list.date.substring(0, 10)}}</td>
           <td>
-            <button class="btn btn-info" @click="editData(list._id, list.title)">编辑数据</button>
+            <button class="btn btn-info" @click="editData(list._id, list.title)">更新数据</button>
             <button class="btn btn-danger" @click="removeData(list._id)">删除数据</button>
           </td>
         </tr>
         </tbody>
       </table>
       <button class="btn btn-success" @click="addData()">增加数据</button>
-      <div class="container" v-show="isDisplay">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="title">Title</label>
-          <input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">
-          <span class="col-sm-1"></span>
-          <button class="btn btn-primary col-sm-1" @click="saveData()">确定</button>
-          <span class="col-sm-1"></span>
-          <button class="btn btn-secondary col-sm-1" @click="cancelData()">取消</button>
-        </div>
-      </div>
-      <div class="container" v-show="isEdit">
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label" for="changeTitle">Title</label>
-          <input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">
-          <span class="col-sm-1"></span>
-          <button class="btn btn-primary col-sm-1" @click="sureEdit()">确认修改</button>
-          <span class="col-sm-1"></span>
-          <button class="btn btn-secondary col-sm-1" @click="cancelEdit()">取消修改</button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -69,14 +49,8 @@
     name   : 'index',
     data() {
       return {
-        username   : '',
-        lists      : [],
-        isDisplay  : false,
-        newTitle   : '',
-        id         : 0,
-        isEdit     : false,
-        changeTitle: '',
-        editId     : ''
+        username: '',
+        lists   : []
       }
     },
     mounted: function () {
@@ -93,7 +67,11 @@
         this.$http.get('/api/forms/getData').then(res => this.lists = res.data);
       },
       addData() {
-        this.isDisplay = true;
+        this.$router.push('/dataChange');
+        let canAdd = {
+          "isDisplay": true
+        };
+        localStorage.setItem('canAdd', JSON.stringify(canAdd));
         this.newTitle = '';
       },
       removeData(id) {
@@ -106,50 +84,20 @@
         }).then((result) => {
           if (result.value) {
             this.$http.delete('/api/forms/removeData/' + id)
-            .then(() => this.refreshData())
-            .then(() => swal('删除成功！'));
+              .then(() => this.refreshData())
+              .then(() => swal('删除成功！'));
           }
         })
       },
       editData(id) {
-        this.isEdit = true;
-        this.editId = id;
+        this.$router.push('/dataChange');
+        let canEdit = {
+          "isEdit": true,
+          "id"    : id
+        };
+        localStorage.setItem('canEdit', JSON.stringify(canEdit));
       },
-      saveData() {
-        if (this.newTitle) {
-          let displayData = {
-            "title": this.newTitle,
-            "date" : new Date().toLocaleDateString(),
-          };
-          this.isDisplay = false;
-          this.$http.post('/api/forms/addData', displayData)
-          .then(res => this.lists = res.data);
-        } else {
-          swal('Title不能为空！');
-        }
-      },
-      cancelData() {
-        this.isDisplay = false;
-        this.newTitle = '';
-      },
-      sureEdit() {
-        if (this.changeTitle) {
-          let payload = {
-            title: this.changeTitle
-          };
-          this.isEdit = false;
-          this.$http.put('/api/forms/editData/' + this.editId, payload)
-          .then(this.refreshData());
-        } else {
-          swal('Title不能为空！');
-        }
-
-      },
-      cancelEdit: function () {
-        this.isEdit = false;
-        this.changeTitle = '';
-      },
-      logout    : function () {
+      logout: function () {
         this.$router.push('/login');
         localStorage.removeItem('username');
       }

@@ -5,6 +5,7 @@ import index from '@/components/index'
 import register from '@/components/register'
 import checkEmail from '@/components/checkEmail'
 import setPassword from '@/components/setPassword'
+import dataChange from '@/components/dataChange'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path     : '/setPassword',
       name     : 'setPassword',
       component: setPassword
+    },
+    {
+      path     : '/dataChange',
+      name     : 'dataChange',
+      component: dataChange
     }
   ]
 })

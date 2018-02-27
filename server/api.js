@@ -31,7 +31,7 @@ apiRoutes.post('/register', (req, res) => {
                 } else {
                     return res.json({
                         success: true,
-                        message: 'register success',
+                        message: '注册成功',
                     })
                 }
             })
@@ -91,7 +91,7 @@ apiRoutes.get('/checkActive', (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.redirect('http://localhost:8080/#/login')
+            res.redirect('http://localhost:8080/#/login?passedCheck=true')
         }
     })
 });
@@ -111,7 +111,7 @@ apiRoutes.post('/singleUser', (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.status('200').json({code: 200, success: true, msg: 'password change success'})
+        res.status('200').json({code: 200, success: true, msg: '密码修改成功'})
     });
 });
 
@@ -159,7 +159,7 @@ apiRoutes.post('/authentication', (req, res) => {
                 // return the information including token as JSON
                 return res.json({
                     success: true,
-                    message: 'login success',
+                    message: '登录成功',
                     token  : token
                 })
             }
@@ -224,9 +224,7 @@ apiRoutes.post('/forms/addData', (req, res, next) => {
 
     });
 }, (req, res) => {
-    Forms.find().exec((err, data) => {
-        res.status('200').json(data);
-    });
+    res.status('200').json({code: 200, success: true});
 });
 
 apiRoutes.put('/forms/editData/:id', (req, res) => {
@@ -234,7 +232,7 @@ apiRoutes.put('/forms/editData/:id', (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.status('200').json({code: 2000, msg: 'update success'})
+        res.status('200').json({code: 200, msg: '数据更新成功'})
     });
     // Forms.update({id: req.params.id}, {title: req.body.title}, (err, docs) => {
     //     if (err) {
@@ -249,7 +247,7 @@ apiRoutes.delete('/forms/removeData/:id', (req, res) => {
         if (err) {
             console.log(err);
         }
-        res.status('200').json({success:true, code: 200, msg: 'delete success'})
+        res.status('200').json({success:true, code: 200, msg: '删除成功'})
     })
 
 });
