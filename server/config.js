@@ -1,5 +1,8 @@
 const nodemailer = require('nodemailer');
 
+let config = process.env.NODE_ENV === 'development' ? require('./config/prod') : require('./config/dev')
+console.log(config);
+
 module.exports = function configInfo() {
     return {
         databaseConnect: databaseConnect,
@@ -21,7 +24,7 @@ function emailConfig() {
         secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
         auth            : {
             user: '371262808@qq.com',
-            pass: 'xxx'
+            pass: config.pass
         },
     });
 }

@@ -1,6 +1,9 @@
 {
   "name": "node-token-jwt",
   "main": "index.js",
+  "scripts": {
+    "test": "set NODE_ENV=development && node index.js"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
