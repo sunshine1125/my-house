@@ -45,6 +45,6 @@ function getconfirToken() {
 function urlConfig() {
     return {
         "login"         : "http://localhost:8080/#/login?passedCheck=true",
-        "changePassword": "http://localhost:8080/#/setPassword"
+        "changePassword": "http://localhost:8080/#/forgotPassword"
     }
 }

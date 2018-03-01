@@ -48,7 +48,7 @@
   import swal from 'sweetalert2'
 
   export default {
-    name   : 'setPassword',
+    name   : 'forgotPassword',
     data() {
       return {
         useremail : '',
@@ -78,10 +78,9 @@
           let userMail = {
             "email": this.useremail
           };
-          this.$http.post('/api/setPassword', userMail).then(res => {
+          this.$http.post('/api/forgotPassword', userMail).then(res => {
             this.isCheck = false;
             localStorage.setItem("email", JSON.stringify(userMail));
-
           })
         } else {
           swal('请输入邮箱！')
@@ -96,9 +95,9 @@
           };
           this.$http.post('/api/singleUser', password).then(res => {
             // 密码修改成功
+            this.$http.put('/api/canChangePassword', password);
             this.$router.push('/login');
             localStorage.removeItem('email');
-            this.$http.put('/api/canChangePassword', password);
           })
 
         } else {

@@ -30,7 +30,7 @@
       <div class="form-group row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
-          <a @click="setPassword()">忘记密码？</a>
+          <a @click="forgotPassword()">忘记密码？</a>
         </div>
       </div>
     </form>
@@ -101,8 +101,8 @@
           swal('用户名和密码都不能为空！')
         }
       },
-      setPassword() {
-        this.$router.push('/setPassword');
+      forgotPassword() {
+        this.$router.push('/forgotPassword');
       }
     }
   }

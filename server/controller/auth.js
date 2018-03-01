@@ -60,7 +60,7 @@ apiRoutes.post('/sendEmail', (req, res) => {
     })
 });
 
-apiRoutes.post('/setPassword', (req, res) => {
+apiRoutes.post('/forgotPassword', (req, res) => {
     let options = {
         from   : '"测试" <371262808@qq.com>',
         to     : '"测试"' + req.body.email,
@@ -104,12 +104,21 @@ apiRoutes.get('/checkPassword', (req, res) => {
 });
 
 apiRoutes.post('/singleUser', (req, res) => {
-    User.update({email: req.body.email}, {password: req.body.password}, (err, docs) => {
-        if (err) {
-            console.log(err);
-        }
-        res.status('200').json({code: 200, success: true, msg: '密码修改成功'})
-    });
+    console.log(req.body.oldPassword)
+    if (req.body.oldPassword) {
+        User.findOne({email: req.body.email}, (err, user) => {
+            if (user.password != req.body.oldPassword) {
+                res.json({code: 401, success: false, message: '旧密码输入错误'})
+            } else {
+                User.update({email: req.body.email}, {password: req.body.password}, (err, docs) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    res.status('200').json({code: 200, success: true, message: '密码修改成功'})
+                });
+            }
+        })
+    }
 });
 
 apiRoutes.get('/canChangePassword/:email', (req, res) => {
@@ -131,6 +140,16 @@ apiRoutes.put('/canChangePassword', (req, res) => {
         }
     })
 });
+
+// apiRoutes.get('/password', (req, res) => {
+//     User.findOne({email: req.body.email}, (err, user) => {
+//         if (user.password != req.body.oldPassword) {
+//             res.status('401').json({code: 401, success: false, msg: '旧密码输入错误'})
+//         } else {
+//             res.
+//         }
+//     })
+// });
 
 apiRoutes.post('/authentication', (req, res) => {
     User.findOne({
