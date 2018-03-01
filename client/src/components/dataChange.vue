@@ -59,7 +59,7 @@
             "date" : new Date().toLocaleDateString(),
           };
           this.isDisplay = false;
-          this.$http.post('/api/forms/addData', displayData).then(res => {
+          this.$http.post('/api/post/add', displayData).then(res => {
             this.$router.push('/');
             localStorage.removeItem('canAdd');
           })
@@ -80,7 +80,7 @@
           };
           this.isEdit = false;
           console.log(this.editId);
-          this.$http.put('/api/forms/editData/' + this.editId, payload)
+          this.$http.put('/api/post/edit/' + this.editId, payload)
             .then(res => {
               this.$router.push("/");
               localStorage.removeItem('canEdit');

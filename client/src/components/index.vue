@@ -64,7 +64,7 @@
     },
     methods: {
       refreshData() {
-        this.$http.get('/api/forms/getData').then(res => this.lists = res.data);
+        this.$http.get('/api/post/get').then(res => this.lists = res.data);
       },
       addData() {
         this.$router.push('/dataChange');
@@ -83,7 +83,7 @@
           cancelButtonText : '取消'
         }).then((result) => {
           if (result.value) {
-            this.$http.delete('/api/forms/removeData/' + id)
+            this.$http.delete('/api/post/remove/' + id)
               .then(() => this.refreshData())
               .then(() => swal('删除成功！'));
           }

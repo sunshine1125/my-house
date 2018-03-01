@@ -50,9 +50,14 @@
       }
     },
     mounted: function () {
-      if (this.$route.query.passedCheck) {
-        this.isChecked = true;
+      if(this.$route.query == null) {
+        this.isChecked = false;
+      } else {
+        if (this.$route.query.passedCheck) {
+          this.isChecked = true;
+        }
       }
+
     },
     methods: {
       login() {
@@ -83,8 +88,9 @@
                     let email = {
                       "email": this.useremail
                     };
-                    this.$http.post('/api/sendEmail', email);
-                    this.$router.push('/checkEmail')
+                    this.$http.post('/api/sendEmail', email).then(res => {
+                      this.$router.push('/checkEmail');
+                    });
                   });
                 } else {
                   swal(res.data.message);

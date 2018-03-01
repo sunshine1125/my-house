@@ -2,14 +2,11 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const app = express();
 const apiRoutes = express.Router();
-const mongoose = require('mongoose');
-const config = require('./config');
-const User = require('./models/user');
-const Forms = require('./models/form');
+const User = require('../models/user');
+let config = process.env.NODE_ENV === 'development' ? require('../config/prod') : require('../config/dev')
+console.log(config);
 
-mongoose.connect(config().databaseConnect().database); // connect to database
 app.set('superSecret', config().databaseConnect().secret);// secret variable
-
 apiRoutes.post('/register', (req, res) => {
     let newUser = new User({
         username          : req.body.username,
@@ -91,7 +88,7 @@ apiRoutes.get('/checkActive', (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.redirect('http://localhost:8080/#/login?passedCheck=true')
+            res.redirect(config().urlConfig().login)
         }
     })
 });
@@ -101,7 +98,7 @@ apiRoutes.get('/checkPassword', (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.redirect('http://localhost:8080/#/setPassword')
+            res.redirect(config().urlConfig().changePassword)
         }
     })
 });
@@ -167,88 +164,4 @@ apiRoutes.post('/authentication', (req, res) => {
     })
 });
 
-// route middleware to verify a token
-apiRoutes.use((req, res, next) => {
-    // check header or url parameters or post parameters for token
-    // let token = req.body.token || req.query.token || req.headers['x-access-token'];
-    let token = req.headers.authorization;
-
-    // decode token
-    if (token) {
-
-        // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function (err, decoded) {
-            if (err) {
-                return res.json({success: false, message: 'Failed to authenticate token.'});
-            } else {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                next();
-            }
-        });
-
-    } else {
-
-        // if there is no token
-        // return an error
-        return res.status(403).send({
-            success: false,
-            message: 'No token provided.'
-        });
-    }
-});
-
-apiRoutes.get('/forms/getData', (req, res) => {
-    Forms.find()
-        .exec(function (err, data) {
-            res.status('200').json(data);
-        });
-});
-
-apiRoutes.post('/forms/addData', (req, res, next) => {
-    let title = req.body.title;
-    let date = req.body.date;
-    Forms.findOne({title: title}, (err, data) => {
-        if (err) {
-            return next(err);
-        }
-        if (data) {
-            res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
-        }
-        let newForm = new Forms({
-            title: title,
-            date : date
-        });
-
-        newForm.save(next);
-
-    });
-}, (req, res) => {
-    res.status('200').json({code: 200, success: true});
-});
-
-apiRoutes.put('/forms/editData/:id', (req, res) => {
-    Forms.findByIdAndUpdate(req.params.id, {title: req.body.title}, (err, docs) => {
-        if (err) {
-            console.log(err);
-        }
-        res.status('200').json({code: 200, msg: '数据更新成功'})
-    });
-    // Forms.update({id: req.params.id}, {title: req.body.title}, (err, docs) => {
-    //     if (err) {
-    //         console.log(err);
-    //     }
-    //     res.status('200').json({success: true, code: 200, msg: 'update success'})
-    // });
-});
-
-apiRoutes.delete('/forms/removeData/:id', (req, res) => {
-    Forms.remove({_id: req.params.id}, (err, docs) => {
-        if (err) {
-            console.log(err);
-        }
-        res.status('200').json({success:true, code: 200, msg: '删除成功'})
-    })
-
-});
 module.exports = apiRoutes;
