@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcrypt');
+const SALT_ROUNDS = 10;
 const express = require('express');
 const app = express();
 const apiRoutes = express.Router();
@@ -7,7 +9,10 @@ let config = process.env.NODE_ENV === 'development' ? require('../config/prod') 
 console.log(config);
 
 app.set('superSecret', config().databaseConnect().secret);// secret variable
+
+// user register
 apiRoutes.post('/register', (req, res) => {
+    let password = req.body.password;
     let newUser = new User({
         username          : req.body.username,
         password          : req.body.password,
@@ -22,6 +27,11 @@ apiRoutes.post('/register', (req, res) => {
         if (user) {
             res.json({success: false, message: '该邮箱已经注册，请直接登录！'})
         } else {
+            // // 生成salt并获取hash值
+            // bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
+            //     bcrypt.hash()
+            // });
+
             newUser.save((err, data) => {
                 if (err) {
                     res.status('405').json({code: 405, msg: err})
@@ -52,7 +62,7 @@ apiRoutes.post('/sendEmail', (req, res) => {
     mailTransport.sendMail(options, (err, msg) => {
         if (err) {
             console.log(err);
-            res.json({success: false, message: '发送失败！'})
+            res.json({success: false, message: '发送失败！', error: err})
         } else {
             console.log(msg);
             res.json({success: true, message: '发送成功！'})
@@ -140,16 +150,6 @@ apiRoutes.put('/canChangePassword', (req, res) => {
         }
     })
 });
-
-// apiRoutes.get('/password', (req, res) => {
-//     User.findOne({email: req.body.email}, (err, user) => {
-//         if (user.password != req.body.oldPassword) {
-//             res.status('401').json({code: 401, success: false, msg: '旧密码输入错误'})
-//         } else {
-//             res.
-//         }
-//     })
-// });
 
 apiRoutes.post('/authentication', (req, res) => {
     User.findOne({

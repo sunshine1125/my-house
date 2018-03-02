@@ -2,9 +2,10 @@
   "name": "node-token-jwt",
   "main": "index.js",
   "scripts": {
-    "test": "set NODE_ENV=development && nodemon"
+    "test": "set NODE_ENV=development&& nodemon"
   },
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.1",
