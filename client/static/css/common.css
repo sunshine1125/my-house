@@ -1,0 +1,18 @@
+.form-group__message {
+  display: none;
+  font-size: .95rem;
+  color: #CC3333;
+  margin-left: 10em;
+}
+.form-group--error .form-group__message {
+  display: block;
+  color: #CC3333;
+}
+.form-group--error input, .form-group--error input:focus, .form-group--error input:hover, .form-group--error textarea {
+  border-color: #CC3333;
+}
+.form-group--error .change__message {
+  display: inline-block;
+  margin-left: 0;
+  margin-top: 10px;
+}

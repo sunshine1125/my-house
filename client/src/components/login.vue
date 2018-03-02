@@ -18,7 +18,7 @@
       <div class="form-group row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
-          <button class="btn btn-primary btn-block" type="button" @click="login()">登录</button>
+          <button :disabled="useremail === '' || password === ''" class="btn btn-primary btn-block" type="button" @click="login()">登录</button>
         </div>
       </div>
       <div class="form-group row">
@@ -61,45 +61,41 @@
     },
     methods: {
       login() {
-        if (this.useremail && this.password) {
-          let userInfo = {
-            "username": this.useremail,
-            "password": this.password
-          };
-          this.$http.post('/api/authentication', userInfo)
-            .then((res) => {
-              if (res.data.success) {
-                if (res.data.token) {
-                  let userInfo = {
-                    'username': this.useremail,
-                    'token'   : res.data.token
-                  };
-                  localStorage.setItem('username', JSON.stringify(userInfo));
-                  this.$router.push('/');
-                }
-                swal(res.data.message);
-              } else {
-                if (!res.data.check) {
-                  swal({
-                    title            : res.data.message,
-                    type             : 'warning',
-                    confirmButtonText: '去验证',
-                  }).then((result) => {
-                    let email = {
-                      "email": this.useremail
-                    };
-                    this.$http.post('/api/sendEmail', email).then(res => {
-                      this.$router.push('/checkEmail');
-                    });
-                  });
-                } else {
-                  swal(res.data.message);
-                }
+        let userInfo = {
+          "username": this.useremail,
+          "password": this.password
+        };
+        this.$http.post('/api/authentication', userInfo)
+          .then((res) => {
+            if (res.data.success) {
+              if (res.data.token) {
+                let userInfo = {
+                  'username': this.useremail,
+                  'token'   : res.data.token
+                };
+                localStorage.setItem('username', JSON.stringify(userInfo));
+                this.$router.push('/');
               }
-            })
-        } else {
-          swal('用户名和密码都不能为空！')
-        }
+              swal(res.data.message);
+            } else {
+              if (!res.data.check) {
+                swal({
+                  title            : res.data.message,
+                  type             : 'warning',
+                  confirmButtonText: '去验证',
+                }).then((result) => {
+                  let email = {
+                    "email": this.useremail
+                  };
+                  this.$http.post('/api/sendEmail', email).then(res => {
+                    this.$router.push('/checkEmail');
+                  });
+                });
+              } else {
+                swal(res.data.message);
+              }
+            }
+          })
       },
       forgotPassword() {
         this.$router.push('/forgotPassword');
