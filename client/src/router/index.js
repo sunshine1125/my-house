@@ -7,6 +7,7 @@ import checkEmail from '@/components/checkEmail'
 import forgotPassword from '@/components/forgotPassword'
 import dataChange from '@/components/dataChange'
 import resetPassword from '@/components/resetPassword'
+import detail from '@/components/detail'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path     : '/resetPassword',
       name     : 'resetPassword',
       component: resetPassword
+    },
+    {
+      path     : '/detail',
+      name     : 'detail',
+      component: detail
     }
   ]
 })

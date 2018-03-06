@@ -39,10 +39,6 @@ apiRoutes.post('/register', (req, res) => {
                         if (err) {
                             res.status('405').json({code: 405, msg: err})
                         } else {
-                            // let post = new Posts({
-                            //     uid  : newUser._id,
-                            // });
-                            // post.save();
                             return res.json({
                                 success: true,
                                 message: '注册成功',

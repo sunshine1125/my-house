@@ -1,16 +1,17 @@
 const express = require('express');
 const apiRoutes = express.Router();
 const Posts = require('../models/post');
+const md = require('markdown-it')();
 
-
+// get user's post
 apiRoutes.get('/post/get/:id', (req, res) => {
     let userId = req.params.id;
     let matchData = [];
     Posts.find()
         .populate({path: 'uid'})
         .exec((err, data) => {
-            data.forEach( item => {
-                if(item.uid._id == userId) {
+            data.forEach(item => {
+                if (item.uid._id == userId) {
                     matchData.push(item);
                 }
             });
@@ -18,10 +19,30 @@ apiRoutes.get('/post/get/:id', (req, res) => {
         });
 });
 
+// get Detail post
+apiRoutes.get('/post/getDetailPost/:id', (req, res) => {
+    let postId = req.params.id;
+    Posts.findOne({_id: postId})
+        .exec((err, post) => {
+            post.content = md.render(post.content);
+            res.status('200').json(post);
+        });
+});
+
+// get Single post
+apiRoutes.get('/post/getSinglePost/:id', (req, res) => {
+    let postId = req.params.id;
+    Posts.findOne({_id: postId})
+        .exec((err, post) => {
+            res.status('200').json(post);
+        });
+});
+
 apiRoutes.post('/post/add/:id', (req, res, next) => {
     let userId = req.params.id;
     let title = req.body.title;
     let date = req.body.date;
+    let content = req.body.content;
     Posts.findOne({title: title}, (err, data) => {
         if (err) {
             return next(err);
@@ -30,16 +51,12 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
             res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
         }
         let newForm = new Posts({
-            title: title,
-            date : date,
-            uid  : userId
+            title  : title,
+            content: content,
+            date   : date,
+            uid    : userId
         });
         newForm.save(next);
-        // User.findOne({_id: userId}, (err, data) => {
-        //     if (data) {
-        //
-        //     }
-        // })
 
     });
 }, (req, res) => {
@@ -47,7 +64,7 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
 });
 
 apiRoutes.put('/post/edit/:id', (req, res) => {
-    Posts.findByIdAndUpdate(req.params.id, {title: req.body.title}, (err, docs) => {
+    Posts.findByIdAndUpdate(req.params.id, {title: req.body.title, content: req.body.content}, (err, docs) => {
         if (err) {
             console.log(err);
         }

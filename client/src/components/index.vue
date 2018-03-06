@@ -19,25 +19,28 @@
       <table v-show="lists.length>0" class="table table-hover table-bordered">
         <thead class="table-dark">
         <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Title</th>
-          <th scope="col">Date</th>
-          <th scope="col">Action</th>
+          <th scope="col">序号</th>
+          <th scope="col">标题</th>
+          <th scope="col">内容</th>
+          <th scope="col">日期</th>
+          <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(list, index) in lists">
           <td scope="row">{{index + 1}}</td>
           <td>{{list.title}}</td>
+          <td class="content">{{list.content}}</td>
           <td>{{list.date.substring(0, 10)}}</td>
           <td>
-            <button class="btn btn-info" @click="editData(list._id, list.title)">更新数据</button>
-            <button class="btn btn-danger" @click="removeData(list._id)">删除数据</button>
+            <button class="btn btn-primary" @click="goShowData(list._id, list.title)">查看</button>
+            <button class="btn btn-info" @click="editData(list._id, list.title)">更新</button>
+            <button class="btn btn-danger" @click="removeData(list._id)">删除</button>
           </td>
         </tr>
         </tbody>
       </table>
-      <button class="btn btn-success" @click="addData()">增加数据</button>
+      <button class="btn btn-success" @click="addData()">新增</button>
     </div>
   </div>
 </template>
@@ -60,7 +63,6 @@
         this.username = JSON.parse(localStorage.getItem('username')).username;
         this.userId = JSON.parse(localStorage.getItem('username'))._id;
         _this.refreshData();
-        console.log(this.userId)
       } else {
         this.$router.push('/login');
       }
@@ -70,11 +72,7 @@
         this.$http.get('/api/post/get/' + this.userId).then(res => this.lists = res.data);
       },
       addData() {
-        this.$router.push('/dataChange');
-        let canAdd = {
-          "isDisplay": true
-        };
-        localStorage.setItem('canAdd', JSON.stringify(canAdd));
+        this.$router.push('/dataChange/?type=add');
         this.newTitle = '';
       },
       removeData(id) {
@@ -93,16 +91,18 @@
         })
       },
       editData(id) {
-        this.$router.push('/dataChange');
+        this.$router.push('/dataChange/?type=edit');
         let canEdit = {
-          "isEdit": true,
-          "id"    : id
+          "editId": id
         };
         localStorage.setItem('canEdit', JSON.stringify(canEdit));
       },
       logout: function () {
         this.$router.push('/login');
         localStorage.removeItem('username');
+      },
+      goShowData(id) {
+        this.$router.push('/detail/?id=' + id);
       }
     }
   }
@@ -121,5 +121,9 @@
   #navbarSupportedContent ul {
     margin-left: auto !important;
     margin-right: 100px !important;
+  }
+
+  .content {
+    overflow: hidden;
   }
 </style>
