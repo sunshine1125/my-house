@@ -6,14 +6,14 @@ const app = express();
 const apiRoutes = express.Router();
 const User = require('../models/user');
 let config = process.env.NODE_ENV === 'development' ? require('../config/prod') : require('../config/dev')
-console.log(config);
 
 app.set('superSecret', config().databaseConnect().secret);// secret variable
 
 // user register
 apiRoutes.post('/register', (req, res) => {
     let password = req.body.password;
-    let noop = function() {};
+    let noop = function () {
+    };
     // 生成salt并获取hash值
     bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
         bcrypt.hash(password, salt, noop, (err, hash) => {
@@ -26,7 +26,7 @@ apiRoutes.post('/register', (req, res) => {
                 email             : req.body.email,
                 confirmation_token: config().getconfirToken(),
                 changePassword    : false,
-                admin             : true
+                admin             : true,
             });
             User.findOne({
                 email: req.body.email
@@ -39,6 +39,10 @@ apiRoutes.post('/register', (req, res) => {
                         if (err) {
                             res.status('405').json({code: 405, msg: err})
                         } else {
+                            // let post = new Posts({
+                            //     uid  : newUser._id,
+                            // });
+                            // post.save();
                             return res.json({
                                 success: true,
                                 message: '注册成功',
@@ -127,13 +131,13 @@ apiRoutes.post('/singleUser', (req, res) => {
                     res.json({code: 401, success: false, message: '旧密码输入错误'})
                 } else {
                     let password = req.body.password;
-                    let noop = function() {};
+                    let noop = function () {
+                    };
                     // 生成salt并获取hash值
                     bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
                         bcrypt.hash(password, salt, noop, (err, hash) => {
                             // 把hash值赋值给password变量
                             password = hash;
-                            console.log(password);
                             User.update({email: req.body.email}, {password: password}, (err, docs) => {
                                 if (err) {
                                     console.log(err);
@@ -195,6 +199,7 @@ apiRoutes.post('/authentication', (req, res) => {
                     return res.json({
                         success: true,
                         message: '登录成功',
+                        _id    : user._id,
                         token  : token
                     })
                 }

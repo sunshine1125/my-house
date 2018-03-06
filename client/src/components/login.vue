@@ -18,7 +18,9 @@
       <div class="form-group row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8">
-          <button :disabled="useremail === '' || password === ''" class="btn btn-primary btn-block" type="button" @click="login()">登录</button>
+          <button :disabled="useremail === '' || password === ''" class="btn btn-primary btn-block" type="button"
+                  @click="login()">登录
+          </button>
         </div>
       </div>
       <div class="form-group row">
@@ -50,7 +52,7 @@
       }
     },
     mounted: function () {
-      if(this.$route.query == null) {
+      if (this.$route.query == null) {
         this.isChecked = false;
       } else {
         if (this.$route.query.passedCheck) {
@@ -71,6 +73,7 @@
               if (res.data.token) {
                 let userInfo = {
                   'username': this.useremail,
+                  '_id'     : res.data._id,
                   'token'   : res.data.token
                 };
                 localStorage.setItem('username', JSON.stringify(userInfo));
@@ -126,6 +129,7 @@
   a {
     cursor: pointer;
   }
+
   h5 {
     margin-bottom: 20px;
   }

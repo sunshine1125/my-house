@@ -38,7 +38,8 @@
         newTitle   : '',
         isEdit     : false,
         changeTitle: '',
-        editId     : ''
+        editId     : '',
+        userId     : ''
       }
     },
     mounted: function () {
@@ -49,6 +50,7 @@
         this.isEdit = JSON.parse(localStorage.getItem('canEdit')).isEdit;
         this.editId = JSON.parse(localStorage.getItem('canEdit')).id;
       }
+      this.userId = JSON.parse(localStorage.getItem('username'))._id;
 
     },
     methods: {
@@ -59,7 +61,7 @@
             "date" : new Date().toLocaleDateString(),
           };
           this.isDisplay = false;
-          this.$http.post('/api/post/add', displayData).then(res => {
+          this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
             this.$router.push('/');
             localStorage.removeItem('canAdd');
           })

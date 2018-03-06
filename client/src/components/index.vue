@@ -50,21 +50,24 @@
     data() {
       return {
         username: '',
-        lists   : []
+        lists   : [],
+        userId  : ''
       }
     },
     mounted: function () {
       let _this = this;
       if (localStorage.getItem('username')) {
         this.username = JSON.parse(localStorage.getItem('username')).username;
+        this.userId = JSON.parse(localStorage.getItem('username'))._id;
         _this.refreshData();
+        console.log(this.userId)
       } else {
         this.$router.push('/login');
       }
     },
     methods: {
       refreshData() {
-        this.$http.get('/api/post/get').then(res => this.lists = res.data);
+        this.$http.get('/api/post/get/' + this.userId).then(res => this.lists = res.data);
       },
       addData() {
         this.$router.push('/dataChange');
