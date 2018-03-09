@@ -8,7 +8,7 @@
           <label class="col-sm-2 col-form-label" for="title">标题</label>
           <input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">
         </div>
-        <uploadImage></uploadImage>
+        <uploadImage @imgHasChange="imgChange"></uploadImage>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">内容</label>
           <mavon-editor :ishljs="true" v-model="content"></mavon-editor>
@@ -25,7 +25,7 @@
           <label class="col-sm-2 col-form-label" for="changeTitle">标题</label>
           <input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">
         </div>
-        <uploadImage :imgSrc="imgPath"></uploadImage>
+        <uploadImage @imgHasChange="imgChange" :imgSrc="imgPath"></uploadImage>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">内容</label>
           <mavon-editor :ishljs="true" v-model="changeContent"></mavon-editor>
@@ -80,7 +80,7 @@
       }
       this.userId = JSON.parse(localStorage.getItem('username'))._id;
 
-    },
+      },
     methods   : {
       saveData() {
         if (this.newTitle) {
@@ -129,6 +129,9 @@
         this.changeTitle = '';
         this.$router.push("/");
         localStorage.removeItem('canEdit');
+      },
+      imgChange (val) {
+        this.imgPath = val;
       }
     },
     components: {
