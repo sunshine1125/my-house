@@ -20,6 +20,7 @@
         <thead class="table-dark">
         <tr>
           <th scope="col">序号</th>
+          <th scope="col">图片</th>
           <th scope="col">标题</th>
           <th scope="col">内容</th>
           <th scope="col">日期</th>
@@ -29,8 +30,9 @@
         <tbody>
         <tr v-for="(list, index) in lists">
           <td scope="row">{{index + 1}}</td>
+          <td><img width="50px" height="50px" :src= "list.image" /></td>
           <td>{{list.title}}</td>
-          <td class="content">{{list.content}}</td>
+          <td><div class="content">{{list.content}}</div></td>
           <td>{{list.date.substring(0, 10)}}</td>
           <td>
             <button class="btn btn-primary" @click="goShowData(list._id, list.title)">查看</button>
@@ -109,7 +111,7 @@
 </script>
 <style scoped>
   #table {
-    width: 56%;
+    width: 70%;
     height: 100%;
     margin: 50px auto;
   }
@@ -124,6 +126,9 @@
   }
 
   .content {
+    max-width: 500px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 </style>

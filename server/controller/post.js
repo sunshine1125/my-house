@@ -1,7 +1,21 @@
 const express = require('express');
 const apiRoutes = express.Router();
+// 引入Multiparty解析表单
+const multipary = require('multiparty');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
+const fs = require('fs');
 const Posts = require('../models/post');
 const md = require('markdown-it')();
+
+
+apiRoutes.post('/post/uploadImage', upload.single('file'), (req, res) => {
+    let file = {
+        path   : req.file.path,
+        name   : req.file.filename
+    };
+    res.json({success: true, file: file});
+});
 
 // get user's post
 apiRoutes.get('/post/get/:id', (req, res) => {
@@ -42,6 +56,7 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
     let userId = req.params.id;
     let title = req.body.title;
     let date = req.body.date;
+    let image = req.body.image;
     let content = req.body.content;
     Posts.findOne({title: title}, (err, data) => {
         if (err) {
@@ -51,6 +66,7 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
             res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
         }
         let newForm = new Posts({
+            image  : image,
             title  : title,
             content: content,
             date   : date,
@@ -64,7 +80,7 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
 });
 
 apiRoutes.put('/post/edit/:id', (req, res) => {
-    Posts.findByIdAndUpdate(req.params.id, {title: req.body.title, content: req.body.content}, (err, docs) => {
+    Posts.findByIdAndUpdate(req.params.id, {title: req.body.title, content: req.body.content, image: req.body.image}, (err, docs) => {
         if (err) {
             console.log(err);
         }
@@ -81,6 +97,5 @@ apiRoutes.delete('/post/remove/:id', (req, res) => {
     })
 
 });
-
 
 module.exports = apiRoutes;

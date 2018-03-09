@@ -8,14 +8,10 @@
           <label class="col-sm-2 col-form-label" for="title">标题</label>
           <input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">
         </div>
-        <div class="form-group row">
-          <label class="col-sm-2 col-form-label">上传图片</label>
-          <input type="file" id="file" @change="upLoad($event)">
-        </div>
+        <uploadImage></uploadImage>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">内容</label>
           <mavon-editor :ishljs="true" v-model="content"></mavon-editor>
-          <!--<textarea name="" cols="30" rows="10" v-model="content" id="content"></textarea>-->
         </div>
         <div class="form-group row">
           <span class="col-sm-2"></span>
@@ -29,10 +25,10 @@
           <label class="col-sm-2 col-form-label" for="changeTitle">标题</label>
           <input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">
         </div>
+        <uploadImage :imgSrc="imgPath"></uploadImage>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">内容</label>
           <mavon-editor :ishljs="true" v-model="changeContent"></mavon-editor>
-          <!--<textarea name="" cols="30" rows="10" v-model="changeContent" id="changeContent"></textarea>-->
         </div>
         <div class="form-group row">
           <span class="col-sm-2"></span>
@@ -47,6 +43,7 @@
 
 <script>
   import swal from 'sweetalert2'
+  import uploadImage from './upLoadImage.vue'
 
   export default {
     name      : 'dataChange',
@@ -60,11 +57,13 @@
         isEdit       : false,
         changeTitle  : '',
         editId       : '',
-        userId       : ''
+        userId       : '',
+        imgResult    : '',
+        imgTemplate  : '',
+        imgPath      : ''
       }
     },
     mounted   : function () {
-
       if (this.$route.query.type === 'add') {
         this.isDisplay = true;
       }
@@ -75,6 +74,7 @@
           this.$http.get('/api/post/getSinglePost/' + this.editId).then(res => {
             this.changeTitle = res.data.title;
             this.changeContent = res.data.content;
+            this.imgPath = res.data.image;
           });
         }
       }
@@ -85,6 +85,7 @@
       saveData() {
         if (this.newTitle) {
           let displayData = {
+            "image"  : this.imgPath,
             "title"  : this.newTitle,
             "content": this.content,
             "date"   : new Date().toLocaleDateString()
@@ -107,6 +108,7 @@
       sureEdit() {
         if (this.changeTitle) {
           let payload = {
+            image  : this.imgPath,
             title  : this.changeTitle,
             content: this.changeContent
           };
@@ -127,21 +129,11 @@
         this.changeTitle = '';
         this.$router.push("/");
         localStorage.removeItem('canEdit');
-      },
-      upLoad(e) {
-        // TODO
-//        let file = e.target.files[0];
-//        let reader = new FileReader();
-//        let that = this;
-//        reader.readAsDataURL(file);
-//        reader.onload = function() {
-//          let result = that.result;
-//          console.log(result);
-////        })
-//        }
       }
     },
-    components: {}
+    components: {
+      uploadImage
+    }
   }
 </script>
 <style scoped>
@@ -150,21 +142,23 @@
   }
 
   #table {
-    width: 56%;
+    width: 90%;
     height: 100%;
     margin: 20px auto;
   }
 
   .container {
     margin-top: 25px;
+    max-width: 100%;
   }
 
   .markdown-body {
     width: 82%;
-    height: 400px;
+    min-height: 450px;
   }
 
   .v-note-wrapper.fullscreen {
     width: 100%;
+    height: 100%;
   }
 </style>

@@ -1,0 +1,72 @@
+<template>
+  <div class="uploadImage">
+    <div class="form-group row">
+      <label class="col-sm-2 col-form-label">上传图片</label>
+      <input type="file" id="file" name="imgData" accept="image/*" @change="upLoad($event)">
+    </div>
+    <div class="form-group row" v-show="imgSrc">
+      <span class="col-sm-2"></span>
+      <div><img width="100px" height="150px" :src="imgSrc"/></div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+  export default {
+    name      : 'uploadImage',
+    props: ['imgSrc'],
+    data() {
+      return {
+
+      }
+    },
+    methods   : {
+      upLoad(e) {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = (e) => {
+          this.imgResult = e.target.result;
+        };
+        // upload image
+        let fd = new FormData();
+        fd.append('file', file);
+        this.$http.post('/api/post/uploadImage', fd, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then(res => {
+          this.imgSrc = res.data.file.path;
+        });
+      }
+    },
+    components: {}
+  }
+</script>
+<style scoped>
+  h3 {
+    margin-top: 30px;
+  }
+
+  #table {
+    width: 90%;
+    height: 100%;
+    margin: 20px auto;
+  }
+
+  .container {
+    margin-top: 25px;
+    max-width: 100%;
+  }
+
+  .markdown-body {
+    width: 82%;
+    min-height: 450px;
+  }
+
+  .v-note-wrapper.fullscreen {
+    width: 100%;
+    height: 100%;
+  }
+</style>

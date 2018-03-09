@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 let PostSchema = new Schema({
+    image  : String,
     title  : String,
     content: String,
     date   : Date,
