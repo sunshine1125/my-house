@@ -6,7 +6,8 @@
     </div>
     <div class="form-group row" v-show="imgPath !== '' || imgSrc">
       <span class="col-sm-2"></span>
-      <div><img width="100px" height="150px" :src="imgPath"/></div>
+      <div v-if="imgSrc"><img width="100px" height="150px" :src="imgSrc"/></div>
+      <div v-if="!imgSrc"><img width="100px" height="150px" :src="imgPath"/></div>
     </div>
   </div>
 </template>
@@ -42,7 +43,7 @@
             'Content-Type': undefined
           }
         }).then(res => {
-          this.imgPath = res.data.file.path;
+          this.imgPath = res.data.path;
           this.$emit('imgHasChange', this.imgPath);
         });
       }

@@ -90,7 +90,6 @@
     display: block;
     opacity: 0.5;
     z-index: 10;
-    border: 1px solid #000;
   }
 
   .detail .header h1 {

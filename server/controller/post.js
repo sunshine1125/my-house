@@ -3,18 +3,21 @@ const apiRoutes = express.Router();
 // 引入Multiparty解析表单
 const multipary = require('multiparty');
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
-const fs = require('fs');
 const Posts = require('../models/post');
 const md = require('markdown-it')();
 
-
+const storage = multer.diskStorage({
+    destination: (req, res, cb) => {
+        cb(null, './public/uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname)
+    }
+});
+const upload = multer({storage: storage});
 apiRoutes.post('/post/uploadImage', upload.single('file'), (req, res) => {
-    let file = {
-        path   : req.file.path,
-        name   : req.file.filename
-    };
-    res.json({success: true, file: file});
+    let url = '/api/uploads/' + req.file.filename;
+    res.json({success: true, path: url});
 });
 
 // get user's post

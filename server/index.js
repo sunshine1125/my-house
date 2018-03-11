@@ -8,6 +8,7 @@ const auth = require('./controller/auth');
 const post = require('./controller/post');
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
+app.use(express.static('public'));
 // use body parser so we can get info from post or url parameters
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

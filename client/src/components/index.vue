@@ -1,49 +1,80 @@
 <template>
   <div class="home">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
-          </li>
-          <li class="nav-item active">
-            <a class="nav-link" href="/#/resetPassword">重置密码</a>
-          </li>
-          <li class="nav-item">
-            <a style="cursor: pointer;" class="nav-link" @click="logout()">退出</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <div id="table">
-      <table v-show="lists.length>0" class="table table-hover table-bordered">
-        <thead class="table-dark">
-        <tr>
-          <th scope="col">序号</th>
-          <th scope="col">图片</th>
-          <th scope="col">标题</th>
-          <th scope="col">内容</th>
-          <th scope="col">日期</th>
-          <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(list, index) in lists">
-          <td scope="row">{{index + 1}}</td>
-          <td><img width="50px" height="50px" :src= "list.image" /></td>
-          <td>{{list.title}}</td>
-          <td><div class="content">{{list.content}}</div></td>
-          <td>{{list.date.substring(0, 10)}}</td>
-          <td>
-            <button class="btn btn-primary" @click="goShowData(list._id, list.title)">查看</button>
-            <button class="btn btn-info" @click="editData(list._id, list.title)">更新</button>
-            <button class="btn btn-danger" @click="removeData(list._id)">删除</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <button class="btn btn-success" @click="addData()">新增</button>
-    </div>
+    <el-container>
+      <el-header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="/#/resetPassword">重置密码</a>
+              </li>
+              <li class="nav-item">
+                <a style="cursor: pointer;" class="nav-link" @click="logout()">退出</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </el-header>
+      <el-container>
+        <el-aside width="200px">
+          <!--左侧导航-->
+          <div class="main-left">
+            <el-menu default-active="/articleManage" class="el-menu-vertical-demo" :router="true">
+              <el-menu-item index="/" :class="{'isActive': active}">文章管理</el-menu-item>
+              <!--<el-menu-item index="/tagManage" :class="{'isActive': !active}">标签管理</el-menu-item>-->
+            </el-menu>
+          </div>
+        </el-aside>
+        <el-main>
+          <div style="margin-bottom: 20px;">
+            <el-button type="success" @click="addData()">新增</el-button>
+          </div>
+          <el-table :data="lists" border style="width: 100%;">
+            <el-table-column
+              type="index"
+              label="序号"
+              min-width="10%">
+            </el-table-column>
+            <el-table-column
+              prop="image"
+              label="图片"
+              min-width="15%" style="overflow: hidden">
+              <template slot-scope="scope">
+                <img width="100%" height="100%" :src="scope.row.image" alt="">
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="title"
+              label="标题"
+              min-width="20%">
+            </el-table-column>
+            <el-table-column
+              prop="content"
+              label="内容"
+              min-width="25%"
+              class="content">
+            </el-table-column>
+            <el-table-column
+              prop="date"
+              label="日期"
+              min-width="10%">
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              min-width="20%">
+              <template slot-scope="scope">
+                <el-button @click="goShowData(scope.row)" size="small">查看</el-button>
+                <el-button @click="editData(scope.row)" type="primary" size="small">编辑</el-button>
+                <el-button @click="removeData(scope.row)" type="danger" size="small">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
 
@@ -54,6 +85,7 @@
     name   : 'index',
     data() {
       return {
+        active  : true,
         username: '',
         lists   : [],
         userId  : ''
@@ -77,7 +109,7 @@
         this.$router.push('/dataChange/?type=add');
         this.newTitle = '';
       },
-      removeData(id) {
+      removeData(row) {
         swal({
           title            : '确定要删除吗？',
           type             : 'warning',
@@ -86,16 +118,16 @@
           cancelButtonText : '取消'
         }).then((result) => {
           if (result.value) {
-            this.$http.delete('/api/post/remove/' + id)
+            this.$http.delete('/api/post/remove/' + row._id)
               .then(() => this.refreshData())
               .then(() => swal('删除成功！'));
           }
         })
       },
-      editData(id) {
+      editData(row) {
         this.$router.push('/dataChange/?type=edit');
         let canEdit = {
-          "editId": id
+          "editId": row._id
         };
         localStorage.setItem('canEdit', JSON.stringify(canEdit));
       },
@@ -103,21 +135,27 @@
         this.$router.push('/login');
         localStorage.removeItem('username');
       },
-      goShowData(id) {
-        this.$router.push('/detail/?id=' + id);
+      goShowData(row) {
+        this.$router.push('/detail/?id=' + row._id);
       }
     }
   }
 </script>
-<style scoped>
+<style>
   #table {
-    width: 70%;
+    width: 100%;
     height: 100%;
-    margin: 50px auto;
+    margin: 10px auto;
   }
 
   .container {
     margin-top: 25px;
+  }
+  aside .main-left {
+    height: 100%;
+  }
+  aside .main-left ul {
+    height: 100%;
   }
 
   #navbarSupportedContent ul {
@@ -125,10 +163,13 @@
     margin-right: 100px !important;
   }
 
-  .content {
-    max-width: 500px;
+  .el-table td .cell {
+    height: 50px !important;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .el-table th .cell {
+    text-align: center;
   }
 </style>

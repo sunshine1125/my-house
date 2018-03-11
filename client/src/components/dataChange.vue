@@ -79,7 +79,6 @@
         }
       }
       this.userId = JSON.parse(localStorage.getItem('username'))._id;
-
       },
     methods   : {
       saveData() {
