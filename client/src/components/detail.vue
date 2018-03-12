@@ -5,7 +5,7 @@
         <img :src="imgSrc" alt="">
         <h1 class="title">{{title}}</h1>
       </div>
-      <div class="time">发布时间：<span>{{date}}</span></div>
+      <div class="time">发布时间：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span></div>
       <div class="content" v-html="content"></div>
     </div>
   </div>
@@ -18,10 +18,11 @@
     name      : 'detail',
     data() {
       return {
-        title  : '',
-        date   : '',
-        content: '',
-        imgSrc : ''
+        title   : '',
+        date    : '',
+        content : '',
+        imgSrc  : '',
+        tagTitle: ''
       }
     },
     mounted   : function () {
@@ -31,6 +32,7 @@
           this.date = res.data.date.substring(0, 10);
           this.content = res.data.content;
           this.imgSrc = res.data.image;
+          this.tagTitle = res.data.tagTitle;
         });
       }
     },
@@ -95,5 +97,15 @@
   .detail .header h1 {
     height: 100px;
     line-height: 100px;
+  }
+  .tag {
+    background-color: rgba(64, 158, 225, .1);
+    padding: 5px 10px;
+    line-height: 30px;
+    font-size: 12px;
+    color: #409eff;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 1px solid rgba(64, 158, 255, .2);
   }
 </style>

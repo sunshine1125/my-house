@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const auth = require('./controller/auth');
 const post = require('./controller/post');
+const tag = require('./controller/tag');
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
 app.use(express.static('public'));
@@ -55,6 +56,9 @@ app.use((req, res, next) => {
 
 // post api
 app.use(post);
+
+// tag api
+app.use(tag);
 
 app.listen(3000);
 console.log('success listen on port 3000');

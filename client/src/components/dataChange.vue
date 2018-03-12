@@ -8,6 +8,12 @@
           <label class="col-sm-2 col-form-label" for="title">标题</label>
           <input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">
         </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">标签</label>
+          <select class="custom-select" name="" id="" v-model="tagTitle">
+            <option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>
+          </select>
+        </div>
         <uploadImage @imgHasChange="imgChange"></uploadImage>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">内容</label>
@@ -24,6 +30,12 @@
         <div class="form-group row">
           <label class="col-sm-2 col-form-label" for="changeTitle">标题</label>
           <input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 col-form-label">标签</label>
+          <select class="custom-select" name="" v-model="tagTitle">
+            <option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>
+          </select>
         </div>
         <uploadImage @imgHasChange="imgChange" :imgSrc="imgPath"></uploadImage>
         <div class="form-group row">
@@ -60,7 +72,9 @@
         userId       : '',
         imgResult    : '',
         imgTemplate  : '',
-        imgPath      : ''
+        imgPath      : '',
+        tags         : '',
+        tagTitle     : ''
       }
     },
     mounted   : function () {
@@ -75,23 +89,28 @@
             this.changeTitle = res.data.title;
             this.changeContent = res.data.content;
             this.imgPath = res.data.image;
+            this.tagTitle = res.data.tagTitle;
           });
         }
       }
       this.userId = JSON.parse(localStorage.getItem('username'))._id;
-      },
+      this.$http.get('api/getTag').then(res => {
+        this.tags = res.data.data;
+      })
+    },
     methods   : {
       saveData() {
         if (this.newTitle) {
           let displayData = {
-            "image"  : this.imgPath,
-            "title"  : this.newTitle,
-            "content": this.content,
-            "date"   : new Date().toLocaleDateString()
+            "image"   : this.imgPath,
+            "title"   : this.newTitle,
+            "content" : this.content,
+            "date"    : new Date().toLocaleDateString(),
+            "tagTitle": this.tagTitle
           };
           this.isDisplay = false;
           this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
-            this.$router.push('/');
+            this.$router.push('/articleManager');
             localStorage.removeItem('canAdd');
           })
         } else {
@@ -101,20 +120,21 @@
       cancelData() {
         this.isDisplay = false;
         this.newTitle = '';
-        this.$router.push('/');
+        this.$router.push('/articleManager');
         localStorage.removeItem('canAdd');
       },
       sureEdit() {
         if (this.changeTitle) {
           let payload = {
-            image  : this.imgPath,
-            title  : this.changeTitle,
-            content: this.changeContent
+            image   : this.imgPath,
+            title   : this.changeTitle,
+            tagTitle: this.tagTitle,
+            content : this.changeContent
           };
           this.isEdit = false;
           this.$http.put('/api/post/edit/' + this.editId, payload)
             .then(res => {
-              this.$router.push("/");
+              this.$router.push("/articleManager");
               localStorage.removeItem('canEdit');
             });
 
@@ -126,10 +146,10 @@
       cancelEdit: function () {
         this.isEdit = false;
         this.changeTitle = '';
-        this.$router.push("/");
+        this.$router.push("/articleManager");
         localStorage.removeItem('canEdit');
       },
-      imgChange (val) {
+      imgChange(val) {
         this.imgPath = val;
       }
     },
@@ -162,5 +182,9 @@
   .v-note-wrapper.fullscreen {
     width: 100%;
     height: 100%;
+  }
+
+  .custom-select {
+    width: 10%;
   }
 </style>

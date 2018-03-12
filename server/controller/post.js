@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     destination: (req, res, cb) => {
         cb(null, './public/uploads')
     },
-    filename: (req, file, cb) => {
+    filename   : (req, file, cb) => {
         cb(null, Date.now() + file.originalname)
     }
 });
@@ -61,6 +61,7 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
     let date = req.body.date;
     let image = req.body.image;
     let content = req.body.content;
+    let tagTitle = req.body.tagTitle;
     Posts.findOne({title: title}, (err, data) => {
         if (err) {
             return next(err);
@@ -69,11 +70,12 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
             res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
         }
         let newForm = new Posts({
-            image  : image,
-            title  : title,
-            content: content,
-            date   : date,
-            uid    : userId
+            image   : image,
+            title   : title,
+            tagTitle: tagTitle,
+            content : content,
+            date    : date,
+            uid     : userId
         });
         newForm.save(next);
 
@@ -83,7 +85,12 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
 });
 
 apiRoutes.put('/post/edit/:id', (req, res) => {
-    Posts.findByIdAndUpdate(req.params.id, {title: req.body.title, content: req.body.content, image: req.body.image}, (err, docs) => {
+    Posts.findByIdAndUpdate(req.params.id, {
+        title   : req.body.title,
+        content : req.body.content,
+        tagTitle: req.body.tagTitle,
+        image   : req.body.image
+    }, (err, docs) => {
         if (err) {
             console.log(err);
         }
