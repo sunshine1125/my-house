@@ -29,13 +29,13 @@
           </div>
         </el-aside>
         <el-main>
-          <div style="margin-bottom: 20px;">
-            <el-button type="success" @click="addData()">新增</el-button>
+          <div style="margin-bottom: 20px; text-align: left;">
+            <el-button type="primary" @click="addData()">新增</el-button>
           </div>
           <el-table :data="lists" border style="width: 100%;">
             <el-table-column
               type="index"
-              label="序号"
+              label="#"
               min-width="10%">
             </el-table-column>
             <el-table-column
@@ -66,9 +66,9 @@
               label="操作"
               min-width="20%">
               <template slot-scope="scope">
-                <el-button @click="goShowData(scope.row)" size="small">查看</el-button>
-                <el-button @click="editData(scope.row)" type="primary" size="small">编辑</el-button>
-                <el-button @click="removeData(scope.row)" type="danger" size="small">删除</el-button>
+                <el-button @click="goShowData(scope.row._id)" size="small">查看</el-button>
+                <el-button @click="editData(scope.row._id)" type="primary" size="small">编辑</el-button>
+                <el-button @click="removeData(scope.row._id)" type="danger" size="small">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -109,7 +109,7 @@
         this.$router.push('/dataChange/?type=add');
         this.newTitle = '';
       },
-      removeData(row) {
+      removeData(id) {
         swal({
           title            : '确定要删除吗？',
           type             : 'warning',
@@ -118,16 +118,16 @@
           cancelButtonText : '取消'
         }).then((result) => {
           if (result.value) {
-            this.$http.delete('/api/post/remove/' + row._id)
+            this.$http.delete('/api/post/remove/' + id)
               .then(() => this.refreshData())
               .then(() => swal('删除成功！'));
           }
         })
       },
-      editData(row) {
+      editData(id) {
         this.$router.push('/dataChange/?type=edit');
         let canEdit = {
-          "editId": row._id
+          "editId": id
         };
         localStorage.setItem('canEdit', JSON.stringify(canEdit));
       },
@@ -135,8 +135,8 @@
         this.$router.push('/login');
         localStorage.removeItem('username');
       },
-      goShowData(row) {
-        this.$router.push('/detail/?id=' + row._id);
+      goShowData(id) {
+        this.$router.push('/detail/?id=' + id);
       }
     }
   }
