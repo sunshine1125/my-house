@@ -1,7 +1,6 @@
 const express = require('express');
 const apiRoutes = express.Router();
 // 引入Multiparty解析表单
-const multipary = require('multiparty');
 const multer = require('multer');
 const Posts = require('../models/post');
 const md = require('markdown-it')();
