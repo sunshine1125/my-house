@@ -8,6 +8,8 @@ import forgotPassword from '@/components/forgotPassword'
 import dataChange from '@/components/dataChange'
 import resetPassword from '@/components/resetPassword'
 import detail from '@/components/detail'
+import articleManager from '@/components/articleManager'
+import tagManager from '@/components/tagManager'
 
 Vue.use(Router)
 
@@ -16,7 +18,17 @@ export default new Router({
     {
       path     : '/',
       name     : 'index',
-      component: index
+      component: index,
+      children : [
+        {
+          path: 'articleManager',
+          component: articleManager
+        },
+        {
+          path: 'tagManager',
+          component: tagManager
+        }
+      ]
     },
     {
       path     : '/login',
