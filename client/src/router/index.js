@@ -27,7 +27,12 @@ export default new Router({
         {
           path: 'tagManager',
           component: tagManager
-        }
+        },
+        {
+          path     : '/dataChange',
+          name     : 'dataChange',
+          component: dataChange
+        },
       ]
     },
     {
@@ -49,11 +54,6 @@ export default new Router({
       path     : '/forgotPassword',
       name     : 'forgotPassword',
       component: forgotPassword
-    },
-    {
-      path     : '/dataChange',
-      name     : 'dataChange',
-      component: dataChange
     },
     {
       path     : '/resetPassword',
