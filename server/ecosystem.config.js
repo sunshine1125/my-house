@@ -26,7 +26,7 @@ module.exports = {
      */
     deploy: {
         production: {
-            user         : 'ubuntu',
+            user         : 'liut',
             host         : ['140.143.192.183'],
             port         : '5722',
             ref          : 'origin/production',
