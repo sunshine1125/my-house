@@ -6,14 +6,13 @@ module.exports = {
     apps: [
         {
             name           : 'vue-express',
-            script         : 'server/index.js',
+            script         : 'index.js',
             env: {
                 NODE_ENV: 'production',
                 // PORT: 8080,
             },
             env_development: {
                 NODE_ENV: 'development',
-                // SERVER_PORT: 8080,
             },
             env_production: {
                 NODE_ENV: 'production',
@@ -34,7 +33,7 @@ module.exports = {
             repo         : 'git@github.com:sunshine1125/vue-express.git',
             path         : '/home/liut/vue-express',
             // "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
-            'post-deploy': 'npm install && pm2 startOrReload ecosystem.config.js --env production'
+            'post-deploy': 'source ./post-deploy.sh'
         },
         // master : {
         //     user         : 'liut',

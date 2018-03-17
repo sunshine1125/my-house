@@ -2,12 +2,13 @@
   "name": "node-token-jwt",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=development&& nodemon",
-    "deploy": "set NODE_ENV=development&& nodemon"
+    "start": "cross-env NODE_ENV=development nodemon",
+    "deploy:dev": "pm2 deploy ecosystem.config.js develop"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.2",
+    "cross-env": "^5.1.4",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.1",
     "markdown-it": "^8.4.1",

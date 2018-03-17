@@ -12,7 +12,7 @@ module.exports = function configInfo() {
 function databaseConnect() {
     return {
         'secret'  : 'ilovescotchyscotch',
-        'database': 'mongodb://localhost/tables'
+        'database': 'mongo mongodb://vue-express_rw:F368yh3uy@localhost:25688/vue-express'
     }
 }
 
