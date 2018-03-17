@@ -60,5 +60,7 @@ app.use(post);
 // tag api
 app.use(tag);
 
-app.listen(3000);
-console.log('success listen on port 3000');
+const PORT = process.env.NODE_ENV.PORT || 3003
+
+app.listen(PORT);
+console.log('success listen on port ' + PORT);

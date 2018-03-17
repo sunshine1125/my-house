@@ -9,7 +9,7 @@ module.exports = {
             script         : 'index.js',
             env: {
                 NODE_ENV: 'production',
-                // PORT: 8080,
+                PORT: 3003,
             },
             env_development: {
                 NODE_ENV: 'development',
