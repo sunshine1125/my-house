@@ -6,20 +6,18 @@ module.exports = {
     apps: [
         {
             name           : 'vue-express',
-            script         : 'index.js',
+            script         : 'server/index.js',
             env: {
-              NODE_ENV: 'production',
-              // PORT: 8080,
+                NODE_ENV: 'production',
+                // PORT: 8080,
             },
             env_development: {
                 NODE_ENV: 'development',
                 // SERVER_PORT: 8080,
-                // LOGSTASH_URL: 'http://localhost/finley/PHP/test.php'
             },
-            // env_production: {
-            //   NODE_ENV: 'production',
-            //   LOGSTASH_URL: 'http://192.168.100.16:9700'
-            // }
+            env_production: {
+                NODE_ENV: 'production',
+            }
         }
     ],
 
