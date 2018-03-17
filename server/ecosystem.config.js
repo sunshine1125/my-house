@@ -33,7 +33,7 @@ module.exports = {
             repo         : 'git@github.com:sunshine1125/vue-express.git',
             path         : '/home/liut/vue-express',
             // "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
-            'post-deploy': 'source ./post-deploy.sh'
+            'post-deploy': 'chmod u+x ./post-deploy.sh && source ./post-deploy.sh'
         },
         // master : {
         //     user         : 'liut',

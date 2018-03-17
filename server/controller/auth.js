@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 const apiRoutes = express.Router();
 const User = require('../models/user');
-let config = process.env.NODE_ENV === 'development' ? require('../config/prod') : require('../config/dev')
+let config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod') ;
 
 app.set('superSecret', config().databaseConnect().secret);// secret variable
 
