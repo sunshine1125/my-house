@@ -25,11 +25,11 @@ module.exports = {
      * http://pm2.keymetrics.io/docs/usage/deployment/
      */
     deploy: {
-        develop: {
+        production: {
             user         : 'liut',
             host         : ['140.143.192.183'],
             port         : '5722',
-            ref          : 'origin/develop',
+            ref          : 'origin/production',
             repo         : 'git@github.com:sunshine1125/vue-express.git',
             path         : '/home/liut/vue-express',
             // "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
