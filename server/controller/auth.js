@@ -5,9 +5,12 @@ const express = require('express');
 const app = express();
 const apiRoutes = express.Router();
 const User = require('../models/user');
+const confirToken = require('../tools/confirToken');
+const nodemailer = require('nodemailer')
+
 let config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod') ;
 
-app.set('superSecret', config().databaseConnect().secret);// secret variable
+app.set('superSecret', config.MongoDB.secret);// secret variable
 
 // user register
 apiRoutes.post('/register', (req, res) => {
@@ -24,7 +27,7 @@ apiRoutes.post('/register', (req, res) => {
                 username          : req.body.username,
                 password          : password,// 把加密后的密码存入数据库
                 email             : req.body.email,
-                confirmation_token: config().getconfirToken(),
+                confirmation_token: confirToken,
                 changePassword    : false,
                 admin             : true,
             });
@@ -52,6 +55,7 @@ apiRoutes.post('/register', (req, res) => {
 
 });
 
+const apiPort = config.http.apiPort;
 apiRoutes.post('/sendEmail', (req, res) => {
     let options = {
         from   : '"测试" <371262808@qq.com>',
@@ -59,11 +63,19 @@ apiRoutes.post('/sendEmail', (req, res) => {
         subject: '一封来自sunshine1125的邮件',
         text   : '一封来自sunshine1125的邮件',
         html   : `<h1>你好，欢迎加入我们！</h1>
-                  <p>请点击下面的按钮激活你的账户</p>
-                  <a href="http://localhost:3000/checkActive/?email=${req.body.email}">点击激活账号</a>`
+                  <p>请点击下面的按钮激活你的账户</p> 
+                  <a href= "${apiPort}/checkActive/?email=${req.body.email}">点击激活账号</a>`
     };
 
-    let mailTransport = config().emailConfig();
+    let mailTransport = nodemailer.createTransport({
+        host            : config.email.host,
+        secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
+        auth            : {
+            user: config.email.user,
+            pass: config.email.pass
+        },
+    });
+    // let mailTransport = config().emailConfig();
     mailTransport.sendMail(options, (err, msg) => {
         if (err) {
             console.log(err);
@@ -83,7 +95,7 @@ apiRoutes.post('/forgotPassword', (req, res) => {
         text   : '一封来自sunshine1125的邮件',
         html   : `<h1>修改密码</h1>
                   <p>确认修改密码吗？</p>
-                  <a href="http://localhost:3000/checkPassword/?email=${req.body.email}">修改密码</a>`
+                  <a href="${apiPort}/checkPassword/?email=${req.body.email}">修改密码</a>`
     };
 
     let mailTransport = config().emailConfig();
@@ -103,7 +115,8 @@ apiRoutes.get('/checkActive', (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.redirect(config().urlConfig().login)
+          console.log(config.url.login);
+            res.redirect(config.url.login)
         }
     })
 });
@@ -113,7 +126,7 @@ apiRoutes.get('/checkPassword', (req, res) => {
         if (err) {
             res.send(err);
         } else {
-            res.redirect(config().urlConfig().changePassword)
+            res.redirect(config.url.changePassword)
         }
     })
 });

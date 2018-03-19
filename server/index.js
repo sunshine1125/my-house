@@ -7,15 +7,16 @@ const mongoose = require('mongoose');
 const auth = require('./controller/auth');
 const post = require('./controller/post');
 const tag = require('./controller/tag');
+console.log(process.env.NODE_ENV)
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
-
+console.log(config)
 app.use(express.static('public'));
 // use body parser so we can get info from post or url parameters
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-mongoose.connect(config().databaseConnect().database); // connect to database
-app.set('superSecret', config().databaseConnect().secret);// secret variable
+mongoose.connect(config.MongoDB.database); // connect to database
+app.set('superSecret', config.MongoDB.secret);// secret variable
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
