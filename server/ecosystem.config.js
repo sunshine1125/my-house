@@ -16,10 +16,10 @@ module.exports = {
                 // SERVER_PORT: 8080,
                 // LOGSTASH_URL: 'http://localhost/finley/PHP/test.php'
             },
-            // env_production: {
-            //   NODE_ENV: 'production',
-            //   LOGSTASH_URL: 'http://192.168.100.16:9700'
-            // }
+            env_production: {
+              NODE_ENV: 'production',
+              // LOGSTASH_URL: 'http://192.168.100.16:9700'
+            }
         }
     ],
 
@@ -36,7 +36,8 @@ module.exports = {
             repo         : 'git@github.com:sunshine1125/vue-express.git',
             path         : '/home/liut/vue-express',
             // "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
-            'post-deploy': 'npm install && pm2 startOrReload ecosystem.config.js --env production'
+            // 'post-deploy': 'npm install && pm2 startOrReload ecosystem.config.js --env production'
+            'post-deploy': 'chmod u+x ./post-deploy.sh && source ./post-deploy.sh'
         },
         // master : {
         //     user         : 'liut',
