@@ -98,7 +98,14 @@ apiRoutes.post('/forgotPassword', (req, res) => {
                   <a href="${apiPort}/checkPassword/?email=${req.body.email}">修改密码</a>`
     };
 
-    let mailTransport = config().emailConfig();
+    let mailTransport = nodemailer.createTransport({
+      host            : config.email.host,
+      secureConnection: true, // 使用SSL方式（安全方式，防止被窃取信息）
+      auth            : {
+        user: config.email.user,
+        pass: config.email.pass
+      },
+    });
     mailTransport.sendMail(options, (err, msg) => {
         if (err) {
             console.log(err);
@@ -122,10 +129,12 @@ apiRoutes.get('/checkActive', (req, res) => {
 });
 
 apiRoutes.get('/checkPassword', (req, res) => {
+  console.log(req.query.email);
     User.update({email: req.query.email}, {changePassword: true}, (err, doc) => {
         if (err) {
             res.send(err);
         } else {
+            console.log(config.url.changePassword);
             res.redirect(config.url.changePassword)
         }
     })
@@ -158,6 +167,23 @@ apiRoutes.post('/singleUser', (req, res) => {
                 }
             })
         })
+    } else {
+      let password = req.body.password;
+      let noop = function () {
+      };
+      // 生成salt并获取hash值
+      bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
+        bcrypt.hash(password, salt, noop, (err, hash) => {
+          // 把hash值赋值给password变量
+          password = hash;
+          User.update({email: req.body.email}, {password: password}, (err, docs) => {
+            if (err) {
+              console.log(err);
+            }
+            res.status('200').json({code: 200, success: true, message: '密码修改成功'})
+          });
+        })
+      })
     }
 });
 

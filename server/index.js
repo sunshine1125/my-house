@@ -7,9 +7,9 @@ const mongoose = require('mongoose');
 const auth = require('./controller/auth');
 const post = require('./controller/post');
 const tag = require('./controller/tag');
-console.log(process.env.NODE_ENV)
+
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
-console.log(config)
+
 app.use(express.static('public'));
 // use body parser so we can get info from post or url parameters
 app.use(bodyParser.urlencoded({extended: false}));
