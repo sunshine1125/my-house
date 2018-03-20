@@ -121,7 +121,7 @@ apiRoutes.post('/singleUser', (req, res) => {
               password = hash;
               User.update({email: req.body.email}, {password: password}, (err, docs) => {
                 if (err) {
-                  console.log(err);
+                  // console.log(err);
                 }
                 res.status('200').json({code: 200, success: true, message: '密码修改成功'})
               });
@@ -141,7 +141,7 @@ apiRoutes.post('/singleUser', (req, res) => {
         password = hash;
         User.update({email: req.body.email}, {password: password}, (err, docs) => {
           if (err) {
-            console.log(err);
+            // console.log(err);
           }
           res.status('200').json({code: 200, success: true, message: '密码修改成功'})
         });

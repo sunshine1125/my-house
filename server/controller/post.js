@@ -91,7 +91,7 @@ apiRoutes.put('/post/edit/:id', (req, res) => {
         image   : req.body.image
     }, (err, docs) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
         }
         res.status('200').json({code: 200, msg: '数据更新成功'})
     });
@@ -100,7 +100,7 @@ apiRoutes.put('/post/edit/:id', (req, res) => {
 apiRoutes.delete('/post/remove/:id', (req, res) => {
     Posts.remove({_id: req.params.id}, (err, docs) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
         }
         res.status('200').json({success: true, code: 200, msg: '删除成功'})
     })

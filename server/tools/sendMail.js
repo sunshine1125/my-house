@@ -11,7 +11,6 @@ module.exports = function sendEmail(options, res) {
       pass: config.email.pass
     },
   });
-  // let mailTransport = config().emailConfig();
   mailTransport.sendMail(options, (err, msg) => {
     if (err) {
       res.json({success: false, message: '发送失败！', error: err})

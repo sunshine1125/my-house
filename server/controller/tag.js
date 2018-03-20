@@ -7,7 +7,7 @@ apiRoutes.get('/getTag', (req, res) => {
     Tags.find()
         .exec((err, data) => {
             if (err) {
-                console.log(err);
+                // console.log(err);
             }
             res.status('200').json({success: true, code:200, data: data})
         })
@@ -24,7 +24,7 @@ apiRoutes.post('/addTag', (req, res, next) => {
     Tags.find()
         .exec((err, data) => {
             if (err) {
-                console.log(err);
+                // console.log(err);
             }
             res.status('200').json({success: true, code:200, data: data})
         })
@@ -34,7 +34,7 @@ apiRoutes.post('/addTag', (req, res, next) => {
 apiRoutes.put('/editTag/:id', (req, res) => {
     Tags.findByIdAndUpdate(req.params.id, {title: req.body.title}, (err, docs) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
         }
         res.status('200').json({success: true, code: 200})
     });
@@ -44,7 +44,7 @@ apiRoutes.put('/editTag/:id', (req, res) => {
 apiRoutes.delete('/removeTag/:id', (req, res) => {
     Tags.findByIdAndRemove(req.params.id, (err, docs) => {
         if (err) {
-            console.log(err);
+            // console.log(err);
         }
         res.status('200').json({success: true, code: 200})
     });

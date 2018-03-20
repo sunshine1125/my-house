@@ -64,4 +64,3 @@ app.use(tag);
 const PORT = process.env.NODE_ENV.PORT || 3003
 
 app.listen(PORT);
-console.log('success listen on port ' + PORT);
