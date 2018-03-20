@@ -99,9 +99,9 @@
           "email": this.useremail
         };
         this.$http.post('/api/forgotPassword', userMail).then(res => {
-          this.isCheck = false;
-          localStorage.setItem("email", JSON.stringify(userMail));
-        })
+        });
+        this.isCheck = false;
+        localStorage.setItem("email", JSON.stringify(userMail));
 
       },
       sure() {
