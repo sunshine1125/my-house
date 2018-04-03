@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import mavonEditor from 'mavon-editor';
-import Element from 'element-ui'
+import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import App from './App';
 import router from './router';
@@ -12,11 +12,12 @@ import VueAxios from 'vue-axios'
 import Vuelidate from 'vuelidate'
 
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.use(ElementUI);
 Vue.use(VueAxios, axios);
 Vue.use(Vuelidate);
 Vue.use(mavonEditor);
-Vue.use(Element);
+
 
 axios.interceptors.request.use(config => {
   if (localStorage.getItem('username')) {

@@ -22,9 +22,10 @@
         <el-aside width="200px">
           <!--左侧导航-->
           <div class="main-left">
-            <el-menu :default-active="indexMenu" class="el-menu-vertical-demo" :router="true">
-              <el-menu-item @click="isArticle()" index="/articleManager" :class="{'isActive': active}">文章管理</el-menu-item>
-              <el-menu-item @click="isTag()" index="/tagManager" :class="{'isActive': !active}">标签管理</el-menu-item>
+            <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true">
+              <el-menu-item index="/userManager">用户管理</el-menu-item>
+              <el-menu-item index="/articleManager">文章管理</el-menu-item>
+              <el-menu-item index="/tagManager">标签管理</el-menu-item>
             </el-menu>
           </div>
         </el-aside>
@@ -37,17 +38,14 @@
 </template>
 
 <script>
-  import swal from 'sweetalert2'
 
   export default {
     name   : 'index',
     data() {
       return {
-        active  : true,
         username: '',
         lists   : [],
-        userId  : '',
-        indexMenu: '/articleManager'
+        userId  : ''
       }
     },
     mounted: function () {
@@ -57,26 +55,22 @@
       } else {
         this.$router.push('/login');
       }
-      this.active = JSON.parse(localStorage.getItem('active')).active;
-      this.active === true ? this.indexMenu = '/articleManager' : this.indexMenu = '/tagManager';
     },
     methods: {
       logout() {
         this.$router.push('/login');
         localStorage.removeItem('username');
-      },
-      isArticle() {
-        this.active = true;
-        localStorage.setItem('active', JSON.stringify({'active': this.active}));
-      },
-      isTag() {
-        this.active = false;
-        localStorage.setItem('active', JSON.stringify({'active': this.active}));
       }
     }
   }
 </script>
 <style>
+  .home {
+    height: 100%;
+  }
+  .home .el-container {
+    height: 100%;
+  }
   #table {
     width: 100%;
     height: 100%;
@@ -92,6 +86,9 @@
   aside .main-left ul {
     height: 100%;
   }
+  /*aside .el-menu {*/
+    /*border: none;*/
+  /*}*/
 
   #navbarSupportedContent ul {
     margin-left: auto !important;

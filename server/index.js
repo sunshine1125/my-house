@@ -61,6 +61,6 @@ app.use(post);
 // tag api
 app.use(tag);
 
-const PORT = process.env.NODE_ENV.PORT || 3003
+const PORT = process.env.NODE_ENV.PORT || 3002
 
 app.listen(PORT);
