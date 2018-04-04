@@ -1,8 +1,11 @@
 <template>
   <div>
-    <div style="margin-bottom: 20px; text-align: left;">
-      <el-button type="primary" @click="addData()">新增</el-button>
-    </div>
+    <el-row style="text-align: left">
+      <strong>文章管理</strong>
+    </el-row>
+    <el-row>
+      <el-button @click="addData()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
+    </el-row>
     <el-table :data="lists" border style="width: 100%;">
       <el-table-column
         type="index"
@@ -42,9 +45,9 @@
         label="操作"
         min-width="20%">
         <template slot-scope="scope">
-          <el-button @click="goShowData(scope.row._id)" size="small">查看</el-button>
-          <el-button @click="editData(scope.row._id)" type="primary" size="small">编辑</el-button>
-          <el-button @click="removeData(scope.row._id)" type="danger" size="small">删除</el-button>
+          <el-button @click="goShowData(scope.row._id)" type="success" icon="el-icon-view" plain round class="circle"></el-button>
+          <el-button @click="editData(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
+          <el-button @click="removeData(scope.row._id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,7 +78,12 @@
     },
     methods: {
       refreshData() {
-        this.$http.get('/api/post/get/' + this.userId).then(res => this.lists = res.data);
+        this.$http.get('/api/post/get/' + this.userId).then(res => {
+          this.lists = res.data;
+          this.lists.find(item => {
+            item.date = item.date.substring(0, 10);
+          })
+        });
       },
       addData() {
         this.$router.push('/dataChange/?type=add');
@@ -116,4 +124,14 @@
   }
 </script>
 <style scoped>
+  .el-button.circle {
+    padding: 6px 6px;
+  }
+  .el-button {
+    outline: none;
+  }
+  .el-row {
+    text-align: left;
+    margin-bottom: 10px;
+  }
 </style>
