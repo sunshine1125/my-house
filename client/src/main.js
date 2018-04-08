@@ -10,6 +10,7 @@ import '../static/css/common.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuelidate from 'vuelidate'
+import Validate from './tools/validate'
 
 
 Vue.config.productionTip = false;
@@ -17,6 +18,7 @@ Vue.use(ElementUI);
 Vue.use(VueAxios, axios);
 Vue.use(Vuelidate);
 Vue.use(mavonEditor);
+Vue.use(Validate);
 
 
 axios.interceptors.request.use(config => {
