@@ -58,7 +58,7 @@ apiRoutes.post('/register', (req, res) => {
 const apiPort = config.http.apiPort;
 apiRoutes.post('/sendEmail', (req, res) => {
   let options = {
-    from   : '"测试" <371262808@qq.com>',
+    from   : '"测试" <2263723236@qq.com>',
     to     : '"测试"' + req.body.email,
     subject: '一封来自sunshine1125的邮件',
     text   : '一封来自sunshine1125的邮件',
@@ -66,12 +66,12 @@ apiRoutes.post('/sendEmail', (req, res) => {
                   <p>请点击下面的按钮激活你的账户</p> 
                   <a href= "${apiPort}/checkActive/?email=${req.body.email}">点击激活账号</a>`
   };
-  sendEmail(options);
+  sendEmail(options, res);
 });
 
 apiRoutes.post('/forgotPassword', (req, res) => {
   let options = {
-    from   : '"测试" <371262808@qq.com>',
+    from   : '"测试" <2263723236@qq.com>',
     to     : '"测试"' + req.body.email,
     subject: '一封来自sunshine1125的邮件',
     text   : '一封来自sunshine1125的邮件',
@@ -80,7 +80,7 @@ apiRoutes.post('/forgotPassword', (req, res) => {
                   <a href="${apiPort}/checkPassword/?email=${req.body.email}">修改密码</a>`
   };
 
-  sendEmail(options);
+  sendEmail(options, res);
 });
 
 apiRoutes.get('/checkActive', (req, res) => {
