@@ -56,14 +56,7 @@ import userDialog from './userDialog.vue'
       }
     },
     mounted: function () {
-      let _this = this;
-      if (localStorage.getItem('username')) {
-        this.username = JSON.parse(localStorage.getItem('username')).username;
-        this.userId = JSON.parse(localStorage.getItem('username'))._id;
-        _this.refreshData();
-      } else {
-        this.$router.push('/login');
-      }
+
     },
     methods: {
       refreshData() {

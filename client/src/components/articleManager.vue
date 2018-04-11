@@ -68,9 +68,9 @@
     },
     mounted: function () {
       let _this = this;
-      if (localStorage.getItem('username')) {
-        this.username = JSON.parse(localStorage.getItem('username')).username;
-        this.userId = JSON.parse(localStorage.getItem('username'))._id;
+      if (localStorage.getItem('userInfo')) {
+        this.username = JSON.parse(localStorage.getItem('userInfo')).email;
+        this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
         _this.refreshData();
       } else {
         this.$router.push('/login');

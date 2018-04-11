@@ -150,6 +150,16 @@ apiRoutes.post('/singleUser', (req, res) => {
   }
 });
 
+apiRoutes.get('/getSingleUser/:email', (req, res) => {
+  User.findOne({
+    email: req.params.email
+  }, (err, user) => {
+    if (user) {
+      res.json({success: true, username: user.username});
+    }
+  })
+});
+
 apiRoutes.get('/canChangePassword/:email', (req, res) => {
   User.findOne({
     email: req.params.email
@@ -173,7 +183,7 @@ apiRoutes.put('/canChangePassword', (req, res) => {
 apiRoutes.post('/authentication', (req, res) => {
   let password = req.body.password;
   User.findOne({
-    email: req.body.username
+    email: req.body.email
   }, function (err, user) {
     if (err) throw err;
     if (!user) {

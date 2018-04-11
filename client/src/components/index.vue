@@ -43,15 +43,19 @@
     name   : 'index',
     data() {
       return {
-        username: '',
+        email   : '',
         lists   : [],
-        userId  : ''
+        userId  : '',
+        username: ''
       }
     },
     mounted: function () {
-      if (localStorage.getItem('username')) {
-        this.username = JSON.parse(localStorage.getItem('username')).username;
-        this.userId = JSON.parse(localStorage.getItem('username'))._id;
+      if (localStorage.getItem('userInfo')) {
+        this.email = JSON.parse(localStorage.getItem('userInfo')).email;
+        this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
+        this.$http.get('/api/getSingleUser/' + this.email).then((res) => {
+          this.username = res.data.username;
+        });
       } else {
         this.$router.push('/login');
       }
@@ -59,7 +63,7 @@
     methods: {
       logout() {
         this.$router.push('/login');
-        localStorage.removeItem('username');
+        localStorage.removeItem('userInfo');
       }
     }
   }
@@ -68,9 +72,11 @@
   .home {
     height: 100%;
   }
+
   .home .el-container {
     height: 100%;
   }
+
   #table {
     width: 100%;
     height: 100%;
@@ -80,15 +86,14 @@
   .container {
     margin-top: 25px;
   }
+
   aside .main-left {
     height: 100%;
   }
+
   aside .main-left ul {
     height: 100%;
   }
-  /*aside .el-menu {*/
-    /*border: none;*/
-  /*}*/
 
   #navbarSupportedContent ul {
     margin-left: auto !important;
@@ -101,6 +106,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .el-table th .cell {
     text-align: center;
   }

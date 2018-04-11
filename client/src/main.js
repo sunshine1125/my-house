@@ -22,8 +22,8 @@ Vue.use(Validate);
 
 
 axios.interceptors.request.use(config => {
-  if (localStorage.getItem('username')) {
-    let token = JSON.parse(localStorage.getItem('username')).token;
+  if (localStorage.getItem('userInfo')) {
+    let token = JSON.parse(localStorage.getItem('userInfo')).token;
     if (token) {
       config.headers.Authorization = token;
     }
