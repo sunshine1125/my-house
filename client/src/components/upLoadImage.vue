@@ -52,28 +52,5 @@
   }
 </script>
 <style scoped>
-  h3 {
-    margin-top: 30px;
-  }
 
-  #table {
-    width: 90%;
-    height: 100%;
-    margin: 20px auto;
-  }
-
-  .container {
-    margin-top: 25px;
-    max-width: 100%;
-  }
-
-  .markdown-body {
-    width: 82%;
-    min-height: 450px;
-  }
-
-  .v-note-wrapper.fullscreen {
-    width: 100%;
-    height: 100%;
-  }
 </style>

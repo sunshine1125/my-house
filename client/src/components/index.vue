@@ -2,21 +2,11 @@
   <div class="home">
     <el-container>
       <el-header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/#/resetPassword">重置密码</a>
-              </li>
-              <li class="nav-item">
-                <a style="cursor: pointer;" class="nav-link" @click="logout()">退出</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        <ul class="header-operations">
+          <li>欢迎 <span>{{username}}</span></li>
+          <li @click="resetPassword()">重置密码</li>
+          <li @click="logout()">退出</li>
+        </ul>
       </el-header>
       <el-container>
         <el-aside width="200px">
@@ -38,7 +28,6 @@
 </template>
 
 <script>
-
   export default {
     name   : 'index',
     data() {
@@ -52,19 +41,25 @@
     mounted: function () {
       if (localStorage.getItem('userInfo')) {
         this.email = JSON.parse(localStorage.getItem('userInfo')).email;
-        this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
         this.$http.get('/api/getSingleUser/' + this.email).then((res) => {
           this.username = res.data.username;
         });
+        this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
       } else {
         this.$router.push('/login');
       }
     },
     methods: {
+      resetPassword() {
+        this.$router.push('/resetPassword');
+      },
       logout() {
         this.$router.push('/login');
         localStorage.removeItem('userInfo');
       }
+    },
+    components: {
+
     }
   }
 </script>
@@ -77,6 +72,25 @@
     height: 100%;
   }
 
+  .home .el-header {
+    background-color: rgb(64, 158, 255)
+  }
+  .header-operations {
+    display: inline-block;
+    float: right;
+    padding-right: 30px;
+    height: 100%;
+  }
+  .header-operations li {
+    color: #fff;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 10px;
+    margin: 0 10px;
+    line-height: 60px;
+    cursor: pointer;
+    font-size: 16px;
+  }
   #table {
     width: 100%;
     height: 100%;

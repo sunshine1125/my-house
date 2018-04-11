@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-header>
+      <ul class="header-operations">
+        <li>欢迎 <span>{{username}}</span></li>
+        <li @click="resetPassword()">重置密码</li>
+        <li @click="logout()">退出</li>
+      </ul>
+    </el-header>
     <div class="container">
       <div style="width: 50%; margin-left: 20%;">
         <el-form :model="resetForm" ref="resetForm" label-width="100px">
@@ -42,11 +49,15 @@
           oldPassword: '',
           password   : '',
           passAgain  : ''
-        }
+        },
+        username: ''
       }
     },
     mounted    : function () {
       this.resetForm.email = JSON.parse(localStorage.getItem('userInfo')).email;
+      this.$http.get('/api/getSingleUser/' + this.resetForm.email).then((res) => {
+        this.username = res.data.username;
+      });
     },
     methods    : {
       sure(formName) {
@@ -79,5 +90,24 @@
 <style scoped>
   .container {
     margin-top: 100px;
+  }
+  .el-header {
+    background-color: rgb(64, 158, 255)
+  }
+  .header-operations {
+    display: inline-block;
+    float: right;
+    padding-right: 30px;
+    height: 100%;
+  }
+  .header-operations li {
+    color: #fff;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 10px;
+    margin: 0 10px;
+    line-height: 60px;
+    cursor: pointer;
+    font-size: 16px;
   }
 </style>
