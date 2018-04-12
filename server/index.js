@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const auth = require('./controller/auth');
 const post = require('./controller/post');
 const tag = require('./controller/tag');
+
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
 app.use(express.static('public'));
@@ -14,8 +15,8 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-mongoose.connect(config().databaseConnect().database); // connect to database
-app.set('superSecret', config().databaseConnect().secret);// secret variable
+mongoose.connect(config.MongoDB.database); // connect to database
+app.set('superSecret', config.MongoDB.secret);// secret variable
 
 // use morgan to log requests to the console
 app.use(morgan('dev'));
@@ -60,5 +61,6 @@ app.use(post);
 // tag api
 app.use(tag);
 
-app.listen(3000);
-console.log('success listen on port 3000');
+const PORT = process.env.NODE_ENV.PORT || 3002
+
+app.listen(PORT);

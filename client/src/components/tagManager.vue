@@ -1,8 +1,11 @@
 <template>
   <div>
-    <div style="margin-bottom: 20px; text-align: left;">
-      <el-button type="primary" @click="addTag()">新增</el-button>
-    </div>
+    <el-row style="text-align: left">
+      <strong>标签管理</strong>
+    </el-row>
+    <el-row>
+      <el-button @click="addTag()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
+    </el-row>
     <el-table :data="tags" border style="width: 80%;">
       <el-table-column
         type="index"
@@ -15,8 +18,8 @@
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="editTag(scope.row._id, scope.row.title)" size="small">编辑</el-button>
-          <el-button @click="removeTag(scope.row._id)" type="danger" size="small">删除</el-button>
+          <el-button @click="editTag(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
+          <el-button @click="removeTag(scope.row._id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -109,4 +112,14 @@
   }
 </script>
 <style scoped>
+  .el-button.circle {
+    padding: 6px 6px;
+  }
+  .el-button {
+    outline: none;
+  }
+  .el-row {
+    text-align: left;
+    margin-bottom: 10px;
+  }
 </style>

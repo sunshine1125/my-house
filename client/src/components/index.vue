@@ -2,29 +2,20 @@
   <div class="home">
     <el-container>
       <el-header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="#">欢迎 <span>{{username}}</span></a>
-              </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/#/resetPassword">重置密码</a>
-              </li>
-              <li class="nav-item">
-                <a style="cursor: pointer;" class="nav-link" @click="logout()">退出</a>
-              </li>
-            </ul>
-          </div>
-        </nav>
+        <ul class="header-operations">
+          <li>欢迎 <span>{{username}}</span></li>
+          <li @click="resetPassword()">重置密码</li>
+          <li @click="logout()">退出</li>
+        </ul>
       </el-header>
       <el-container>
         <el-aside width="200px">
           <!--左侧导航-->
           <div class="main-left">
-            <el-menu :default-active="indexMenu" class="el-menu-vertical-demo" :router="true">
-              <el-menu-item @click="isArticle()" index="/articleManager" :class="{'isActive': active}">文章管理</el-menu-item>
-              <el-menu-item @click="isTag()" index="/tagManager" :class="{'isActive': !active}">标签管理</el-menu-item>
+            <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true">
+              <el-menu-item index="/userManager">用户管理</el-menu-item>
+              <el-menu-item index="/articleManager">文章管理</el-menu-item>
+              <el-menu-item index="/tagManager">标签管理</el-menu-item>
             </el-menu>
           </div>
         </el-aside>
@@ -37,46 +28,69 @@
 </template>
 
 <script>
-  import swal from 'sweetalert2'
-
   export default {
     name   : 'index',
     data() {
       return {
-        active  : true,
-        username: '',
+        email   : '',
         lists   : [],
         userId  : '',
-        indexMenu: '/articleManager'
+        username: ''
       }
     },
     mounted: function () {
-      if (localStorage.getItem('username')) {
-        this.username = JSON.parse(localStorage.getItem('username')).username;
-        this.userId = JSON.parse(localStorage.getItem('username'))._id;
+      if (localStorage.getItem('userInfo')) {
+        this.email = JSON.parse(localStorage.getItem('userInfo')).email;
+        this.$http.get('/api/getSingleUser/' + this.email).then((res) => {
+          this.username = res.data.username;
+        });
+        this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
       } else {
         this.$router.push('/login');
       }
-      this.active = JSON.parse(localStorage.getItem('active')).active;
-      this.active === true ? this.indexMenu = '/articleManager' : this.indexMenu = '/tagManager';
     },
     methods: {
+      resetPassword() {
+        this.$router.push('/resetPassword');
+      },
       logout() {
         this.$router.push('/login');
-        localStorage.removeItem('username');
-      },
-      isArticle() {
-        this.active = true;
-        localStorage.setItem('active', JSON.stringify({'active': this.active}));
-      },
-      isTag() {
-        this.active = false;
-        localStorage.setItem('active', JSON.stringify({'active': this.active}));
+        localStorage.removeItem('userInfo');
       }
+    },
+    components: {
+
     }
   }
 </script>
 <style>
+  .home {
+    height: 100%;
+  }
+
+  .home .el-container {
+    height: 100%;
+  }
+
+  .home .el-header {
+    background-color: rgb(64, 158, 255)
+  }
+  .header-operations {
+    display: inline-block;
+    float: right;
+    padding-right: 30px;
+    height: 100%;
+  }
+  .header-operations li {
+    color: #fff;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 10px;
+    margin: 0 10px;
+    line-height: 60px;
+    cursor: pointer;
+    font-size: 16px;
+  }
   #table {
     width: 100%;
     height: 100%;
@@ -86,9 +100,11 @@
   .container {
     margin-top: 25px;
   }
+
   aside .main-left {
     height: 100%;
   }
+
   aside .main-left ul {
     height: 100%;
   }
@@ -104,6 +120,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .el-table th .cell {
     text-align: center;
   }

@@ -10,9 +10,16 @@
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">标签</label>
-          <select class="custom-select" name="" id="" v-model="tagTitle">
-            <option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>
-          </select>
+          <el-select v-model="tagTitle" placeholder="请选择">
+            <el-option v-for="tag in tags"
+                       :key="tag.title"
+                       :label="tag.title"
+                       :value="tag.title">
+            </el-option>
+          </el-select>
+          <!--<select class="custom-select" name="" id="" v-model="tagTitle">-->
+            <!--<option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>-->
+          <!--</select>-->
         </div>
         <uploadImage @imgHasChange="imgChange"></uploadImage>
         <div class="form-group row">
@@ -33,9 +40,16 @@
         </div>
         <div class="form-group row">
           <label class="col-sm-2 col-form-label">标签</label>
-          <select class="custom-select" name="" v-model="tagTitle">
-            <option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>
-          </select>
+          <el-select v-model="tagTitle" placeholder="请选择">
+            <el-option v-for="tag in tags"
+                       :key="tag.title"
+                       :label="tag.title"
+                       :value="tag.title">
+            </el-option>
+          </el-select>
+          <!--<select class="custom-select" name="" v-model="tagTitle">-->
+            <!--<option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>-->
+          <!--</select>-->
         </div>
         <uploadImage @imgHasChange="imgChange" :imgSrc="imgPath"></uploadImage>
         <div class="form-group row">
@@ -93,7 +107,7 @@
           });
         }
       }
-      this.userId = JSON.parse(localStorage.getItem('username'))._id;
+      this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
       this.$http.get('api/getTag').then(res => {
         this.tags = res.data.data;
       })

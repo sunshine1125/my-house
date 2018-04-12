@@ -1,3 +1,9 @@
+html, body {
+  height: 100%!important;
+}
+button, input {
+  outline: none;
+}
 .form-group__message {
   display: none;
   font-size: .95rem;

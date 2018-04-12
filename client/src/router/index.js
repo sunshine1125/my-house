@@ -8,6 +8,7 @@ import forgotPassword from '@/components/forgotPassword'
 import dataChange from '@/components/dataChange'
 import resetPassword from '@/components/resetPassword'
 import detail from '@/components/detail'
+import userManager from '@/components/userManager'
 import articleManager from '@/components/articleManager'
 import tagManager from '@/components/tagManager'
 
@@ -19,7 +20,12 @@ export default new Router({
       path     : '/',
       name     : 'index',
       component: index,
+      redirect : '/userManager',
       children : [
+        {
+          path: 'userManager',
+          component: userManager
+        },
         {
           path: 'articleManager',
           component: articleManager

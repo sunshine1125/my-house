@@ -1,126 +1,99 @@
 <template>
   <div class="register container">
-    <h2>注册</h2>
-    <form>
-      <div class="form-group row" v-bind:class="{ 'form-group--error': $v.username.$error }">
-        <label for="username" class="col-sm-3 col-form-label form__label">用户名</label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control form__input" id="username" v-model.trim="username" @input="$v.username.$touch()" placeholder="请填写用户名">
-        </div>
-        <span class="form-group__message" v-if="!$v.username.required">用户名不能为空</span>
-      </div>
-      <div class="form-group row" v-bind:class="{ 'form-group--error': $v.mail.$error }">
-        <label for="email" class="col-sm-3 col-form-label form__label">邮箱</label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control form__input" id="email" v-model.trim="mail" @input="$v.mail.$touch()" placeholder="请填写邮箱">
-        </div>
-        <span class="form-group__message" v-if="!$v.mail.required">邮箱不能为空</span>
-        <span class="form-group__message" v-if="!$v.mail.email">请填写格式正确的邮箱</span>
-      </div>
-      <div class="form-group row" v-bind:class="{ 'form-group--error': $v.password.$error }">
-        <label for="inputPassword" class="col-sm-3 col-form-label form__label">密码</label>
-        <div class="col-sm-8">
-          <input type="password" class="form-control form__input" id="inputPassword" v-model.trim="password" @input="$v.password.$touch()" placeholder="请设置密码">
-        </div>
-        <span class="form-group__message" v-if="!$v.password.required">密码不能为空</span>
-        <span class="form-group__message" v-if="!$v.password.minLength">密码长度不少于4个字符</span>
-      </div>
-      <div class="form-group row" v-bind:class="{ 'form-group--error': $v.passAgain.$error }">
-        <label for="password" class="col-sm-3 col-form-label form__label">确认密码</label>
-        <div class="col-sm-8">
-          <input type="password" class="form-control form__input" id="password" v-model="passAgain" @input="$v.passAgain.$touch()" placeholder="请再次输入密码">
-        </div>
-        <span class="form-group__message" v-if="!$v.passAgain.required">密码不能为空</span>
-        <span class="form-group__message" v-if="!$v.passAgain.minLength">两次输入密码应一致</span>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-8">
-          <button :disabled="$v.validationGroup.$error || $v.validationGroup.$invalid" class="btn btn-primary btn-block" type="button" @click="register()">注册</button>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-8">
-          已有账号，去<a href="/#/login">登录</a>
-        </div>
-      </div>
-    </form>
+    <h3>注册</h3>
+    <el-form :model="registerForm" ref="registerForm" label-width="100px" class="demo-ruleForm">
+      <el-form-item label="用户名"
+                    prop="username"
+                    :rules="validate_rules({required: true, min: 3, max: 5})">
+        <el-input v-model="registerForm.username" placeholder="请输入用户名"></el-input>
+      </el-form-item>
+      <el-form-item label="邮箱"
+                    prop="email"
+                    :rules="validate_rules({required: true, type: 'email'})">
+        <el-input v-model="registerForm.email" placeholder="请输入邮箱"></el-input>
+      </el-form-item>
+      <el-form-item label="密码"
+                    prop="password"
+                    :rules="validate_rules({required: true, type: 'password'})">
+        <el-input type="password" v-model="registerForm.password" placeholder="请输入密码"></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码"
+                    prop="passAgain"
+                    :rules="validate_rules({required: true, type: 'passAgain'})">
+        <el-input type="password" v-model="registerForm.passAgain" placeholder="请再次输入密码"></el-input>
+      </el-form-item>
+      <el-form-item label="">
+        <el-button type="primary" style="width: 100%" @click="register('registerForm')">注册</el-button>
+        已有账号，去<el-button style="margin-left: 0;" type="text" @click="goLogin()">登录</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-  import swal from 'sweetalert2'
-  import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
-
   export default {
     name   : 'register',
     data() {
       return {
-        username : '',
-        password : '',
-        mail     : '',
-        passAgain: ''
+        registerForm: {
+          username : '',
+          password : '',
+          email     : '',
+          passAgain: ''
+        },
       }
     },
-    validations: {
-      username: {
-        required
-      },
-      mail: {
-        required, email
-      },
-      password: {
-        required,
-        minLength: minLength(4)
-      },
-      passAgain: {
-        required,
-        sameAsPassword: sameAs('password')
-      },
-      validationGroup: ['username', 'mail', 'password', 'passAgain']
-    },
     methods: {
-      register() {
-        let userInfo = {
-          "username": this.username,
-          "password": this.password,
-          'email'   : this.mail
-        };
-        this.$http.post('/api/register', userInfo)
-          .then((res) => {
-            if (res.data.success) {
-              let email = {
-                "email": this.mail
-              };
-              swal(res.data.message);
-              this.$http.post('/api/sendEmail', email).then(res => {
-                this.$router.push('/checkEmail');
-              });
-
-            } else {
-              swal(res.data.message);
-            }
-
-          })
+      register(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let userInfo = {
+              "username": this.registerForm.username,
+              "password": this.registerForm.password,
+              'email'   : this.registerForm.email
+            };
+            this.$http.post('/api/register', userInfo)
+              .then((res) => {
+                if (res.data.success) {
+                  let email = {
+                    "email": this.registerForm.email
+                  };
+                  this.$message({
+                    message: res.data.message,
+                    type: 'success'
+                  });
+                  this.$http.post('/api/sendEmail', email).then(res => {
+                    this.$router.push('/checkEmail');
+                  });
+                } else {
+                  this.$message.error(res.data.message);
+                }
+              })
+          } else {
+            return false;
+          }
+        });
+      },
+      goLogin() {
+        this.$router.push('/login');
       }
     }
   }
 </script>
 <style scoped>
   .register {
-    width: 35%;
-    /*height: 300px;*/
+    width: 30%;
     margin: auto;
     background: #eee;
     padding-top: 40px;
-    padding-bottom: 40px;
-    margin-top: 200px;
+    padding-bottom: 20px;
+    margin-top: 150px;
   }
 
   form {
     width: 80%;
-    margin: 30px auto auto;
+    margin-top: 30px;
+    margin-left: 30px;
   }
 
   input, button {

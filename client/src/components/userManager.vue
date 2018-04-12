@@ -1,96 +1,73 @@
 <template>
   <div>
-    <el-row style="text-align: left">
-      <strong>文章管理</strong>
+    <el-row>
+      <strong>用户管理</strong>
     </el-row>
     <el-row>
-      <el-button @click="addData()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
+      <el-button @click="addUser" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
     </el-row>
     <el-table :data="lists" border style="width: 100%;">
       <el-table-column
         type="index"
-        label="#"
-        min-width="10%">
-      </el-table-column>
-      <el-table-column
-        prop="image"
-        label="图片"
-        min-width="15%" style="overflow: hidden">
-        <template slot-scope="scope">
-          <img width="100%" height="100%" :src="scope.row.image" alt="">
-        </template>
+        label="#">
       </el-table-column>
       <el-table-column
         prop="title"
-        label="标题"
-        min-width="15%">
+        label="用户名">
+      </el-table-column>
+      <el-table-column
+        prop="title"
+        label="用户类型">
       </el-table-column>
       <el-table-column
         prop="tagTitle"
-        label="标签"
-        min-width="5%">
+        label="邮箱">
       </el-table-column>
       <el-table-column
-        prop="content"
-        label="内容"
-        min-width="25%"
-        class="content">
+        prop="tagTitle"
+        label="联系方式">
       </el-table-column>
       <el-table-column
-        prop="date"
-        label="日期"
-        min-width="10%">
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        min-width="20%">
+        label="操作">
         <template slot-scope="scope">
-          <el-button @click="goShowData(scope.row._id)" type="success" icon="el-icon-view" plain round class="circle"></el-button>
           <el-button @click="editData(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
           <el-button @click="removeData(scope.row._id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog style="text-align: left" :title="dialogTitle" :visible.sync="dialogFormVisible">
+      <user-dialog></user-dialog>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-
+import userDialog from './userDialog.vue'
   export default {
-    name   : 'articleManager',
+    name   : 'userManger',
     data() {
       return {
         active  : true,
         username: '',
         lists   : [],
-        userId  : ''
+        userId  : '',
+        dialogFormVisible: false,
+        dialogTitle: ''
       }
     },
     mounted: function () {
-      let _this = this;
-      if (localStorage.getItem('userInfo')) {
-        this.username = JSON.parse(localStorage.getItem('userInfo')).email;
-        this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
-        _this.refreshData();
-      } else {
-        this.$router.push('/login');
-      }
+
     },
     methods: {
       refreshData() {
-        this.$http.get('/api/post/get/' + this.userId).then(res => {
-          this.lists = res.data;
-          this.lists.find(item => {
-            item.date = item.date.substring(0, 10);
-          })
-        });
+        this.$http.get('/api/post/get/' + this.userId).then(res => this.lists = res.data);
       },
       addData() {
         this.$router.push('/dataChange/?type=add');
         this.newTitle = '';
       },
       removeData(id) {
-        this.$confirm('确定删除这篇文章吗？', '提示', {
+        this.$confirm('确定删除该条记录？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText : '取消',
           type             : 'warning'
@@ -111,15 +88,19 @@
         })
       },
       editData(id) {
-        this.$router.push('/dataChange/?type=edit');
-        let canEdit = {
-          "editId": id
-        };
-        localStorage.setItem('canEdit', JSON.stringify(canEdit));
+        this.dialogFormVisible = true;
+        this.dialogTitle = "编辑用户";
       },
       goShowData(id) {
         this.$router.push('/detail/?id=' + id);
+      },
+      addUser() {
+        this.dialogFormVisible = true;
+        this.dialogTitle = "添加用户";
       }
+    },
+    components: {
+      userDialog
     }
   }
 </script>

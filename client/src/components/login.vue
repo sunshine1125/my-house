@@ -1,104 +1,107 @@
 <template>
   <div class="login container">
-    <h5 v-show="isChecked">邮箱验证成功，请登录</h5>
-    <h2>登录</h2>
-    <form>
-      <div class="form-group row">
-        <label for="useremail" class="col-sm-2 col-form-label">用户名</label>
-        <div class="col-sm-8">
-          <input type="text" class="form-control" id="useremail" v-model="useremail" placeholder="请输入邮箱">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label for="inputPassword" class="col-sm-2 col-form-label">密码</label>
-        <div class="col-sm-8">
-          <input type="password" class="form-control" id="inputPassword" v-model="password" placeholder="请输入密码">
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
-          <button :disabled="useremail === '' || password === ''" class="btn btn-primary btn-block" type="button"
-                  @click="login()">登录
-          </button>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
-          还没有账号，快去<a href="/#/register">创建</a>一个吧！
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
-          <a @click="forgotPassword()">忘记密码？</a>
-        </div>
-      </div>
-    </form>
+    <h3>登录</h3>
+    <el-form :model="loginForm" ref="loginForm" label-width="100px">
+      <el-form-item label="邮箱"
+                    prop="email"
+                    :rules="validate_rules({required: true, type: 'email'})">
+        <el-input v-model="loginForm.email" placeholder="请输入邮箱"></el-input>
+      </el-form-item>
+      <el-form-item label="密码"
+                    prop="password"
+                    :rules="validate_rules({required: true, type: 'password'})">
+        <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
+      </el-form-item>
+      <el-form-item label="">
+        <el-button type="primary" style="width: 100%" @click="login('loginForm')">登录</el-button>
+        还没有账号，快去
+        <el-button style="margin-left: 0;" type="text" @click="goRegister()">创建</el-button>
+        一个吧！
+        <p style="cursor: pointer" @click="forgotPassword()">忘记密码？</p>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-  import swal from 'sweetalert2'
-
   export default {
     name   : 'login',
     data() {
       return {
-        useremail: '',
-        password : '',
-        isChecked: false
+        loginForm: {
+          email   : '',
+          password: ''
+        }
       }
     },
     mounted: function () {
       if (this.$route.query == null) {
-        this.isChecked = false;
+
       } else {
         if (this.$route.query.passedCheck) {
-          this.isChecked = true;
+          this.$message({
+            message: '邮箱验证成功，请登录!',
+            type   : 'success'
+          })
         }
       }
-
     },
     methods: {
-      login() {
-        let userInfo = {
-          "username": this.useremail,
-          "password": this.password
-        };
-        this.$http.post('/api/authentication', userInfo)
-          .then((res) => {
-            if (res.data.success) {
-              if (res.data.token) {
-                let userInfo = {
-                  'username': this.useremail,
-                  '_id'     : res.data._id,
-                  'token'   : res.data.token
-                };
-                localStorage.setItem('username', JSON.stringify(userInfo));
-                this.$router.push('/');
-              }
-              swal(res.data.message);
-            } else {
-              if (!res.data.check) {
-                swal({
-                  title            : res.data.message,
-                  type             : 'warning',
-                  confirmButtonText: '去验证',
-                }).then((result) => {
-                  let email = {
-                    "email": this.useremail
-                  };
-                  this.$http.post('/api/sendEmail', email).then(res => {
-                    this.$router.push('/checkEmail');
-                  });
-                });
-              } else {
-                swal(res.data.message);
-              }
-            }
-          })
+      login(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let userInfo = {
+              "email"   : this.loginForm.email,
+              "password": this.loginForm.password
+            };
+            let that = this;
+            this.$http.post('/api/authentication', userInfo)
+              .then((res) => {
+                if (res.data.success) {
+                  if (res.data.token) {
+                    let userInfo = {
+                      'email': this.loginForm.email,
+                      '_id'  : res.data._id,
+                      'token': res.data.token
+                    };
+                    this.$message({
+                      message: res.data.message,
+                      type   : 'success'
+                    });
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+                    that.$router.push('/');
+                  }
+                } else {
+                  if (!res.data.check) {
+                    this.$confirm(res.data.message, '提示', {
+                      confirmButtonText: '去验证',
+                      cancelButtonText: '取消',
+                      type: 'warning'
+                    }).then(() => {
+                      let email = {
+                        "email": this.useremail
+                      };
+                      this.$http.post('/api/sendEmail', email).then(res => {
+                        this.$router.push('/checkEmail');
+                      });
+                    }).catch(() => {
+                      this.$message({
+                        type: 'info',
+                        message: '已取消验证'
+                      })
+                    })
+                  } else {
+                    this.$message.error(res.data.message);
+                  }
+                }
+              })
+          } else {
+            return false;
+          }
+        })
+      },
+      goRegister() {
+        this.$router.push('/register');
       },
       forgotPassword() {
         this.$router.push('/forgotPassword');
@@ -108,18 +111,18 @@
 </script>
 <style scoped>
   .login {
-    width: 35%;
-    /*height: 300px;*/
+    width: 30%;
     margin: auto;
     background: #eee;
-    padding-top: 20px;
-    padding-bottom: 40px;
-    margin-top: 200px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin-top: 150px;
   }
 
   form {
     width: 80%;
-    margin: 30px auto auto;
+    margin-top: 30px;
+    margin-left: 30px;
   }
 
   input, button {
@@ -130,7 +133,4 @@
     cursor: pointer;
   }
 
-  h5 {
-    margin-bottom: 20px;
-  }
 </style>
