@@ -56,9 +56,10 @@ apiRoutes.post('/register', (req, res) => {
 });
 
 const apiPort = config.http.apiPort;
+const sender = config.email.user;
 apiRoutes.post('/sendEmail', (req, res) => {
   let options = {
-    from   : '"测试" <2263723236@qq.com>',
+    from   : '"测试"' + sender,
     to     : '"测试"' + req.body.email,
     subject: '一封来自sunshine1125的邮件',
     text   : '一封来自sunshine1125的邮件',
@@ -71,7 +72,7 @@ apiRoutes.post('/sendEmail', (req, res) => {
 
 apiRoutes.post('/forgotPassword', (req, res) => {
   let options = {
-    from   : '"测试" <2263723236@qq.com>',
+    from   : '"测试"' + sender,
     to     : '"测试"' + req.body.email,
     subject: '一封来自sunshine1125的邮件',
     text   : '一封来自sunshine1125的邮件',
