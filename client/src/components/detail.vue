@@ -2,7 +2,8 @@
   <div class="detail">
     <div class="article">
       <div class="header">
-        <img :src="imgSrc" alt="">
+        <div class="iconImage" :style="{backgroundImage: 'url(' + imgSrc + ')'}"></div>
+        <!--<img :src="imgSrc" alt="">-->
         <h1 class="title">{{title}}</h1>
       </div>
       <div class="time">发布时间：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span></div>
@@ -36,6 +37,18 @@
         });
       }
     },
+    computed: {
+//      backgroundImage() {
+//        return {
+//          background: url(this.imgSrc) no-repeat center;
+//        }
+//      },
+//      getImage() {
+//        return {
+//          backgroundImage: `${this.imgSrc}`
+//        }
+//      }
+    },
     methods   : {},
     components: {}
   }
@@ -47,11 +60,13 @@
   }
 
   .detail .article .title {
-    margin: 20px 0;
-    -ms-word-break: break-word;
-    word-break: break-word !important;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     font-size: 34px;
     font-weight: 700;
+    line-height: 150px;
+    z-index: 10;
   }
 
   .article .time {
@@ -81,22 +96,20 @@
 
   .detail .header {
     width: 100%;
-    height: 100px;
+    height: 150px;
     position: relative;
   }
 
-  .detail .header img {
+  .detail .header .iconImage {
     position: absolute;
     width: 100%;
     height: 100%;
     display: block;
-    opacity: 0.5;
-    z-index: 10;
-  }
-
-  .detail .header h1 {
-    height: 100px;
-    line-height: 100px;
+    opacity: 0.6;
+    background-repeat: no-repeat;
+    background-position: center;
+    -webkit-background-size: 100% 150px;
+    background-size: 100% 150px;
   }
   .tag {
     background-color: rgba(64, 158, 225, .1);

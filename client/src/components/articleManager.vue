@@ -12,14 +12,15 @@
         label="#"
         min-width="10%">
       </el-table-column>
-      <el-table-column
-        prop="image"
-        label="图片"
-        min-width="15%" style="overflow: hidden">
-        <template slot-scope="scope">
-          <img width="100%" height="100%" :src="scope.row.image" alt="">
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="image"-->
+        <!--label="图片"-->
+        <!--min-width="15%" style="overflow: hidden">-->
+        <!--<template slot-scope="scope">-->
+          <!--<div style="'background-image: url(' + scope.row.image + ')'"></div>-->
+          <!--&lt;!&ndash;<img width="100%" height="100%" :src="scope.row.image" alt="">&ndash;&gt;-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column
         prop="title"
         label="标题"

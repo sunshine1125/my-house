@@ -124,4 +124,7 @@
   .el-table th .cell {
     text-align: center;
   }
+  /*main {*/
+    /*background-color: #e9eef3;*/
+  /*}*/
 </style>
