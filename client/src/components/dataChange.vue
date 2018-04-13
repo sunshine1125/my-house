@@ -13,8 +13,8 @@
       </el-form-item>
       <el-form-item label="标签"
                     prop="tag"
-                    class="customInput"
-                    :rules="validate_rules({required: true})">
+                    class="customInput">
+        <!--<pre>{{addArticleData.tagTitle}}</pre>-->
         <el-select v-model="addArticleData.tagTitle" placeholder="请选择">
           <el-option v-for="tag in tags"
                      :key="tag.title"
@@ -28,24 +28,20 @@
                     :rules="validate_rules({required: true})">
         <mavon-editor :ishljs="true" v-model="addArticleData.content"></mavon-editor>
       </el-form-item>
-      <div class="form-group row">
-        <span class="col-sm-2"></span>
-        <button class="btn btn-primary col-sm-1" @click="saveData()">确定</button>
-        <span class="col-sm-1"></span>
-        <button class="btn btn-secondary col-sm-1" @click="cancelData()">取消</button>
-      </div>
+      <el-form-item style="text-align: left" label="">
+        <el-button type="primary" @click="saveData('addArticleData')">确定</el-button>
+        <el-button type="info" @click="cancelData()">取消</el-button>
+      </el-form-item>
     </el-form>
     <el-form v-show="isEdit" :model="editArticleData" ref="editArticleData" label-width="70px" class="rowContainer">
       <el-form-item label="标题"
                     prop="changeTitle"
-                    class="customInput"
-                    :rules="validate_rules({required: true})">
+                    class="customInput">
         <el-input v-model="editArticleData.changeTitle" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="标签"
                     prop="tag"
-                    class="customInput"
-                    :rules="validate_rules({required: true})">
+                    class="customInput">
         <el-select v-model="editArticleData.tagTitle" placeholder="请选择">
           <el-option v-for="tag in tags"
                      :key="tag.title"
@@ -55,84 +51,19 @@
         </el-select>
       </el-form-item>
       <el-form-item label="内容"
-                    prop="content"
-                    :rules="validate_rules({required: true})">
+                    prop="content">
         <mavon-editor :ishljs="true" v-model="editArticleData.changeContent"></mavon-editor>
       </el-form-item>
-      <div class="form-group row">
-        <span class="col-sm-2"></span>
-        <button class="btn btn-primary col-sm-1" @click="sureEdit()">确定</button>
-        <span class="col-sm-1"></span>
-        <button class="btn btn-secondary col-sm-1" @click="cancelEdit()">取消</button>
-      </div>
+      <el-form-item style="text-align: left" label="">
+        <el-button type="primary" @click="sureEdit('editArticleData')">确定</el-button>
+        <el-button type="info" @click="cancelEdit()">取消</el-button>
+      </el-form-item>
     </el-form>
-    <!--<div id="table">-->
-    <!--<div class="container" v-show="isDisplay">-->
-    <!--&lt;!&ndash;<div class="form-group row">&ndash;&gt;-->
-    <!--&lt;!&ndash;<label class="col-sm-2 col-form-label" for="title">标题</label>&ndash;&gt;-->
-    <!--&lt;!&ndash;<input class="form-control col-sm-4" type="text" id="title" v-model="newTitle">&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="form-group row">&ndash;&gt;-->
-    <!--&lt;!&ndash;<label class="col-sm-2 col-form-label">标签</label>&ndash;&gt;-->
-    <!--&lt;!&ndash;<el-select v-model="tagTitle" placeholder="请选择">&ndash;&gt;-->
-    <!--&lt;!&ndash;<el-option v-for="tag in tags"&ndash;&gt;-->
-    <!--&lt;!&ndash;:key="tag.title"&ndash;&gt;-->
-    <!--&lt;!&ndash;:label="tag.title"&ndash;&gt;-->
-    <!--&lt;!&ndash;:value="tag.title">&ndash;&gt;-->
-    <!--&lt;!&ndash;</el-option>&ndash;&gt;-->
-    <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
-    <!--&lt;!&ndash;<select class="custom-select" name="" id="" v-model="tagTitle">&ndash;&gt;-->
-    <!--&lt;!&ndash;<option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;</select>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--&lt;!&ndash;<uploadImage @imgHasChange="imgChange"></uploadImage>&ndash;&gt;-->
-    <!--&lt;!&ndash;<div class="form-group row">&ndash;&gt;-->
-    <!--&lt;!&ndash;<label class="col-sm-2 col-form-label">内容</label>&ndash;&gt;-->
-    <!--&lt;!&ndash;<mavon-editor :ishljs="true" v-model="content"></mavon-editor>&ndash;&gt;-->
-    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-    <!--<div class="form-group row">-->
-    <!--<span class="col-sm-2"></span>-->
-    <!--<button class="btn btn-primary col-sm-1" @click="saveData()">确定</button>-->
-    <!--<span class="col-sm-1"></span>-->
-    <!--<button class="btn btn-secondary col-sm-1" @click="cancelData()">取消</button>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="container" v-show="isEdit">-->
-    <!--<div class="form-group row">-->
-    <!--<label class="col-sm-2 col-form-label" for="changeTitle">标题</label>-->
-    <!--<input class="form-control col-sm-4" type="text" id="changeTitle" v-model="changeTitle">-->
-    <!--</div>-->
-    <!--<div class="form-group row">-->
-    <!--<label class="col-sm-2 col-form-label">标签</label>-->
-    <!--<el-select v-model="tagTitle" placeholder="请选择">-->
-    <!--<el-option v-for="tag in tags"-->
-    <!--:key="tag.title"-->
-    <!--:label="tag.title"-->
-    <!--:value="tag.title">-->
-    <!--</el-option>-->
-    <!--</el-select>-->
-    <!--&lt;!&ndash;<select class="custom-select" name="" v-model="tagTitle">&ndash;&gt;-->
-    <!--&lt;!&ndash;<option v-for="tag in tags" v-model="tag.title">{{tag.title}}</option>&ndash;&gt;-->
-    <!--&lt;!&ndash;</select>&ndash;&gt;-->
-    <!--</div>-->
-    <!--<uploadImage @imgHasChange="imgChange" :imgSrc="imgPath"></uploadImage>-->
-    <!--<div class="form-group row">-->
-    <!--<label class="col-sm-2 col-form-label">内容</label>-->
-    <!--<mavon-editor :ishljs="true" v-model="changeContent"></mavon-editor>-->
-    <!--</div>-->
-    <!--<div class="form-group row">-->
-    <!--<span class="col-sm-2"></span>-->
-    <!--<button class="btn btn-primary col-sm-1" @click="sureEdit()">确定</button>-->
-    <!--<span class="col-sm-1"></span>-->
-    <!--<button class="btn btn-secondary col-sm-1" @click="cancelEdit()">取消</button>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</div>-->
   </div>
 </template>
 
 <script>
-  import swal from 'sweetalert2'
+//  import swal from 'sweetalert2'
   import uploadImage from './upLoadImage.vue'
 
   export default {
@@ -140,19 +71,14 @@
     data() {
       return {
         isDisplay     : false,
-        newTitle      : '',
         img           : '',
-        content       : '',
-        changeContent : '',
         isEdit        : false,
-        changeTitle   : '',
         editId        : '',
         userId        : '',
-        imgResult     : '',
-        imgTemplate   : '',
-        imgPath       : '',
+//        imgResult     : '',
+//        imgTemplate   : '',
+//        imgPath       : '',
         tags          : '',
-        tagTitle      : '',
         addArticleData: {
           newTitle: '',
           tagTitle: '',
@@ -187,23 +113,25 @@
       })
     },
     methods   : {
-      saveData() {
-        if (this.newTitle) {
-          let displayData = {
+      saveData(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let displayData = {
 //            "image"   : this.imgPath,
-            "title"   : this.addArticleData.newTitle,
-            "content" : this.addArticleData.content,
-            "date"    : new Date().toLocaleDateString(),
-            "tagTitle": this.addArticleData.tagTitle
-          };
-          this.isDisplay = false;
-          this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
-            this.$router.push('/articleManager');
-            localStorage.removeItem('canAdd');
-          })
-        } else {
-          swal('Title不能为空！');
-        }
+              "title"   : this.addArticleData.newTitle,
+              "content" : this.addArticleData.content,
+              "date"    : new Date().toLocaleDateString(),
+              "tagTitle": this.addArticleData.tagTitle
+            };
+            this.isDisplay = false;
+            this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
+              this.$router.push('/articleManager');
+              localStorage.removeItem('canAdd');
+            })
+          } else {
+            return false;
+          }
+        })
       },
       cancelData() {
         this.isDisplay = false;
@@ -211,24 +139,25 @@
         this.$router.push('/articleManager');
         localStorage.removeItem('canAdd');
       },
-      sureEdit() {
-        if (this.editArticleData.changeTitle) {
-          let payload = {
+      sureEdit(formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let payload = {
 //            image   : this.imgPath,
-            title   : this.editArticleData.changeTitle,
-            tagTitle: this.editArticleData.tagTitle,
-            content : this.editArticleData.changeContent
-          };
-          this.isEdit = false;
-          this.$http.put('/api/post/edit/' + this.editId, payload)
-            .then(res => {
-              this.$router.push("/articleManager");
-              localStorage.removeItem('canEdit');
-            });
-
-        } else {
-          swal('Title不能为空！');
-        }
+              title   : this.editArticleData.changeTitle,
+              tagTitle: this.editArticleData.tagTitle,
+              content : this.editArticleData.changeContent
+            };
+            this.isEdit = false;
+            this.$http.put('/api/post/edit/' + this.editId, payload)
+              .then(res => {
+                this.$router.push("/articleManager");
+                localStorage.removeItem('canEdit');
+              });
+          } else {
+            return false;
+          }
+        })
 
       },
       cancelEdit: function () {

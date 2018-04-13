@@ -35,6 +35,17 @@ exports.install = (Vue, options) => {
       callback();
     }
   };
+  const isPhone = (rule, value, callback) => {
+    if (value !== null && value !== "") {
+      if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(value))) {
+        callback(new Error('请输入正确的手机号码'))
+      } else {
+        callback();
+      }
+    } else {
+      callback();
+    }
+  };
 
   Vue.prototype.validate_rules = (item) => {
     let rules = [];
@@ -58,6 +69,9 @@ exports.install = (Vue, options) => {
           break;
         case 'passAgain':
           rules.push({validator: isPassAgain, trigger: 'blur, change'});
+          break;
+        case 'phone':
+          rules.push({validator: isPhone, trigger: 'blur, change'});
           break;
         default:
           rules.push({});
