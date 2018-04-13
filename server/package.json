@@ -3,7 +3,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon",
-    "deploy:prod": "pm2 deploy ecosystem.config.js develop"
+    "deploy:prod": "pm2 deploy ecosystem.config.js production"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
