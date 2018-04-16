@@ -27,6 +27,8 @@ apiRoutes.post('/register', (req, res) => {
         username          : req.body.username,
         password          : password,// 把加密后的密码存入数据库
         email             : req.body.email,
+        userTypeId        : req.body.userTypeId,
+        userType          : '',
         confirmation_token: confirToken,
         changePassword    : false,
         admin             : true,
@@ -216,5 +218,17 @@ apiRoutes.post('/authentication', (req, res) => {
     }
   })
 });
+
+apiRoutes.get('/getAllUsers', (req, res) => {
+  User.find()
+    .exec((err, data) => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.status(200).json({success: true, data: data})
+      }
+
+    })
+})
 
 module.exports = apiRoutes;

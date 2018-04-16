@@ -4,13 +4,13 @@
       <el-input v-model="form.userName"></el-input>
     </el-form-item>
     <el-form-item label="密码" prop="password" :rules="validate_rules({required: true, type: 'password'})">
-      <el-input v-model="form.password"></el-input>
+      <el-input v-model="form.password" type="password"></el-input>
     </el-form-item>
     <el-form-item label="确认密码" prop="passAgain" :rules="validate_rules({required: true, type: 'passAgain'})">
-      <el-input v-model="form.passAgain"></el-input>
+      <el-input v-model="form.passAgain" type="password"></el-input>
     </el-form-item>
-    <el-form-item label="用户类型" prop="userType">
-      <el-select v-model="form.userType" placeholder="请选择用户类型" :rules="validate_rules({required: true})">
+    <el-form-item label="用户类型" prop="userType" :rules="validate_rules({required: true})">
+      <el-select v-model="form.userType" placeholder="请选择用户类型">
         <el-option value="管理员"></el-option>
         <el-option value="普通用户"></el-option>
       </el-select>
@@ -23,6 +23,7 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="save('form')">保存</el-button>
+      <el-button type="info" @click="cancel()">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -31,9 +32,11 @@
 
   export default {
     name   : 'userDialog',
+    props  : ['formVisible'],
     data() {
       return {
         labelPosition: 'right',
+        isCloseForm  : this.formVisible,
         form         : {
           userName : '',
           password : '',
@@ -41,31 +44,10 @@
           userType : '',
           email    : '',
           phone    : ''
-        },
-//        formRules    : {
-//          userName: [
-//            {required: true, message: '请输入用户名', trigger: 'blur'}
-//          ],
-//          password: [
-//            {required: true, message: '请输入密码', trigger: 'blur'}
-//          ],
-//          againpass: [
-//            {required: true, message: '请再次输入密码', trigger: 'blur'}
-//          ],
-//          userType: [
-//            {required: true, message: '请选择用户类型', trigger: 'change'}
-//          ],
-//          email   : [
-//            {required: true, message: '请输入邮箱', trigger: 'blur'}
-//          ],
-//          phone   : [
-//            {required: true, message: '请输入联系方式', trigger: 'blur'}
-//          ]
-//        }
-
+        }
       }
     },
-    mounted: function () {
+    computed: {
 
     },
     methods: {
@@ -73,10 +55,16 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             alert('TODO')
+            this.isCloseForm = false;
+            this.$emit('isCloseForm', this.isCloseForm);
           } else {
             return false;
           }
         })
+      },
+      cancel() {
+        this.isCloseForm = false;
+        this.$emit('isCloseForm', this.isCloseForm);
       }
     }
   }

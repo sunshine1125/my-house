@@ -64,7 +64,7 @@
 
 <script>
 //  import swal from 'sweetalert2'
-  import uploadImage from './upLoadImage.vue'
+//  import uploadImage from './upLoadImage.vue'
 
   export default {
     name      : 'dataChange',
@@ -171,7 +171,7 @@
       }
     },
     components: {
-      uploadImage
+//      uploadImage
     }
   }
 </script>
@@ -192,8 +192,8 @@
   }
 
   .markdown-body {
-    width: 82%;
-    min-height: 450px;
+    width: 100%;
+    min-height: 600px;
   }
 
   .v-note-wrapper.fullscreen {

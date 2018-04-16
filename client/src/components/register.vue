@@ -24,7 +24,8 @@
       </el-form-item>
       <el-form-item label="">
         <el-button type="primary" style="width: 100%" @click="register('registerForm')">注册</el-button>
-        已有账号，去<el-button style="margin-left: 0;" type="text" @click="goLogin()">登录</el-button>
+        已有账号，去
+        <el-button style="margin-left: 0;" type="text" @click="goLogin()">登录</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -38,7 +39,7 @@
         registerForm: {
           username : '',
           password : '',
-          email     : '',
+          email    : '',
           passAgain: ''
         },
       }
@@ -48,9 +49,10 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let userInfo = {
-              "username": this.registerForm.username,
-              "password": this.registerForm.password,
-              'email'   : this.registerForm.email
+              "username"  : this.registerForm.username,
+              "password"  : this.registerForm.password,
+              'email'     : this.registerForm.email,
+              'userTypeId': 1
             };
             this.$http.post('/api/register', userInfo)
               .then((res) => {
@@ -60,7 +62,7 @@
                   };
                   this.$message({
                     message: res.data.message,
-                    type: 'success'
+                    type   : 'success'
                   });
                   this.$http.post('/api/sendEmail', email).then(res => {
                     this.$router.push('/checkEmail');
@@ -99,6 +101,7 @@
   input, button {
     outline: none;
   }
+
   a {
     cursor: pointer;
   }

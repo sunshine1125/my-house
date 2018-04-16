@@ -6,7 +6,7 @@
     <el-row>
       <el-button @click="addTag()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
     </el-row>
-    <el-table :data="tags" border style="width: 80%;">
+    <el-table :data="tags" border style="width: 100%;">
       <el-table-column
         type="index"
         label="#">

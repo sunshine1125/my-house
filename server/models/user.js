@@ -6,6 +6,8 @@ let UserSchema = new Schema({
   password          : String,
   email             : String,
   admin             : Boolean,
+  userTypeId        : Number,
+  userType          : String,
   confirmation_token: String,
   changePassword    : Boolean,
   posts             : [{type: Schema.Types.ObjectId, ref: 'Post'}]

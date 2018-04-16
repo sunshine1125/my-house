@@ -6,21 +6,22 @@
     <el-row>
       <el-button @click="addUser" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
     </el-row>
-    <el-table :data="lists" border style="width: 100%;">
+    <el-table :data="users" border style="width: 100%;">
       <el-table-column
         type="index"
         label="#">
       </el-table-column>
       <el-table-column
-        prop="title"
+        prop="username"
         label="用户名">
       </el-table-column>
+      <pre>{{userType}}</pre>
       <el-table-column
-        prop="title"
+        prop="userType"
         label="用户类型">
       </el-table-column>
       <el-table-column
-        prop="tagTitle"
+        prop="email"
         label="邮箱">
       </el-table-column>
       <el-table-column
@@ -36,7 +37,7 @@
       </el-table-column>
     </el-table>
     <el-dialog style="text-align: left" :title="dialogTitle" :visible.sync="dialogFormVisible">
-      <user-dialog></user-dialog>
+      <user-dialog @isCloseForm="isCloseForm" :formVisible="dialogFormVisible"></user-dialog>
     </el-dialog>
   </div>
 </template>
@@ -49,54 +50,68 @@ import userDialog from './userDialog.vue'
       return {
         active  : true,
         username: '',
-        lists   : [],
+        users   : [],
         userId  : '',
         dialogFormVisible: false,
         dialogTitle: ''
       }
     },
     mounted: function () {
-
+      this.refreshData();
     },
     methods: {
       refreshData() {
-        this.$http.get('/api/post/get/' + this.userId).then(res => this.lists = res.data);
+        this.$http.get('/api/getAllUsers')
+          .then(res => this.users = res.data.data)
+          .then(()=> {
+            this.users.forEach((item) => {
+              if (item.userTypeId === 1) {
+                item.userType = '普通用户'
+              } else {
+                item.userType = '管理员'
+              }
+            })
+            console.log(this.users)
+          });
       },
-      addData() {
-        this.$router.push('/dataChange/?type=add');
-        this.newTitle = '';
-      },
-      removeData(id) {
-        this.$confirm('确定删除该条记录？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText : '取消',
-          type             : 'warning'
-        }).then((value) => {
-          this.$http.delete('/api/post/remove/' + id)
-            .then(() => this.refreshData())
-            .then(() => {
-              this.$message({
-                type   : 'success',
-                message: '删除成功！'
-              })
-            });
-        }).catch(() => {
-          this.$message({
-            type   : 'info',
-            message: '已取消删除'
-          })
-        })
-      },
-      editData(id) {
-        this.dialogFormVisible = true;
-        this.dialogTitle = "编辑用户";
-      },
-      goShowData(id) {
-        this.$router.push('/detail/?id=' + id);
-      },
+//      addData() {
+//        this.$router.push('/dataChange/?type=add');
+//        this.newTitle = '';
+//      },
+//      removeData(id) {
+//        this.$confirm('确定删除该条记录？', '提示', {
+//          confirmButtonText: '确定',
+//          cancelButtonText : '取消',
+//          type             : 'warning'
+//        }).then((value) => {
+//          this.$http.delete('/api/post/remove/' + id)
+//            .then(() => this.refreshData())
+//            .then(() => {
+//              this.$message({
+//                type   : 'success',
+//                message: '删除成功！'
+//              })
+//            });
+//        }).catch(() => {
+//          this.$message({
+//            type   : 'info',
+//            message: '已取消删除'
+//          })
+//        })
+//      },
+//      editData(id) {
+//        this.dialogFormVisible = true;
+//        this.dialogTitle = "编辑用户";
+//      },
+//      goShowData(id) {
+//        this.$router.push('/detail/?id=' + id);
+//      },
       addUser() {
         this.dialogFormVisible = true;
         this.dialogTitle = "添加用户";
+      },
+      isCloseForm(val) {
+        this.dialogFormVisible = val;
       }
     },
     components: {
