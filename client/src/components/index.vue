@@ -2,18 +2,22 @@
   <div class="home">
     <el-container>
       <el-header>
-        <ul class="header-operations">
-          <li>欢迎 <span>{{username}}</span></li>
-          <li @click="resetPassword()">重置密码</li>
-          <li @click="logout()">退出</li>
-        </ul>
+        <el-dropdown class="header-operations" @command="handleCommand">
+          <span class="el-dropdown-link">
+            欢迎 <span>{{username}}</span><i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="resetPassword" @click="resetPassword()">重置密码</el-dropdown-item>
+            <el-dropdown-item command="logout" @click="logout()">退出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-header>
       <el-container>
         <el-aside width="200px">
           <!--左侧导航-->
           <div class="main-left">
             <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true">
-              <el-menu-item index="/userManager">用户管理</el-menu-item>
+              <!--<el-menu-item index="/userManager">用户管理</el-menu-item>-->
               <el-menu-item index="/articleManager">文章管理</el-menu-item>
               <el-menu-item index="/tagManager">标签管理</el-menu-item>
             </el-menu>
@@ -50,12 +54,14 @@
       }
     },
     methods: {
-      resetPassword() {
-        this.$router.push('/resetPassword');
-      },
-      logout() {
-        this.$router.push('/login');
-        localStorage.removeItem('userInfo');
+      handleCommand(command) {
+        if (command === 'resetPassword') {
+          this.$router.push('/resetPassword');
+        }
+        if (command === 'logout') {
+          this.$router.push('/login');
+          localStorage.removeItem('userInfo');
+        }
       }
     },
     components: {
@@ -80,15 +86,11 @@
     float: right;
     padding-right: 30px;
     height: 100%;
-  }
-  .header-operations li {
-    color: #fff;
-    display: inline-block;
     vertical-align: middle;
-    padding: 0 10px;
     margin: 0 10px;
-    line-height: 60px;
+    line-height: 70px;
     cursor: pointer;
+    color: #fff;
     font-size: 16px;
   }
   #table {

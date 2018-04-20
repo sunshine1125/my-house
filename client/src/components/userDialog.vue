@@ -18,7 +18,7 @@
     <el-form-item label="邮箱" prop="email" :rules="validate_rules({required: true, type: 'email'})">
       <el-input v-model="form.email"></el-input>
     </el-form-item>
-    <el-form-item label="联系方式" prop="phone" :rules="validate_rules({required: true, type: 'phone'})">
+    <el-form-item label="联系方式" prop="phone" :rules="validate_rules({type: 'phone'})">
       <el-input v-model="form.phone"></el-input>
     </el-form-item>
     <el-form-item>
@@ -31,8 +31,8 @@
 <script>
 
   export default {
-    name   : 'userDialog',
-    props  : ['formVisible'],
+    name    : 'userDialog',
+    props   : ['formVisible'],
     data() {
       return {
         labelPosition: 'right',
@@ -47,16 +47,27 @@
         }
       }
     },
-    computed: {
-
-    },
-    methods: {
+    computed: {},
+    methods : {
       save(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            alert('TODO')
+            var userTypeId = null;
+            if (this.form.userType === '管理员') {
+              userTypeId = 0;
+            } else {
+              userTypeId = 1;
+            }
+            var userInfo = {
+              'userName'  : this.form.username,
+              'password'  : this.form.password,
+              'userTypeId': userTypeId,
+              'userType'  : this.form.userType,
+              'phone'     : this.form.phone
+            }
             this.isCloseForm = false;
             this.$emit('isCloseForm', this.isCloseForm);
+            this.$http.post('/api/register', userInfo);
           } else {
             return false;
           }

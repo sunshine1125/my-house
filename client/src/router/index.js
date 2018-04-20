@@ -20,7 +20,7 @@ export default new Router({
       path     : '/',
       name     : 'index',
       component: index,
-      redirect : '/userManager',
+      redirect : '/articleManager',
       children : [
         {
           path: 'userManager',

@@ -15,7 +15,6 @@
         prop="username"
         label="用户名">
       </el-table-column>
-      <pre>{{userType}}</pre>
       <el-table-column
         prop="userType"
         label="用户类型">
@@ -31,13 +30,13 @@
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="editData(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
+          <!--<el-button @click="editData(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>-->
           <el-button @click="removeData(scope.row._id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog style="text-align: left" :title="dialogTitle" :visible.sync="dialogFormVisible">
-      <user-dialog @isCloseForm="isCloseForm" :formVisible="dialogFormVisible"></user-dialog>
+      <user-dialog @isCloseForm="isCloseForm" :formVisible="dialogFormVisible" :editUser="editUser" :canEdit="canEdit"></user-dialog>
     </el-dialog>
   </div>
 </template>
@@ -51,6 +50,8 @@ import userDialog from './userDialog.vue'
         active  : true,
         username: '',
         users   : [],
+        editUser : {},
+        canEdit : false,
         userId  : '',
         dialogFormVisible: false,
         dialogTitle: ''
@@ -71,7 +72,6 @@ import userDialog from './userDialog.vue'
                 item.userType = '管理员'
               }
             })
-            console.log(this.users)
           });
       },
 //      addData() {
@@ -99,10 +99,20 @@ import userDialog from './userDialog.vue'
 //          })
 //        })
 //      },
-//      editData(id) {
-//        this.dialogFormVisible = true;
-//        this.dialogTitle = "编辑用户";
-//      },
+        editData(id) {
+          this.dialogFormVisible = true;
+          this.dialogTitle = "编辑用户";
+          this.canEdit = true;
+//          this.$http.get('/api/getSingleUserById/' + id).then((res) => {
+//            this.editUser = res.data.data;
+//            if (this.editUser.userTypeId === 1) {
+//              this.editUser.userType = '普通用户';
+//            } else {
+//              this.editUser.userType = '管理员';
+//            }
+//          })
+
+        },
 //      goShowData(id) {
 //        this.$router.push('/detail/?id=' + id);
 //      },

@@ -1,11 +1,15 @@
 <template>
   <div>
     <el-header>
-      <ul class="header-operations">
-        <li>欢迎 <span>{{username}}</span></li>
-        <li @click="resetPassword()">重置密码</li>
-        <li @click="logout()">退出</li>
-      </ul>
+      <el-dropdown class="header-operations" @command="handleCommand">
+          <span class="el-dropdown-link">
+            欢迎 <span>{{username}}</span><i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="resetPassword" @click="resetPassword()">重置密码</el-dropdown-item>
+          <el-dropdown-item command="logout" @click="logout()">退出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-header>
     <div class="container">
       <div style="width: 50%; margin-left: 20%;">
@@ -83,6 +87,15 @@
             return false;
           }
         })
+      },
+      handleCommand(command) {
+        if (command === 'resetPassword') {
+          this.$router.push('/resetPassword');
+        }
+        if (command === 'logout') {
+          this.$router.push('/login');
+          localStorage.removeItem('userInfo');
+        }
       }
     }
   }

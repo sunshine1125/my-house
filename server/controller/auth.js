@@ -29,6 +29,7 @@ apiRoutes.post('/register', (req, res) => {
         email             : req.body.email,
         userTypeId        : req.body.userTypeId,
         userType          : '',
+        phone             : null,
         confirmation_token: confirToken,
         changePassword    : false,
         admin             : true,
@@ -37,7 +38,7 @@ apiRoutes.post('/register', (req, res) => {
         email: req.body.email
       }, function (err, user) {
         if (user) {
-          res.json({success: false, message: '该邮箱已经注册，请直接登录！'})
+          res.json({success: false, message: '该用户已经存在！'})
         } else {
 
           newUser.save((err, data) => {
@@ -46,7 +47,7 @@ apiRoutes.post('/register', (req, res) => {
             } else {
               return res.json({
                 success: true,
-                message: '注册成功',
+                message: '添加成功',
               })
             }
           })
@@ -225,6 +226,19 @@ apiRoutes.get('/getAllUsers', (req, res) => {
       if (err) {
         res.send(err);
       } else {
+        res.status(200).json({success: true, data: data})
+      }
+
+    })
+});
+
+apiRoutes.get('/getSingleUserById/:id', (req, res) => {
+  User.findOne({_id: req.params.id})
+    .exec((err, data) => {
+      if (err) {
+        res.send(err);
+      } else {
+        bcrypt
         res.status(200).json({success: true, data: data})
       }
 

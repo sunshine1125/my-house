@@ -1,9 +1,13 @@
 <template>
   <div class="dataChange">
-    <el-row style="text-align: left">
-      <strong v-show="isDisplay">文章管理 / <span>添加文章</span></strong>
-      <strong v-show="isEdit">文章管理 / <span>修改文章</span></strong>
-    </el-row>
+    <el-breadcrumb v-show="isDisplay" separator="/">
+      <el-breadcrumb-item :to="{ path: '/' }">文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item>添加文章</el-breadcrumb-item>
+    </el-breadcrumb>
+    <el-breadcrumb v-show="isEdit" separator="/">
+      <el-breadcrumb-item :to="{ path: '/' }">文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item v-show="isEdit">修改文章</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-form v-show="isDisplay" :model="addArticleData" ref="addArticleData" label-width="70px" class="rowContainer">
       <el-form-item label="标题"
                     prop="newTitle"
