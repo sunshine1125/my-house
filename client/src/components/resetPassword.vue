@@ -77,7 +77,7 @@
                 // 密码修改成功
                 this.$message.success('密码修改成功');
                 this.$http.put('/api/canChangePassword', password);
-                this.$router.push('/login');
+                this.$router.push('/admin/login');
               } else {
                 this.$message.error(res.data.message);
               }
@@ -90,10 +90,10 @@
       },
       handleCommand(command) {
         if (command === 'resetPassword') {
-          this.$router.push('/resetPassword');
+          this.$router.push('/admin/resetPassword');
         }
         if (command === 'logout') {
-          this.$router.push('/login');
+          this.$router.push('/admin/login');
           localStorage.removeItem('userInfo');
         }
       }

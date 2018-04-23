@@ -11,60 +11,66 @@ import detail from '@/components/detail'
 import userManager from '@/components/userManager'
 import articleManager from '@/components/articleManager'
 import tagManager from '@/components/tagManager'
+import articlesList from '@/components/articlesList'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path     : '/',
+      path     : '/admin',
       name     : 'index',
       component: index,
-      redirect : '/articleManager',
+      redirect : '/admin/articleManager',
       children : [
         {
-          path: 'userManager',
+          path: '/admin/userManager',
           component: userManager
         },
         {
-          path: 'articleManager',
+          path: '/admin/articleManager',
           component: articleManager
         },
         {
-          path: 'tagManager',
+          path: '/admin/tagManager',
           component: tagManager
         },
         {
-          path     : '/dataChange',
+          path     : '/admin/dataChange',
           name     : 'dataChange',
           component: dataChange
         },
       ]
     },
     {
-      path     : '/login',
+      path     : '/admin/login',
       name     : 'login',
       component: login
     },
     {
-      path     : '/register',
+      path     : '/admin/register',
       name     : 'register',
       component: register
     },
     {
-      path     : '/checkEmail',
+      path     : '/admin/checkEmail',
       name     : 'checkEmail',
       component: checkEmail
     },
     {
-      path     : '/forgotPassword',
+      path     : '/admin/forgotPassword',
       name     : 'forgotPassword',
       component: forgotPassword
     },
     {
-      path     : '/resetPassword',
+      path     : '/admin/resetPassword',
       name     : 'resetPassword',
       component: resetPassword
+    },
+    {
+      path     : '/',
+      name     : 'articlesList',
+      component: articlesList
     },
     {
       path     : '/detail',

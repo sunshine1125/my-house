@@ -129,7 +129,7 @@
             };
             this.isDisplay = false;
             this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
-              this.$router.push('/articleManager');
+              this.$router.push('/admin/articleManager');
               localStorage.removeItem('canAdd');
             })
           } else {
@@ -140,7 +140,7 @@
       cancelData() {
         this.isDisplay = false;
         this.addArticleData.newTitle = '';
-        this.$router.push('/articleManager');
+        this.$router.push('/admin/articleManager');
         localStorage.removeItem('canAdd');
       },
       sureEdit(formName) {
@@ -155,7 +155,7 @@
             this.isEdit = false;
             this.$http.put('/api/post/edit/' + this.editId, payload)
               .then(res => {
-                this.$router.push("/articleManager");
+                this.$router.push("/admin/articleManager");
                 localStorage.removeItem('canEdit');
               });
           } else {
@@ -167,7 +167,7 @@
       cancelEdit: function () {
         this.isEdit = false;
         this.editArticleData.changeTitle = '';
-        this.$router.push("/articleManager");
+        this.$router.push("/admin/articleManager");
         localStorage.removeItem('canEdit');
       },
       imgChange(val) {

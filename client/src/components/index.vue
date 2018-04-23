@@ -13,13 +13,13 @@
         </el-dropdown>
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="10%">
           <!--左侧导航-->
           <div class="main-left">
             <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true">
               <!--<el-menu-item index="/userManager">用户管理</el-menu-item>-->
-              <el-menu-item index="/articleManager">文章管理</el-menu-item>
-              <el-menu-item index="/tagManager">标签管理</el-menu-item>
+              <el-menu-item index="/admin/articleManager">文章管理</el-menu-item>
+              <el-menu-item index="/admin/tagManager">标签管理</el-menu-item>
             </el-menu>
           </div>
         </el-aside>
@@ -50,16 +50,16 @@
         });
         this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
       } else {
-        this.$router.push('/login');
+        this.$router.push('/admin/login');
       }
     },
     methods: {
       handleCommand(command) {
         if (command === 'resetPassword') {
-          this.$router.push('/resetPassword');
+          this.$router.push('/admin/resetPassword');
         }
         if (command === 'logout') {
-          this.$router.push('/login');
+          this.$router.push('/admin/login');
           localStorage.removeItem('userInfo');
         }
       }

@@ -2,7 +2,7 @@
   <div class="detail">
     <div class="article">
       <div class="header">
-        <div class="iconImage" :style="{backgroundImage: 'url(' + imgSrc + ')'}"></div>
+        <!--<div class="iconImage" :style="{backgroundImage: 'url(' + imgSrc + ')'}"></div>-->
         <!--<img :src="imgSrc" alt="">-->
         <h1 class="title">{{title}}</h1>
       </div>
@@ -56,16 +56,17 @@
 <style>
   .detail {
     width: 40%;
-    margin: auto;
+    height: 90%;
+    margin: 60px auto;
+    padding: 60px;
+    background: #fff;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, .36);
   }
-
   .detail .article .title {
-    position: absolute;
-    width: 100%;
-    height: 100%;
     font-size: 34px;
     font-weight: 700;
-    line-height: 150px;
+    line-height: 34px;
+    padding-bottom: 20px;
     z-index: 10;
   }
 
@@ -83,7 +84,7 @@
   }
 
   .article .content pre {
-    background-color: #f6f6f8;
+    background-color: #f6f8fa;
     line-height: 1.45;
     padding: 16px;
     -ms-word-wrap: normal;
@@ -96,21 +97,20 @@
 
   .detail .header {
     width: 100%;
-    height: 150px;
-    position: relative;
+    text-align: center;
   }
 
-  .detail .header .iconImage {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: block;
-    opacity: 0.6;
-    background-repeat: no-repeat;
-    background-position: center;
-    -webkit-background-size: 100% 150px;
-    background-size: 100% 150px;
-  }
+  /*.detail .header .iconImage {*/
+    /*position: absolute;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*display: block;*/
+    /*opacity: 0.6;*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: center;*/
+    /*-webkit-background-size: 100% 150px;*/
+    /*background-size: 100% 150px;*/
+  /*}*/
   .tag {
     background-color: rgba(64, 158, 225, .1);
     padding: 5px 10px;

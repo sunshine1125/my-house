@@ -88,7 +88,7 @@
               // 密码修改成功
               this.$http.put('/api/canChangePassword', password);
               this.$message.success('重置密码成功');
-              this.$router.push('/login');
+              this.$router.push('/admin/login');
               localStorage.removeItem('email');
             })
           }

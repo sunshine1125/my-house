@@ -20,6 +20,7 @@
     "markdown-it": "^8.4.1",
     "mavon-editor": "^2.5.1",
     "mongoose": "^5.0.3",
+    "remove-markdown": "^0.2.2",
     "sweetalert2": "^7.10.0",
     "vee-validate": "^2.0.4",
     "vue": "^2.5.2",

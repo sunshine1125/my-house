@@ -69,7 +69,7 @@
                       type   : 'success'
                     });
                     localStorage.setItem('userInfo', JSON.stringify(userInfo));
-                    that.$router.push('/');
+                    that.$router.push('/admin');
                   }
                 } else {
                   if (!res.data.check) {
@@ -82,7 +82,7 @@
                         "email": this.useremail
                       };
                       this.$http.post('/api/sendEmail', email).then(res => {
-                        this.$router.push('/checkEmail');
+                        this.$router.push('/admin/checkEmail');
                       });
                     }).catch(() => {
                       this.$message({
@@ -101,10 +101,10 @@
         })
       },
       goRegister() {
-        this.$router.push('/register');
+        this.$router.push('/admin/register');
       },
       forgotPassword() {
-        this.$router.push('/forgotPassword');
+        this.$router.push('/admin/forgotPassword');
       }
     }
   }

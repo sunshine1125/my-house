@@ -74,7 +74,7 @@
         this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
         _this.refreshData();
       } else {
-        this.$router.push('/login');
+        this.$router.push('/admin/login');
       }
     },
     methods: {
@@ -87,7 +87,7 @@
         });
       },
       addData() {
-        this.$router.push('/dataChange/?type=add');
+        this.$router.push('/admin/dataChange/?type=add');
         this.newTitle = '';
       },
       removeData(id) {
@@ -112,7 +112,7 @@
         })
       },
       editData(id) {
-        this.$router.push('/dataChange/?type=edit');
+        this.$router.push('/admin/dataChange/?type=edit');
         let canEdit = {
           "editId": id
         };

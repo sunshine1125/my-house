@@ -35,6 +35,16 @@ apiRoutes.get('/post/get/:id', (req, res) => {
         });
 });
 
+apiRoutes.get('/post/getAllArticles', (rea, res) => {
+  Posts.find()
+    .exec((err, posts) => {
+      posts.forEach((post) => {
+        post.content = md.render(post.content);
+      })
+      res.status('200').json({success: true, data: posts});
+    })
+})
+
 // get Detail post
 apiRoutes.get('/post/getDetailPost/:id', (req, res) => {
     let postId = req.params.id;

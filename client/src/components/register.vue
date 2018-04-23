@@ -65,7 +65,7 @@
                     type   : 'success'
                   });
                   this.$http.post('/api/sendEmail', email).then(res => {
-                    this.$router.push('/checkEmail');
+                    this.$router.push('/admin/checkEmail');
                   });
                 } else {
                   this.$message.error(res.data.message);
@@ -77,7 +77,7 @@
         });
       },
       goLogin() {
-        this.$router.push('/login');
+        this.$router.push('/admin/login');
       }
     }
   }
