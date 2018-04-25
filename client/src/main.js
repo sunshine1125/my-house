@@ -11,6 +11,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import Vuelidate from 'vuelidate'
 import Validate from './tools/validate'
+import moment from 'moment'
 
 
 Vue.config.productionTip = false;
@@ -19,6 +20,7 @@ Vue.use(VueAxios, axios);
 Vue.use(Vuelidate);
 Vue.use(mavonEditor);
 Vue.use(Validate);
+Vue.prototype.$moment = moment;
 
 
 axios.interceptors.request.use(config => {

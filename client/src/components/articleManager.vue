@@ -13,13 +13,13 @@
         min-width="10%">
       </el-table-column>
       <!--<el-table-column-->
-        <!--prop="image"-->
-        <!--label="图片"-->
-        <!--min-width="15%" style="overflow: hidden">-->
-        <!--<template slot-scope="scope">-->
-          <!--<div style="'background-image: url(' + scope.row.image + ')'"></div>-->
-          <!--&lt;!&ndash;<img width="100%" height="100%" :src="scope.row.image" alt="">&ndash;&gt;-->
-        <!--</template>-->
+      <!--prop="image"-->
+      <!--label="图片"-->
+      <!--min-width="15%" style="overflow: hidden">-->
+      <!--<template slot-scope="scope">-->
+      <!--<div style="'background-image: url(' + scope.row.image + ')'"></div>-->
+      <!--&lt;!&ndash;<img width="100%" height="100%" :src="scope.row.image" alt="">&ndash;&gt;-->
+      <!--</template>-->
       <!--</el-table-column>-->
       <el-table-column
         prop="title"
@@ -82,12 +82,12 @@
         this.$http.get('/api/post/get/' + this.userId).then(res => {
           this.lists = res.data;
           this.lists.find(item => {
-            item.date = item.date.substring(0, 10);
+            item.date = this.$moment(item.date).format('YYYY-MM-DD HH:mm:ss');
           })
         });
       },
       addData() {
-        this.$router.push('/admin/dataChange/?type=add');
+        this.$router.push('/admin/dataChange/add');
         this.newTitle = '';
       },
       removeData(id) {
@@ -112,14 +112,14 @@
         })
       },
       editData(id) {
-        this.$router.push('/admin/dataChange/?type=edit');
+        this.$router.push('/admin/dataChange/edit');
         let canEdit = {
           "editId": id
         };
         localStorage.setItem('canEdit', JSON.stringify(canEdit));
       },
       goShowData(id) {
-        this.$router.push('/detail/?id=' + id);
+        this.$router.push('/detail/' + id);
       }
     }
   }

@@ -67,13 +67,14 @@
 </template>
 
 <script>
-//  import swal from 'sweetalert2'
-//  import uploadImage from './upLoadImage.vue'
+  //  import swal from 'sweetalert2'
+  //  import uploadImage from './upLoadImage.vue'
 
   export default {
     name      : 'dataChange',
     data() {
       return {
+        type          : this.$route.params.type,
         isDisplay     : false,
         img           : '',
         isEdit        : false,
@@ -96,10 +97,10 @@
       }
     },
     mounted   : function () {
-      if (this.$route.query.type === 'add') {
+      if (this.type === 'add') {
         this.isDisplay = true;
       }
-      if (this.$route.query.type === 'edit') {
+      if (this.type === 'edit') {
         this.isEdit = true;
         if (localStorage.getItem('canEdit')) {
           this.editId = JSON.parse(localStorage.getItem('canEdit')).editId;
@@ -124,9 +125,10 @@
 //            "image"   : this.imgPath,
               "title"   : this.addArticleData.newTitle,
               "content" : this.addArticleData.content,
-              "date"    : new Date().toLocaleDateString(),
+              "date"    : this.$moment().format('YYYY-MM-DD HH:mm:ss'),
               "tagTitle": this.addArticleData.tagTitle
             };
+//            console.log(this.$moment(displayData.date).format())
             this.isDisplay = false;
             this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
               this.$router.push('/admin/articleManager');

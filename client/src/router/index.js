@@ -36,7 +36,7 @@ export default new Router({
           component: tagManager
         },
         {
-          path     : '/admin/dataChange',
+          path     : '/admin/dataChange/:type',
           name     : 'dataChange',
           component: dataChange
         },
@@ -73,7 +73,7 @@ export default new Router({
       component: articlesList
     },
     {
-      path     : '/detail',
+      path     : '/detail/:id',
       name     : 'detail',
       component: detail
     }

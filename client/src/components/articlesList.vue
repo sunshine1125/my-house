@@ -4,11 +4,14 @@
     <div>
       <el-row class="box-card" v-for="article in articlesList">
         <el-card>
+          <code>{{article}}</code>
           <!--<img src="" alt="" class="image">-->
           <div>
             <h1 @click="getDetail(article._id)" class="articleTitle">{{article.title}}</h1>
             <p class="content" v-html="getContent(article.content)"></p>
             <div class="bottom clearfix">
+              - by
+              <time>{{article.auth}}</time>
               <time class="time">{{article.date}}</time>
               <el-button type="text" class="button" @click="getDetail(article._id)">阅读全文 >></el-button>
             </div>
@@ -22,25 +25,55 @@
 
 <script>
   import removeMd from 'remove-markdown'
+
   export default {
-    name   : 'articlesList',
+    name      : 'articlesList',
     data() {
       return {
         articlesList: [],
+        auths       : []
       }
     },
-    mounted: function () {
-      this.$http.get('/api/post/getAllArticles').then((res) => {
-        if (res.data.success && res.data.data) {
-          res.data.data.forEach((data) => {
-            data.date = data.date.substring(0, 10)
-          })
-          this.articlesList = res.data.data;
-        }
-
-      })
+    mounted   : function () {
+      this.getAllArticles();
     },
-    methods: {
+    methods   : {
+      getAllArticles() {
+        let that = this;
+        this.$http.get('/api/post/getAllArticles')
+          .then((res) => {
+            if (res.data.success && res.data.data) {
+              res.data.data.forEach((data) => {
+                data.date = this.$moment(data.date).format('YYYY-MM-DD HH:mm:ss');
+                this.$http.get('/api/getSingleUserById/' + data.uid).then((res) => {
+                  console.log(res);
+                  that.auths.push(res.data.data.username);
+                });
+              });
+              this.articlesList = res.data.data;
+              console.log(that.auths)
+            }
+          })
+          .then(() => {
+            for(let i = 0; i < that.auths.length; i++) {
+//              console.log(this.auths[i])
+              console.log(that.auths.length)
+            }
+            this.auths.forEach((auth) => {
+              console.log(auth);
+            });
+            this.articlesList.forEach((article) => {
+
+            })
+
+          })
+      },
+      getAuth(id) {
+        this.$http.get('/api/getSingleUserById/' + id).then((res) => {
+          console.log(res.data.data.username)
+          return res.data.data.username;
+        });
+      },
       getContent(content) {
         return removeMd(content);
       },
@@ -48,9 +81,7 @@
         this.$router.push('/detail/?id=' + id);
       }
     },
-    components: {
-
-    }
+    components: {}
   }
 </script>
 <style scoped>
@@ -58,9 +89,11 @@
     width: 40%;
     margin: auto;
   }
+
   .articlesList .header {
     padding: 40px 0 30px 0;
   }
+
   .time {
     font-size: 13px;
     color: #999;
@@ -98,14 +131,17 @@
     margin: 20px 0 0 0;
     text-align: left;
   }
+
   .box-card .articleTitle {
     display: inline-block;
   }
-  .box-card .articleTitle:hover{
+
+  .box-card .articleTitle:hover {
     cursor: pointer;
     color: rgb(64, 158, 255);
 
   }
+
   .box-card .content {
     overflow: hidden;
     text-overflow: ellipsis;

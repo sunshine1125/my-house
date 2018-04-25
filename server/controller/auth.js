@@ -238,7 +238,6 @@ apiRoutes.get('/getSingleUserById/:id', (req, res) => {
       if (err) {
         res.send(err);
       } else {
-        bcrypt
         res.status(200).json({success: true, data: data})
       }
 
