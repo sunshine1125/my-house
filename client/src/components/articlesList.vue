@@ -4,7 +4,6 @@
     <div>
       <el-row class="box-card" v-for="article in articlesList">
         <el-card>
-          <code>{{article}}</code>
           <!--<img src="" alt="" class="image">-->
           <div>
             <h1 @click="getDetail(article._id)" class="articleTitle">{{article.title}}</h1>
@@ -30,8 +29,7 @@
     name      : 'articlesList',
     data() {
       return {
-        articlesList: [],
-        auths       : []
+        articlesList: []
       }
     },
     mounted   : function () {
@@ -44,41 +42,27 @@
           .then((res) => {
             if (res.data.success && res.data.data) {
               res.data.data.forEach((data) => {
-                data.date = this.$moment(data.date).format('YYYY-MM-DD HH:mm:ss');
-                this.$http.get('/api/getSingleUserById/' + data.uid).then((res) => {
-                  console.log(res);
-                  that.auths.push(res.data.data.username);
-                });
-              });
-              this.articlesList = res.data.data;
-              console.log(that.auths)
+                that.$http.get('/api/getSingleUserById/' + data.uid).then((res) => {
+                  return res.data.data.username;
+                }).then((auth) => {
+                  this.articlesList.push({
+                    auth    : auth,
+                    content : data.content,
+                    date    : that.$moment(data.date).format('YYYY-MM-DD HH:mm:ss'),
+                    tagTitle: data.tagTitle,
+                    title   : data.title,
+                    _id     : data._id
+                  })
+                })
+              })
             }
           })
-          .then(() => {
-            for(let i = 0; i < that.auths.length; i++) {
-//              console.log(this.auths[i])
-              console.log(that.auths.length)
-            }
-            this.auths.forEach((auth) => {
-              console.log(auth);
-            });
-            this.articlesList.forEach((article) => {
-
-            })
-
-          })
-      },
-      getAuth(id) {
-        this.$http.get('/api/getSingleUserById/' + id).then((res) => {
-          console.log(res.data.data.username)
-          return res.data.data.username;
-        });
       },
       getContent(content) {
         return removeMd(content);
       },
       getDetail(id) {
-        this.$router.push('/detail/?id=' + id);
+        this.$router.push('/detail/' + id);
       }
     },
     components: {}
