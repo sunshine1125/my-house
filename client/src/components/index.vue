@@ -45,7 +45,7 @@
     mounted: function () {
       if (localStorage.getItem('userInfo')) {
         this.email = JSON.parse(localStorage.getItem('userInfo')).email;
-        this.$http.get('/api/getSingleUser/' + this.email).then((res) => {
+        this.$http.get(`/api/getSingleUser/${this.email}`).then((res) => {
           this.username = res.data.username;
         });
         this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;

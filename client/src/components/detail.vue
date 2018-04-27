@@ -45,7 +45,7 @@
     methods   : {
       getArticle () {
         if (this.$route.params.id) {
-          this.$http.get('/api/post/getDetailPost/' + this.$route.params.id).then(res => {
+          this.$http.get(`/api/post/getDetailPost/${this.$route.params.id}`).then(res => {
             this.title = res.data.title;
             this.date = this.$moment(res.data.date).format('YYYY-MM-DD HH:mm:ss');
             this.content = res.data.content;
@@ -54,7 +54,7 @@
             this.uid = res.data.uid;
           })
             .then(() => {
-              this.$http.get('/api/getSingleUserById/' + this.uid).then((res) => {
+              this.$http.get(`/api/getSingleUserById/${this.uid}`).then((res) => {
                 this.auth = res.data.data.username;
               })
             });

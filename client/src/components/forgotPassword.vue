@@ -51,7 +51,7 @@
       if (localStorage.getItem('email')) {
         this.forgotForm.email = JSON.parse(localStorage.getItem('email')).email;
         if (this.hasChecked) {
-          this.$http.get('/api/canChangePassword/' + JSON.parse(localStorage.getItem('email')).email).then(res => {
+          this.$http.get(`/api/canChangePassword/${JSON.parse(localStorage.getItem('email')).email}`).then(res => {
             if (res.data.success) {
               this.hasChecked = false;
             } else {

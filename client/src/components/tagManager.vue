@@ -74,7 +74,7 @@
           let tag  = {
             title : value
           };
-          this.$http.put('api/editTag/' + id, tag).then( (res) => {
+          this.$http.put(`api/editTag/${id}`, tag).then( (res) => {
             this.refreshData();
             this.$message({
               type: 'success',
@@ -94,7 +94,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.delete('api/removeTag/' + id).then( (res) => {
+          this.$http.delete(`api/removeTag/${id}`).then( (res) => {
             this.refreshData();
             this.$message({
               type: 'success',

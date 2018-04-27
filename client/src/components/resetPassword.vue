@@ -59,7 +59,7 @@
     },
     mounted    : function () {
       this.resetForm.email = JSON.parse(localStorage.getItem('userInfo')).email;
-      this.$http.get('/api/getSingleUser/' + this.resetForm.email).then((res) => {
+      this.$http.get(`/api/getSingleUser/${this.resetForm.email}`).then((res) => {
         this.username = res.data.username;
       });
     },

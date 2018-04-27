@@ -104,7 +104,7 @@
         this.isEdit = true;
         if (localStorage.getItem('canEdit')) {
           this.editId = JSON.parse(localStorage.getItem('canEdit')).editId;
-          this.$http.get('/api/post/getSinglePost/' + this.editId).then(res => {
+          this.$http.get(`/api/post/getSinglePost/${this.editId}`).then(res => {
             this.editArticleData.changeTitle = res.data.title;
             this.editArticleData.changeContent = res.data.content;
 //            this.imgPath = res.data.image;
@@ -130,7 +130,7 @@
             };
 //            console.log(this.$moment(displayData.date).format())
             this.isDisplay = false;
-            this.$http.post('/api/post/add/' + this.userId, displayData).then(res => {
+            this.$http.post(`/api/post/add/${this.userId}`, displayData).then(res => {
               this.$router.push('/admin/articleManager');
               localStorage.removeItem('canAdd');
             })
@@ -155,7 +155,7 @@
               content : this.editArticleData.changeContent
             };
             this.isEdit = false;
-            this.$http.put('/api/post/edit/' + this.editId, payload)
+            this.$http.put(`/api/post/edit/${this.editId}`, payload)
               .then(res => {
                 this.$router.push("/admin/articleManager");
                 localStorage.removeItem('canEdit');

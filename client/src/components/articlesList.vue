@@ -17,7 +17,6 @@
           </div>
         </el-card>
       </el-row>
-
     </div>
   </div>
 </template>
@@ -42,7 +41,7 @@
           .then((res) => {
             if (res.data.success && res.data.data) {
               res.data.data.forEach((data) => {
-                that.$http.get('/api/getSingleUserById/' + data.uid).then((res) => {
+                that.$http.get(`/api/getSingleUserById/${data.uid}`).then((res) => {
                   return res.data.data.username;
                 }).then((auth) => {
                   this.articlesList.push({
@@ -62,7 +61,7 @@
         return removeMd(content);
       },
       getDetail(id) {
-        this.$router.push('/detail/' + id);
+        this.$router.push(`/detail/${id}`);
       }
     },
     components: {}
