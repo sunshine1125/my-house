@@ -7,6 +7,7 @@
             欢迎 <span>{{username}}</span><i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="goArticlesList" @click="goArticlesList()">文章首页</el-dropdown-item>
             <el-dropdown-item command="resetPassword" @click="resetPassword()">重置密码</el-dropdown-item>
             <el-dropdown-item command="logout" @click="logout()">退出</el-dropdown-item>
           </el-dropdown-menu>
@@ -61,6 +62,9 @@
         if (command === 'logout') {
           this.$router.push('/admin/login');
           localStorage.removeItem('userInfo');
+        }
+        if (command === 'goArticlesList') {
+          this.$router.push('/');
         }
       }
     },
