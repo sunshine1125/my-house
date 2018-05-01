@@ -111,15 +111,15 @@
     }
   }
 </script>
-<style scoped>
-  .el-button.circle {
-    padding: 6px 6px;
-  }
-  .el-button {
-    outline: none;
-  }
-  .el-row {
-    text-align: left;
-    margin-bottom: 10px;
-  }
+<style scoped lang="stylus">
+  .el-button.circle
+    padding 6px 6px
+
+  .el-button
+    outline none
+
+  .el-row
+    text-align left
+    margin-bottom 10px
+
 </style>

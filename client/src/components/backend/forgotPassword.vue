@@ -97,8 +97,7 @@
     }
   }
 </script>
-<style scoped>
-  .container {
-    margin-top: 100px;
-  }
+<style scoped lang="stylus">
+  .container
+    margin-top 100px
 </style>

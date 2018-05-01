@@ -67,67 +67,66 @@
     components: {}
   }
 </script>
-<style scoped>
-  .articlesList {
-    width: 40%;
-    margin: auto;
-  }
+<style scoped lang="stylus">
+  .articlesList
+    width 40%
+    margin auto
 
-  .articlesList .header {
-    padding: 40px 0 30px 0;
-  }
 
-  .time {
-    font-size: 13px;
-    color: #999;
-  }
+  .articlesList .header
+    padding 40px 0 30px 0
 
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
-  }
+  .time
+    font-size 13px
+    color #999
 
-  .button {
-    padding: 0;
-    float: right;
-  }
 
-  .image {
-    width: 100%;
-    display: block;
-  }
+  .bottom
+    margin-top 13px
+    line-height 12px
+
+
+  .button
+    padding 0
+    float right
+
+
+  .image
+    width 100%
+    display block
+
 
   .clearfix:before,
-  .clearfix:after {
-    display: table;
-    content: "";
-  }
+  .clearfix:after
+    display table
+    content ""
 
-  .clearfix:after {
-    clear: both
-  }
 
-  .box-card {
-    width: 100%;
-    display: block;
+  .clearfix:after
+    clear both
+
+
+  .box-card
+    width 100%
+    display block
     /*padding: 20px 0;*/
-    margin: 20px 0 0 0;
-    text-align: left;
-  }
+    margin 20px 0 0 0
+    text-align left
 
-  .box-card .articleTitle {
-    display: inline-block;
-  }
 
-  .box-card .articleTitle:hover {
-    cursor: pointer;
-    color: rgb(64, 158, 255);
+  .box-card .articleTitle
+    display inline-block
 
-  }
 
-  .box-card .content {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  .box-card .articleTitle:hover
+    cursor pointer
+    color rgb(64, 158, 255)
+
+
+
+  .box-card .content
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
 </style>

@@ -73,63 +73,55 @@
     }
   }
 </script>
-<style>
-  .home {
-    height: 100%;
-  }
+<style lang="stylus">
+  .home
+    height 100%
 
-  .home .el-container {
-    height: 100%;
-  }
+  .home .el-container
+    height 100%
 
-  .home .el-header {
-    background-color: rgb(64, 158, 255)
-  }
-  .header-operations {
-    display: inline-block;
-    float: right;
-    padding-right: 30px;
-    height: 100%;
-    vertical-align: middle;
-    margin: 0 10px;
-    line-height: 70px;
-    cursor: pointer;
-    color: #fff;
-    font-size: 16px;
-  }
-  #table {
-    width: 100%;
-    height: 100%;
-    margin: 10px auto;
-  }
+  .home .el-header
+    background-color rgb(64, 158, 255)
 
-  .container {
-    margin-top: 25px;
-  }
+  .header-operations
+    display inline-block
+    float right
+    padding-right 30px
+    height 100%
+    vertical-align middle
+    margin 0 10px
+    line-height 70px
+    cursor pointer
+    color #fff
+    font-size 16px
 
-  aside .main-left {
-    height: 100%;
-  }
+  #table
+    width 100%
+    height 100%
+    margin 10px auto
 
-  aside .main-left ul {
-    height: 100%;
-  }
+  .container
+    margin-top 25px
 
-  #navbarSupportedContent ul {
-    margin-left: auto !important;
-    margin-right: 100px !important;
-  }
+  aside .main-left
+    height 100%
 
-  .el-table td .cell {
-    height: 50px !important;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  aside .main-left ul
+    height 100%
 
-  .el-table th .cell {
-    text-align: center;
-  }
+  #navbarSupportedContent ul
+    margin-left auto !important
+    margin-right 100px !important
+
+  .el-table td .cell
+    height 50px !important
+    overflow hidden
+    text-overflow ellipsis
+    white-space nowrap
+
+  .el-table th .cell
+    text-align center
+
   /*main {*/
     /*background-color: #e9eef3;*/
   /*}*/

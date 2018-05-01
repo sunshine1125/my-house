@@ -6,7 +6,7 @@
     <el-row>
       <el-button @click="addData()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
     </el-row>
-    <el-row>
+    <el-row style="text-align: center">
       <el-col :span="24">
         <el-table :data="lists" border style="width: 100%;">
           <el-table-column
@@ -56,16 +56,16 @@
         </el-table>
       </el-col>
     </el-row>
-    <el-row>
-      <el-col :span="24" class="page">
-        <el-pagination layout="prev,pager,next"
-                       @current-change="handle"
-                       :total="total"
-                       :page-size="limit"
-                       style="float:right">
-        </el-pagination>
-      </el-col>
-    </el-row>
+    <!--<el-row>-->
+      <!--<el-col :span="24" class="page">-->
+        <!--<el-pagination layout="prev,pager,next"-->
+                       <!--@current-change="handle"-->
+                       <!--:total="total"-->
+                       <!--:page-size="limit"-->
+                       <!--style="float:right">-->
+        <!--</el-pagination>-->
+      <!--</el-col>-->
+    <!--</el-row>-->
   </div>
 </template>
 
@@ -145,15 +145,14 @@
     }
   }
 </script>
-<style scoped>
-  .el-button.circle {
-    padding: 6px 6px;
-  }
-  .el-button {
-    outline: none;
-  }
-  .el-row {
-    text-align: left;
-    margin-bottom: 10px;
-  }
+<style scoped lang="stylus">
+  .el-button.circle
+    padding 6px 6px
+
+  .el-button
+    outline none
+
+  .el-row
+    text-align left
+    margin-bottom 10px
 </style>

@@ -1,74 +1,96 @@
 <template>
   <div class="dataChange">
     <el-breadcrumb v-show="isDisplay" separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/admin' }">文章管理</el-breadcrumb-item>
       <el-breadcrumb-item>添加文章</el-breadcrumb-item>
     </el-breadcrumb>
     <el-breadcrumb v-show="isEdit" separator="/">
-      <el-breadcrumb-item :to="{ path: '/' }">文章管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/admin' }">文章管理</el-breadcrumb-item>
       <el-breadcrumb-item v-show="isEdit">修改文章</el-breadcrumb-item>
     </el-breadcrumb>
     <el-form v-show="isDisplay" :model="addArticleData" ref="addArticleData" label-width="70px" class="rowContainer">
-      <el-form-item label="标题"
-                    prop="newTitle"
-                    class="customInput"
-                    :rules="validate_rules({required: true})">
-        <el-input v-model="addArticleData.newTitle" placeholder="请输入标题"></el-input>
-      </el-form-item>
-      <el-form-item label="标签"
-                    prop="tag"
-                    class="customInput">
-        <!--<pre>{{addArticleData.tagTitle}}</pre>-->
-        <el-select v-model="addArticleData.tagTitle" placeholder="请选择">
-          <el-option v-for="tag in tags"
-                     :key="tag.title"
-                     :label="tag.title"
-                     :value="tag.title">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="内容"
-                    prop="content"
-                    :rules="validate_rules({required: true})">
-        <mavon-editor :ishljs="true" v-model="addArticleData.content"></mavon-editor>
-      </el-form-item>
-      <el-form-item style="text-align: left" label="">
-        <el-button type="primary" @click="saveData('addArticleData')">确定</el-button>
-        <el-button type="info" @click="cancelData()">取消</el-button>
-      </el-form-item>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="标题"
+                        prop="newTitle"
+                        class="customInput"
+                        :rules="validate_rules({required: true})">
+            <el-input v-model="addArticleData.newTitle" placeholder="请输入标题"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="标签"
+                        prop="tag"
+                        class="customInput">
+            <el-select v-model="addArticleData.tagTitle" placeholder="请选择">
+              <el-option v-for="tag in tags"
+                         :key="tag.title"
+                         :label="tag.title"
+                         :value="tag.title">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <!--<uploadImage></uploadImage>-->
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-form-item label="内容"
+                      prop="content"
+                      :rules="validate_rules({required: true})">
+          <mavon-editor :ishljs="true" v-model="addArticleData.content"></mavon-editor>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item style="text-align: left" label="">
+          <el-button type="primary" @click="saveData('addArticleData')">确定</el-button>
+          <el-button type="info" @click="cancelData()">取消</el-button>
+        </el-form-item>
+      </el-row>
     </el-form>
     <el-form v-show="isEdit" :model="editArticleData" ref="editArticleData" label-width="70px" class="rowContainer">
-      <el-form-item label="标题"
-                    prop="changeTitle"
-                    class="customInput">
-        <el-input v-model="editArticleData.changeTitle" placeholder="请输入标题"></el-input>
-      </el-form-item>
-      <el-form-item label="标签"
-                    prop="tag"
-                    class="customInput">
-        <el-select v-model="editArticleData.tagTitle" placeholder="请选择">
-          <el-option v-for="tag in tags"
-                     :key="tag.title"
-                     :label="tag.title"
-                     :value="tag.title">
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="内容"
-                    prop="content">
-        <mavon-editor :ishljs="true" v-model="editArticleData.changeContent"></mavon-editor>
-      </el-form-item>
-      <el-form-item style="text-align: left" label="">
-        <el-button type="primary" @click="sureEdit('editArticleData')">确定</el-button>
-        <el-button type="info" @click="cancelEdit()">取消</el-button>
-      </el-form-item>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="标题"
+                        prop="changeTitle"
+                        class="customInput">
+            <el-input v-model="editArticleData.changeTitle" placeholder="请输入标题"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="标签"
+                        prop="tag"
+                        class="customInput">
+            <el-select v-model="editArticleData.tagTitle" placeholder="请选择">
+              <el-option v-for="tag in tags"
+                         :key="tag.title"
+                         :label="tag.title"
+                         :value="tag.title">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-form-item label="内容"
+                      prop="content">
+          <mavon-editor :ishljs="true" v-model="editArticleData.changeContent"></mavon-editor>
+        </el-form-item>
+      </el-row>
+      <el-row>
+        <el-form-item style="text-align: left" label="">
+          <el-button type="primary" @click="sureEdit('editArticleData')">确定</el-button>
+          <el-button type="info" @click="cancelEdit()">取消</el-button>
+        </el-form-item>
+      </el-row>
     </el-form>
   </div>
 </template>
 
 <script>
   //  import swal from 'sweetalert2'
-  //  import uploadImage from './upLoadImage.vue'
+    import uploadImage from './upLoadImage.vue'
 
   export default {
     name      : 'dataChange',
@@ -177,47 +199,39 @@
       }
     },
     components: {
-//      uploadImage
+      uploadImage
     }
   }
 </script>
-<style scoped>
-  h3 {
-    margin-top: 30px;
-  }
+<style scoped lang="stylus">
+  h3
+    margin-top 30px
 
-  #table {
-    width: 90%;
-    height: 100%;
-    margin: 20px auto;
-  }
+  #table
+    width 90%
+    height 100%
+    margin 20px auto
 
-  .container {
-    margin-top: 25px;
-    max-width: 100%;
-  }
+  .container
+    margin-top 25px
+    max-width 100%
 
-  .markdown-body {
-    width: 100%;
-    min-height: 600px;
-  }
+  .markdown-body
+    width 100%
+    min-height 600px
 
-  .v-note-wrapper.fullscreen {
-    width: 100%;
-    height: 100%;
-  }
+  .v-note-wrapper.fullscreen
+    width 100%
+    height 100%
 
-  .custom-select {
-    width: 10%;
-    text-align: left;
-  }
+  .custom-select
+    width 80%
+    text-align left
 
-  .rowContainer {
-    padding: 20px;
-  }
+  .rowContainer
+    padding 20px
 
-  .customInput {
-    width: 40%;
-    text-align: left;
-  }
+  .customInput
+    width 80%
+    text-align left
 </style>

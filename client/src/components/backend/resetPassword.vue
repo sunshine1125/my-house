@@ -104,23 +104,23 @@
     }
   }
 </script>
-<style scoped>
-  .container {
-    margin-top: 100px;
-  }
-  .el-header {
-    background-color: rgb(64, 158, 255)
-  }
-  .header-operations {
-    display: inline-block;
-    float: right;
-    padding-right: 30px;
-    height: 100%;
-    vertical-align: middle;
-    margin: 0 10px;
-    line-height: 70px;
-    cursor: pointer;
-    color: #fff;
-    font-size: 16px;
-  }
+<style scoped lang="stylus">
+  .container
+    margin-top 100px
+
+  .el-header
+    background-color rgb(64, 158, 255)
+
+  .header-operations
+    display inline-block
+    float right
+    padding-right 30px
+    height 100%
+    vertical-align middle
+    margin 0 10px
+    line-height 70px
+    cursor pointer
+    color #fff
+    font-size 16px
+
 </style>
