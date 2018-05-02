@@ -46,25 +46,25 @@
 
 <script>
   export default {
-    name       : 'forgotPassword',
+    name   : 'forgotPassword',
     data() {
       return {
-        resetForm  : {
+        resetForm: {
           email      : '',
           oldPassword: '',
           password   : '',
           passAgain  : ''
         },
-        username: ''
+        username : ''
       }
     },
-    mounted    : function () {
+    mounted: function () {
       this.resetForm.email = JSON.parse(localStorage.getItem('userInfo')).email;
       this.$http.get(`/api/getSingleUser/${this.resetForm.email}`).then((res) => {
         this.username = res.data.username;
       });
     },
-    methods    : {
+    methods: {
       sure(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -105,22 +105,26 @@
   }
 </script>
 <style scoped lang="stylus">
-  .container
-    margin-top 100px
+  .container {
+    margin-top: 100px
+  }
 
-  .el-header
-    background-color rgb(64, 158, 255)
+  .el-header {
+    background-color: rgb(64, 158, 255)
+  }
 
-  .header-operations
-    display inline-block
-    float right
-    padding-right 30px
-    height 100%
-    vertical-align middle
-    margin 0 10px
-    line-height 70px
-    cursor pointer
-    color #fff
-    font-size 16px
+  .header-operations {
+    display: inline-block;
+    float: right;
+    padding-right: 30px;
+    height: 100%;
+    vertical-align: middle;
+    margin: 0 10px;
+    line-height: 70px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+  }
+
 
 </style>

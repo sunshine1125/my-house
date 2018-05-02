@@ -1,7 +1,9 @@
 <template>
-  <div class="articlesList">
-    <h1 class="header">所有文章</h1>
-    <div>
+  <div class="articlesListView">
+    <div class="header">
+      <h1>所有文章</h1>
+    </div>
+    <div class="article-list">
       <el-row class="box-card" v-for="article in articlesList">
         <el-card>
           <!--<img src="" alt="" class="image">-->
@@ -17,12 +19,16 @@
           </div>
         </el-card>
       </el-row>
+      <div class="tags-list">
+        <h1>标签</h1>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import removeMd from 'remove-markdown'
+  import 'bootstrap/dist/css/bootstrap.css';
 
   export default {
     name      : 'articlesList',
@@ -68,65 +74,69 @@
   }
 </script>
 <style scoped lang="stylus">
-  .articlesList
-    width 40%
-    margin auto
-
-
-  .articlesList .header
-    padding 40px 0 30px 0
-
-  .time
-    font-size 13px
-    color #999
-
-
-  .bottom
-    margin-top 13px
-    line-height 12px
-
-
-  .button
-    padding 0
-    float right
-
-
-  .image
-    width 100%
-    display block
-
-
-  .clearfix:before,
-  .clearfix:after
-    display table
-    content ""
-
-
-  .clearfix:after
-    clear both
-
-
-  .box-card
-    width 100%
-    display block
-    /*padding: 20px 0;*/
-    margin 20px 0 0 0
-    text-align left
-
-
-  .box-card .articleTitle
-    display inline-block
-
-
-  .box-card .articleTitle:hover
-    cursor pointer
-    color rgb(64, 158, 255)
-
-
-
-  .box-card .content
-    overflow hidden
-    text-overflow ellipsis
-    white-space nowrap
+  .articlesListView {
+    width: 100%;
+    position: relative;
+    .header {
+      margin: 20px;
+    }
+    .article-list {
+      position: relative;
+      width: 640px;
+      margin: 20px auto;
+      .time {
+        font-size: 13px;
+        color: #999;
+      }
+      .bottom {
+        margin-top: 13px;
+        line-height: 12px;
+      }
+      .button {
+        padding: 0;
+        float: right;
+      }
+      .image {
+        width: 100%;
+        display: block;
+      }
+      .clearfix:before,
+      .clearfix:after {
+        display: table;
+        content: '';
+      }
+      .clearfix:after {
+        clear: both;
+      }
+      .box-card {
+        width: 100%;
+        display: block;
+        margin: 20px 0 0 0;
+        text-align: left;
+        .articleTitle {
+          display: inline-block;
+          &:hover {
+             cursor: pointer;
+             color: rgb(64, 158, 255);
+           }
+        }
+        .content {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+  @media screen and (max-width:786px) {
+    .article-list {
+      width: 640px
+    }
+  }
+  @media screen and (max-width:480px) {
+    .article-list {
+      width: 80% !important;
+    }
+  }
 
 </style>

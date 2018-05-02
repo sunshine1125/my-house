@@ -22,6 +22,8 @@
   }
 </script>
 <style scoped lang="stylus">
-  .container
-    margin-top 100px
+  .container {
+    margin-top: 100px
+  }
+
 </style>

@@ -204,34 +204,43 @@
   }
 </script>
 <style scoped lang="stylus">
-  h3
-    margin-top 30px
+  h3 {
+    margin-top: 30px;
+  }
 
-  #table
-    width 90%
-    height 100%
-    margin 20px auto
+  #table {
+    width: 90%;
+    height: 100%;
+    margin: 20px auto;
+  }
 
-  .container
-    margin-top 25px
-    max-width 100%
+  .container {
+    margin-top: 25px;
+    max-width: 100%;
+  }
 
-  .markdown-body
-    width 100%
-    min-height 600px
+  .markdown-body {
+    width: 100%;
+    min-height: 600px;
+  }
 
-  .v-note-wrapper.fullscreen
-    width 100%
-    height 100%
+  .v-note-wrapper.fullscreen {
+    width: 100%;
+    height: 100%;
+  }
 
-  .custom-select
-    width 80%
-    text-align left
+  .custom-select {
+    width: 80%;
+    text-align: left;
+  }
 
-  .rowContainer
-    padding 20px
+  .rowContainer {
+    padding: 20px;
+  }
 
-  .customInput
-    width 80%
-    text-align left
+  .customInput {
+    width: 80%;
+    text-align: left;
+  }
+
 </style>

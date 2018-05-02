@@ -83,23 +83,27 @@
   }
 </script>
 <style scoped lang="stylus">
-  .register
-    width 30%
-    margin auto
-    background #eee
-    padding-top 40px
-    padding-bottom 20px
-    margin-top 150px
+  .register {
+    width: 30%;
+    margin: auto;
+    background: #eee;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    margin-top: 150px;
+  }
 
-  form
-    width 80%
-    margin-top 30px
-    margin-left 30px
+  form {
+    width: 80%;
+    margin-top: 30px;
+    margin-left: 30px;
+  }
 
-  input, button
-    outline none
+  input, button {
+    outline: none
+  }
 
-  a
-    cursor pointer
+  a {
+    cursor: pointer
+  }
 
 </style>
