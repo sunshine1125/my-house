@@ -3,25 +3,32 @@
     <div class="header">
       <h1>所有文章</h1>
     </div>
-    <div class="article-list">
-      <el-row class="box-card" v-for="article in articlesList">
-        <el-card>
-          <!--<img src="" alt="" class="image">-->
-          <div>
-            <h1 @click="getDetail(article._id)" class="articleTitle">{{article.title}}</h1>
-            <p class="content" v-html="getContent(article.content)"></p>
-            <div class="bottom clearfix">
-              - by
-              <time>{{article.auth}}</time>
-              <time class="time">{{article.date}}</time>
-              <el-button type="text" class="button" @click="getDetail(article._id)">阅读全文 >></el-button>
-            </div>
-          </div>
-        </el-card>
-      </el-row>
-      <div class="tags-list">
-        <h1>标签</h1>
+    <div class="article-list" v-for="article in articlesList">
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 @click="getDetail(article._id)" class="card-title">{{article.title}}</h5>
+          <p class="card-text content" v-html="getContent(article.content)"></p>
+          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+        </div>
       </div>
+      <!--<el-row class="box-card" v-for="article in articlesList">-->
+        <!--<el-card>-->
+          <!--&lt;!&ndash;<img src="" alt="" class="image">&ndash;&gt;-->
+          <!--<div>-->
+            <!--<h1  class="articleTitle">{{article.title}}</h1>-->
+            <!--<p class="content" v-html="getContent(article.content)"></p>-->
+            <!--<div class="bottom clearfix">-->
+              <!-- - by-->
+              <!--<time>{{article.auth}}</time>-->
+              <!--<time class="time">{{article.date}}</time>-->
+              <!--<el-button type="text" class="button" @click="getDetail(article._id)">阅读全文 >></el-button>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</el-card>-->
+      <!--</el-row>-->
+      <!--<div class="tags-list">-->
+        <!--<h1>标签</h1>-->
+      <!--</div>-->
     </div>
   </div>
 </template>
@@ -84,6 +91,7 @@
       position: relative;
       width: 640px;
       margin: 20px auto;
+      text-align: left;
       .time {
         font-size: 13px;
         color: #999;
