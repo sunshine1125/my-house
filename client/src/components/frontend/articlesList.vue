@@ -76,8 +76,7 @@
       getDetail(id) {
         this.$router.push(`/detail/${id}`);
       }
-    },
-    components: {}
+    }
   }
 </script>
 <style scoped lang="stylus">
