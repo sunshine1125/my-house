@@ -1,28 +1,31 @@
 <template>
   <div class="dataChange">
-    <el-breadcrumb v-show="isDisplay" separator="/">
+    <el-breadcrumb v-if="!isEdit" separator="/">
       <el-breadcrumb-item :to="{ path: '/admin' }">文章管理</el-breadcrumb-item>
       <el-breadcrumb-item>添加文章</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-breadcrumb v-show="isEdit" separator="/">
+    <el-breadcrumb v-if="isEdit" separator="/">
       <el-breadcrumb-item :to="{ path: '/admin' }">文章管理</el-breadcrumb-item>
       <el-breadcrumb-item v-show="isEdit">修改文章</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-form v-show="isDisplay" :model="addArticleData" ref="addArticleData" label-width="70px" class="rowContainer">
+    <el-form :model="articleData" ref="articleData" label-width="70px" class="rowContainer">
       <el-row>
         <el-col :span="6">
           <el-form-item label="标题"
                         prop="newTitle"
                         class="customInput"
                         :rules="validate_rules({required: true})">
-            <el-input v-model="addArticleData.newTitle" placeholder="请输入标题"></el-input>
+            <el-input v-model="articleData.newTitle" placeholder="请输入标题"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="标签"
                         prop="tag"
                         class="customInput">
-            <el-select v-model="addArticleData.tagTitle" placeholder="请选择">
+            <el-select v-model="articleData.tagInfo.tagTitle"
+                       no-data-text="请先去添加标签"
+                       v-on:change="getTagId(articleData.tagInfo.tagTitle)"
+                       placeholder="请选择">
               <el-option v-for="tag in tags"
                          :key="tag.title"
                          :label="tag.title"
@@ -39,49 +42,13 @@
         <el-form-item label="内容"
                       prop="content"
                       :rules="validate_rules({required: true})">
-          <mavon-editor :ishljs="true" v-model="addArticleData.content"></mavon-editor>
+          <mavon-editor :ishljs="true" v-model="articleData.content"></mavon-editor>
         </el-form-item>
       </el-row>
       <el-row>
         <el-form-item style="text-align: left" label="">
-          <el-button type="primary" @click="saveData('addArticleData')">确定</el-button>
+          <el-button type="primary" @click="saveData('articleData')">确定</el-button>
           <el-button type="info" @click="cancelData()">取消</el-button>
-        </el-form-item>
-      </el-row>
-    </el-form>
-    <el-form v-show="isEdit" :model="editArticleData" ref="editArticleData" label-width="70px" class="rowContainer">
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="标题"
-                        prop="changeTitle"
-                        class="customInput">
-            <el-input v-model="editArticleData.changeTitle" placeholder="请输入标题"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="标签"
-                        prop="tag"
-                        class="customInput">
-            <el-select v-model="editArticleData.tagTitle" placeholder="请选择">
-              <el-option v-for="tag in tags"
-                         :key="tag.title"
-                         :label="tag.title"
-                         :value="tag.title">
-              </el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-form-item label="内容"
-                      prop="content">
-          <mavon-editor :ishljs="true" v-model="editArticleData.changeContent"></mavon-editor>
-        </el-form-item>
-      </el-row>
-      <el-row>
-        <el-form-item style="text-align: left" label="">
-          <el-button type="primary" @click="sureEdit('editArticleData')">确定</el-button>
-          <el-button type="info" @click="cancelEdit()">取消</el-button>
         </el-form-item>
       </el-row>
     </el-form>
@@ -89,49 +56,37 @@
 </template>
 
 <script>
-  //  import swal from 'sweetalert2'
-    import uploadImage from './upLoadImage.vue'
+  import uploadImage from './upLoadImage.vue'
 
   export default {
     name      : 'dataChange',
     data() {
       return {
-        type          : this.$route.params.type,
-        isDisplay     : false,
-        img           : '',
-        isEdit        : false,
-        editId        : '',
-        userId        : '',
+        type           : this.$route.params.type,
+        img            : '',
+        isEdit         : false,
+        editId         : '',
+        userId         : '',
 //        imgResult     : '',
 //        imgTemplate   : '',
 //        imgPath       : '',
-        tags          : '',
-        addArticleData: {
+        tags           : '',
+        articleData : {
           newTitle: '',
-          tagTitle: '',
+          tagInfo : {
+            tagTitle: '',
+            tagId   : ''
+          },
           content : ''
-        },
-        editArticleData: {
-          changeTitle  : '',
-          tagTitle     : '',
-          changeContent: ''
         }
       }
     },
     mounted   : function () {
-      if (this.type === 'add') {
-        this.isDisplay = true;
-      }
       if (this.type === 'edit') {
         this.isEdit = true;
         if (localStorage.getItem('canEdit')) {
           this.editId = JSON.parse(localStorage.getItem('canEdit')).editId;
-          this.$http.get(`/api/post/getSinglePost/${this.editId}`).then(res => {
-            this.editArticleData.changeTitle = res.data.title;
-            this.editArticleData.changeContent = res.data.content;
-//            this.imgPath = res.data.image;
-            this.editArticleData.tagTitle = res.data.tagTitle;
-          });
+          this.initData();
         }
       }
       this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
@@ -140,62 +95,61 @@
       })
     },
     methods   : {
+      initData () {
+        this.$http.get(`/api/post/getSinglePost/${this.editId}`).then(res => {
+          this.articleData.newTitle = res.data.title;
+          this.articleData.content = res.data.content;
+//            this.imgPath = res.data.image;
+          this.articleData.tagInfo.tagTitle = res.data.tagTitle;
+          this.articleData.tagInfo.tagId = res.data.tagId;
+        });
+      },
       saveData(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let displayData = {
 //            "image"   : this.imgPath,
-              "title"   : this.addArticleData.newTitle,
-              "content" : this.addArticleData.content,
+              "title"   : this.articleData.newTitle,
+              "content" : this.articleData.content,
               "date"    : this.$moment().format('YYYY-MM-DD HH:mm:ss'),
-              "tagTitle": this.addArticleData.tagTitle
+              "tagId"   : this.articleData.tagInfo.tagId,
+              "tagTitle": this.articleData.tagInfo.tagTitle
             };
-//            console.log(this.$moment(displayData.date).format())
-            this.isDisplay = false;
-            this.$http.post(`/api/post/add/${this.userId}`, displayData).then(res => {
-              this.$router.push('/admin/articleManager');
-              localStorage.removeItem('canAdd');
-            })
+            if (this.type === 'add') {
+              this.$http.post(`/api/post/add/${this.userId}`, displayData).then(res => {
+                this.$router.push('/admin/articleManager');
+                localStorage.removeItem('canAdd');
+              })
+            } else if (this.type === 'edit') {
+              this.isEdit = false;
+              this.$http.put(`/api/post/edit/${this.editId}`, displayData)
+                .then(res => {
+                  this.$router.push("/admin/articleManager");
+                  localStorage.removeItem('canEdit');
+                });
+            }
           } else {
             return false;
           }
         })
       },
       cancelData() {
-        this.isDisplay = false;
-        this.addArticleData.newTitle = '';
+        if (this.type === 'edit') {
+          this.isEdit = false;
+        }
+        this.articleData.newTitle = '';
         this.$router.push('/admin/articleManager');
         localStorage.removeItem('canAdd');
       },
-      sureEdit(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            let payload = {
-//            image   : this.imgPath,
-              title   : this.editArticleData.changeTitle,
-              tagTitle: this.editArticleData.tagTitle,
-              content : this.editArticleData.changeContent
-            };
-            this.isEdit = false;
-            this.$http.put(`/api/post/edit/${this.editId}`, payload)
-              .then(res => {
-                this.$router.push("/admin/articleManager");
-                localStorage.removeItem('canEdit');
-              });
-          } else {
-            return false;
-          }
-        })
-
-      },
-      cancelEdit: function () {
-        this.isEdit = false;
-        this.editArticleData.changeTitle = '';
-        this.$router.push("/admin/articleManager");
-        localStorage.removeItem('canEdit');
-      },
       imgChange(val) {
 //        this.imgPath = val;
+      },
+      getTagId(title) {
+        this.tags.find((tag) => {
+          if (tag.title === title) {
+            this.articleData.tagInfo.tagId = tag._id;
+          }
+        })
       }
     },
     components: {

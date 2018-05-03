@@ -3,32 +3,35 @@
     <div class="header">
       <h1>所有文章</h1>
     </div>
-    <div class="article-list" v-for="article in articlesList">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h5 @click="getDetail(article._id)" class="card-title">{{article.title}}</h5>
-          <p class="card-text content" v-html="getContent(article.content)"></p>
-          <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+    <div class="article-list">
+      <div>
+        <div class="card mb-3" v-for="article in articlesList">
+          <div class="card-body">
+            <h5 @click="getDetail(article._id)" class="card-title articleTitle">{{article.title}}</h5>
+            <p class="card-text content" v-html="getContent(article.content)"></p>
+            <p class="card-text">
+              <small class="text-muted">
+                -by
+                <time>{{article.auth}}</time>
+                发布于：
+                <time>{{article.date}}</time>
+              </small>
+              <small class="articleDetail">
+                <button type="button" class="btn btn-link" @click="getDetail(article._id)">阅读全文 >></button>
+              </small>
+            </p>
+          </div>
         </div>
       </div>
-      <!--<el-row class="box-card" v-for="article in articlesList">-->
-        <!--<el-card>-->
-          <!--&lt;!&ndash;<img src="" alt="" class="image">&ndash;&gt;-->
-          <!--<div>-->
-            <!--<h1  class="articleTitle">{{article.title}}</h1>-->
-            <!--<p class="content" v-html="getContent(article.content)"></p>-->
-            <!--<div class="bottom clearfix">-->
-              <!-- - by-->
-              <!--<time>{{article.auth}}</time>-->
-              <!--<time class="time">{{article.date}}</time>-->
-              <!--<el-button type="text" class="button" @click="getDetail(article._id)">阅读全文 >></el-button>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</el-card>-->
-      <!--</el-row>-->
-      <!--<div class="tags-list">-->
-        <!--<h1>标签</h1>-->
-      <!--</div>-->
+      <div class="tags-list">
+        <h5>Tags</h5>
+        <div class="tag">
+          <span class="badge badge-pill badge-info">全部文章</span>
+        </div>
+        <div class="tag" v-for="tag in tags">
+          <span @click="getArticlesByTag(tag._id)" class="badge badge-pill badge-info">{{tag.title}}</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,16 +41,18 @@
   import 'bootstrap/dist/css/bootstrap.css';
 
   export default {
-    name      : 'articlesList',
+    name   : 'articlesList',
     data() {
       return {
-        articlesList: []
+        articlesList: [],
+        tags:[]
       }
     },
-    mounted   : function () {
+    mounted: function () {
       this.getAllArticles();
+      this.getTags();
     },
-    methods   : {
+    methods: {
       getAllArticles() {
         let that = this;
         this.$http.get('/api/post/getAllArticles')
@@ -75,75 +80,63 @@
       },
       getDetail(id) {
         this.$router.push(`/detail/${id}`);
+      },
+      getTags() {
+        this.$http.get('/api/getTag').then((res) => {
+          this.tags = res.data.data;
+        })
+      },
+      getArticlesByTag(id) {
+        this.$http.get(`/api/getArticlesByTag/${id}`).then((res) =>{
+
+        })
       }
     }
   }
 </script>
 <style scoped lang="stylus">
-  .articlesListView {
-    width: 100%;
-    position: relative;
-    .header {
-      margin: 20px;
-    }
-    .article-list {
-      position: relative;
-      width: 640px;
-      margin: 20px auto;
-      text-align: left;
-      .time {
-        font-size: 13px;
-        color: #999;
-      }
-      .bottom {
-        margin-top: 13px;
-        line-height: 12px;
-      }
-      .button {
-        padding: 0;
-        float: right;
-      }
-      .image {
-        width: 100%;
-        display: block;
-      }
-      .clearfix:before,
-      .clearfix:after {
-        display: table;
-        content: '';
-      }
-      .clearfix:after {
-        clear: both;
-      }
-      .box-card {
-        width: 100%;
-        display: block;
-        margin: 20px 0 0 0;
-        text-align: left;
-        .articleTitle {
-          display: inline-block;
-          &:hover {
-             cursor: pointer;
-             color: rgb(64, 158, 255);
-           }
-        }
-        .content {
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-    }
-  }
-  @media screen and (max-width:786px) {
-    .article-list {
-      width: 640px
-    }
-  }
-  @media screen and (max-width:480px) {
-    .article-list {
-      width: 80% !important;
-    }
-  }
+  .articlesListView
+    width 100%
+    position relative
+    .header
+      margin 20px
+    .article-list
+      position relative
+      width 640px
+      margin 20px auto
+      text-align left
+      .articleTitle
+        display inline-block
+        &:hover
+          cursor pointer
+          color rgb(64, 158, 255)
+      .content
+        overflow hidden
+        text-overflow ellipsis
+        white-space nowrap
+      .articleDetail
+        display inline-block
+        float right
+      .tags-list
+        position absolute
+        top 0
+        left 100%
+        margin-left 40px
+        .tag
+          margin-bottom 5px
+          .badge
+            padding-left 8px
+            padding-right 8px
+            cursor pointer
 
+  @media screen and (max-width: 786px)
+    .article-list
+      width 640px
+
+  @media screen and (max-width: 480px)
+    .article-list
+      width 70% !important
+      margin-left 8%!important
+      .tags-list
+        margin-left 20px!important
 </style>

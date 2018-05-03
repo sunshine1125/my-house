@@ -71,6 +71,7 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
   let image = req.body.image;
   let content = req.body.content;
   let tagTitle = req.body.tagTitle;
+  let tagId = req.body.tagId;
   Posts.findOne({title: title}, (err, data) => {
     if (err) {
       return next(err);
@@ -84,7 +85,8 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
       tagTitle: tagTitle,
       content : content,
       date    : date,
-      uid     : userId
+      uid     : userId,
+      tagId   : tagId
     });
     newForm.save(next);
 
@@ -98,6 +100,7 @@ apiRoutes.put('/post/edit/:id', (req, res) => {
     title   : req.body.title,
     content : req.body.content,
     tagTitle: req.body.tagTitle,
+    tagId   : req.body.tagId,
     image   : req.body.image
   }, (err, docs) => {
     if (err) {
@@ -116,5 +119,9 @@ apiRoutes.delete('/post/remove/:id', (req, res) => {
   })
 
 });
+
+apiRoutes.get('getArticlesByTag/:id', (req, res) => {
+
+})
 
 module.exports = apiRoutes;

@@ -8,7 +8,7 @@ let PostSchema = new Schema({
   tagTitle: String,
   date    : {type: Date, default: Date.now},
   uid     : {type: Schema.Types.ObjectId, ref: 'User'},
-  // tagId   : [{type: Schema.Types.ObjectId, ref: 'Tag'}]
+  tagId   : {type: Schema.Types.ObjectId, ref: 'Tag'}
 });
 
 let Post = mongoose.model('Post', PostSchema);
