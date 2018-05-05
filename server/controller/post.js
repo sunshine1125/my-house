@@ -120,7 +120,15 @@ apiRoutes.delete('/post/remove/:id', (req, res) => {
 
 });
 
-apiRoutes.get('getArticlesByTag/:id', (req, res) => {
+apiRoutes.get('/getArticlesByTag/:id', (req, res) => {
+  Posts.find({tagId: req.params.id}, (err, data) => {
+    if (err) {
+
+    } else {
+      res.status('200').json({success: true, data: data});
+    }
+
+  })
 
 })
 

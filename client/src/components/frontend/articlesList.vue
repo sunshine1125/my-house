@@ -5,7 +5,7 @@
     </div>
     <div class="article-list">
       <div>
-        <div class="card mb-3" v-for="article in articlesList">
+        <div v-if="hasArticles" class="card mb-3" v-for="article in articlesList">
           <div class="card-body">
             <h5 @click="getDetail(article._id)" class="card-title articleTitle">{{article.title}}</h5>
             <p class="card-text content" v-html="getContent(article.content)"></p>
@@ -22,11 +22,12 @@
             </p>
           </div>
         </div>
+        <div style="text-align: center;" v-if="!hasArticles"><p>您选择的分类下没有文章</p></div>
       </div>
       <div class="tags-list">
         <h5>Tags</h5>
         <div class="tag">
-          <span class="badge badge-pill badge-info">全部文章</span>
+          <span @click="getAllArticles()" class="badge badge-pill badge-info">全部文章</span>
         </div>
         <div class="tag" v-for="tag in tags">
           <span @click="getArticlesByTag(tag._id)" class="badge badge-pill badge-info">{{tag.title}}</span>
@@ -45,7 +46,8 @@
     data() {
       return {
         articlesList: [],
-        tags:[]
+        tags        : [],
+        hasArticles : true
       }
     },
     mounted: function () {
@@ -53,25 +55,34 @@
       this.getTags();
     },
     methods: {
+      processArticlesFormat(article) {
+        article.forEach((data) => {
+          this.$http.get(`/api/getSingleUserById/${data.uid}`).then((res) => {
+            console.log(res.data.data.username);
+            return res.data.data.username;
+          }).then((auth) => {
+            this.articlesList.push({
+              auth    : auth,
+              content : data.content,
+              date    : this.$moment(data.date).format('YYYY-MM-DD HH:mm:ss'),
+              tagTitle: data.tagTitle,
+              title   : data.title,
+              _id     : data._id
+            })
+          })
+        })
+      },
       getAllArticles() {
-        let that = this;
         this.$http.get('/api/post/getAllArticles')
           .then((res) => {
             if (res.data.success && res.data.data) {
-              res.data.data.forEach((data) => {
-                that.$http.get(`/api/getSingleUserById/${data.uid}`).then((res) => {
-                  return res.data.data.username;
-                }).then((auth) => {
-                  this.articlesList.push({
-                    auth    : auth,
-                    content : data.content,
-                    date    : that.$moment(data.date).format('YYYY-MM-DD HH:mm:ss'),
-                    tagTitle: data.tagTitle,
-                    title   : data.title,
-                    _id     : data._id
-                  })
-                })
-              })
+              if (res.data.data.length === 0) {
+                this.articlesList = [];
+                this.hasArticles = false;
+              } else {
+                this.hasArticles = true;
+                this.processArticlesFormat(res.data.data);
+              }
             }
           })
       },
@@ -87,8 +98,17 @@
         })
       },
       getArticlesByTag(id) {
-        this.$http.get(`/api/getArticlesByTag/${id}`).then((res) =>{
-
+        this.articlesList = [];
+        this.$http.get(`/api/getArticlesByTag/${id}`).then((res) => {
+          if (res.data.success && res.data.data) {
+            if (res.data.data.length === 0) {
+              this.articlesList = [];
+              this.hasArticles = false;
+            } else {
+              this.hasArticles = true;
+              this.processArticlesFormat(res.data.data);
+            }
+          }
         })
       }
     }
@@ -136,7 +156,7 @@
   @media screen and (max-width: 480px)
     .article-list
       width 70% !important
-      margin-left 8%!important
+      margin-left 8% !important
       .tags-list
-        margin-left 20px!important
+        margin-left 20px !important
 </style>
