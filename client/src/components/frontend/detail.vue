@@ -66,57 +66,54 @@
   }
 </script>
 <style lang="stylus">
-  .detail {
-    width: 40%;
-    height: 90%;
-    margin: 60px auto;
-    padding: 60px;
-    background: #fff;
-    box-shadow: 0 0 2px 0 rgba(0, 0, 0, .36);
-  }
+  .detail
+    width 640px
+    height 90%
+    margin 10px auto
+    padding 60px
+    background #fff
+    box-shadow 0 0 2px 0 rgba(0, 0, 0, .36)
+    .article
+      .title
+        font-size 34px
+        font-weight 700
+        line-height 34px
+        padding-bottom 20px
+        z-index 10
+      .time
+        font-size 14px
+        margin-bottom 20px
+        .auth
+          margin-right 10px
+      .content
+        color #2f2f2f
+        font-size 16px
+        font-weight 400
+        line-height 1.7
+        text-align left
+        pre
+          background-color #f6f8fa
+          line-height 1.45
+          padding 16px
+          -ms-word-wrap normal
+          word-wrap normal
+          -ms-word-break break-word
+          white-space pre
+          overflow auto
+      .header
+        width: 100%
+        text-align: center
+      .tag
+        background-color rgba(64, 158, 225, .1)
+        padding 5px 10px
+        line-height 30px
+        font-size 12px
+        color #409eff
+        border-radius 5px
+        box-sizing border-box
+        border 1px solid rgba(64, 158, 255, .2)
 
-  .detail .article .title {
-    font-size: 34px;
-    font-weight: 700;
-    line-height: 34px;
-    padding-bottom: 20px;
-    z-index: 10;
-  }
 
-  .article .time {
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-
-  .article .time .auth {
-    /*font-size: 12px;*/
-    margin-right: 10px;
-  }
-
-  .article .content {
-    color: #2f2f2f;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.7;
-    text-align: left;
-  }
-
-  .article .content pre {
-    background-color: #f6f8fa;
-    line-height: 1.45;
-    padding: 16px;
-    -ms-word-wrap: normal;
-    word-wrap: normal;
-    -ms-word-break: break-word;
-      /*word-break: break-word;*/
-    white-space: pre;
-    overflow: auto;
-  }
-
-  .detail .header {
-    width: 100%;
-    text-align: center;
-  }
 
   /*.detail .header .iconImage {*/
   /*position: absolute;*/
@@ -129,16 +126,14 @@
   /*-webkit-background-size: 100% 150px;*/
   /*background-size: 100% 150px;*/
   /*}*/
-  .tag {
-    background-color: rgba(64, 158, 225, .1);
-    padding: 5px 10px;
-    line-height: 30px;
-    font-size: 12px;
-    color: #409eff;
-    border-radius: 5px;
-    box-sizing: border-box;
-    border: 1px solid rgba(64, 158, 255, .2);
-  }
 
 
+  @media screen and (max-width: 786px)
+    .detail
+      width 640px
+
+  @media screen and (max-width: 480px)
+    .detail
+      width 100% !important
+      margin-top 0 !important
 </style>
