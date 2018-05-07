@@ -9,6 +9,38 @@
       <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span></div>
       <div class="content" v-html="content"></div>
     </div>
+    <div class="writeComment">
+      <div>
+        <strong>userName：</strong>
+        <textarea class="form-control" rows="3" placeholder="请写下你的评论"></textarea>
+      </div>
+      <div>
+        <button type="button" class="btn btn-secondary">取消</button>
+        <button type="button" class="btn btn-success">发送</button>
+      </div>
+    </div>
+    <div class="comment">
+      <div class="title" data-title="评论"></div>
+      <div>
+        <div class="card mb-3">
+          <div class="card-body">
+            <p class="card-title">
+              <strong>userName</strong>
+              <small>评论于：</small>
+            </p>
+            <p class="card-text"></p>
+            <p class="card-text">
+              <small class="text-muted">
+                -by
+                <time>article.auth</time>
+                发布于：
+                <time>article.date</time>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -65,15 +97,15 @@
     components: {}
   }
 </script>
-<style lang="stylus">
+<style scoped lang="stylus">
   .detail
     width 640px
-    height 90%
-    margin 10px auto
-    padding 60px
-    background #fff
-    box-shadow 0 0 2px 0 rgba(0, 0, 0, .36)
+    height 100%
+    margin 20px auto
     .article
+      padding 60px
+      background #fff
+      box-shadow 0 0 2px 0 rgba(0, 0, 0, .36)
       .title
         font-size 34px
         font-weight 700
@@ -112,6 +144,48 @@
         border-radius 5px
         box-sizing border-box
         border 1px solid rgba(64, 158, 255, .2)
+    .comment
+      text-align left
+      .title
+        position relative
+        padding 40px 20px
+        font-size 24px
+        color gray
+        text-align center
+        &:before
+          content attr(data-title)
+          position relative
+          display inline-block
+          padding 0 10px
+          background-color #f5f5f5
+          z-index 1
+        &:after
+          content ''
+          display inline-block
+          position absolute
+          height 2px
+          width 80%
+          top 50%
+          left 50%
+          margin-left -40%
+          background-color gray
+          transform translateY(-50%)
+      .card-title
+        display flex
+        small
+          margin-left auto
+    .writeComment
+      padding-top 40px
+      div:first-child
+        display flex
+        margin-bottom 10px
+        textarea
+          font-size 13px
+          border-radius 4px
+          outline none
+      div:nth-child(2)
+        text-align right
+
 
 
 
