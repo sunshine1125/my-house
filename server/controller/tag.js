@@ -12,7 +12,7 @@ apiRoutes.get('/getTag', (req, res) => {
             if (err) {
                 // console.log(err);
             }
-            res.status('200').json({success: true, code:200, data: data})
+            res.status('200').json({success: true, code:200, data: data, message: '获得标签'})
         })
 });
 
