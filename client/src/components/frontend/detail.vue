@@ -1,5 +1,6 @@
 <template>
   <div class="detail">
+    <navBar></navBar>
     <div class="article">
       <div class="header">
         <!--<div class="iconImage" :style="{backgroundImage: 'url(' + imgSrc + ')'}"></div>-->
@@ -45,7 +46,7 @@
 </template>
 
 <script>
-  import 'bootstrap/dist/css/bootstrap.css';
+  import navBar from './navBar.vue';
 
   export default {
     name      : 'detail',
@@ -94,7 +95,9 @@
         }
       }
     },
-    components: {}
+    components: {
+      navBar
+    }
   }
 </script>
 <style scoped lang="stylus">
@@ -102,6 +105,7 @@
     width 640px
     height 100%
     margin 20px auto
+    margin-top 80px
     .article
       padding 60px
       background #fff

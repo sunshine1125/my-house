@@ -6,6 +6,7 @@ import App from './App';
 import router from './router';
 import 'mavon-editor/dist/css/index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min';
 import '../static/css/common.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'

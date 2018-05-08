@@ -1,7 +1,8 @@
 <template>
   <div class="articlesListView">
+    <navBar></navBar>
     <div class="header">
-      <h1>所有文章</h1>
+      <h1>{{articleTitle}}</h1>
     </div>
     <div class="article-list">
       <div>
@@ -30,7 +31,7 @@
           <span @click="getAllArticles()" class="badge badge-pill badge-info">全部文章</span>
         </div>
         <div class="tag" v-for="tag in tags">
-          <span @click="getArticlesByTag(tag._id)" class="badge badge-pill badge-info">{{tag.title}}</span>
+          <span @click="getArticlesByTag(tag._id, tag.title)" class="badge badge-pill badge-info">{{tag.title}}</span>
         </div>
       </div>
     </div>
@@ -38,8 +39,8 @@
 </template>
 
 <script>
+  import navBar from './navBar.vue'
   import removeMd from 'remove-markdown'
-  import 'bootstrap/dist/css/bootstrap.css';
 
   export default {
     name   : 'articlesList',
@@ -47,7 +48,8 @@
       return {
         articlesList: [],
         tags        : [],
-        hasArticles : true
+        hasArticles : true,
+        articleTitle: '所有文章'
       }
     },
     mounted: function () {
@@ -72,6 +74,7 @@
         })
       },
       getAllArticles() {
+        this.articleTitle = '所有文章';
         this.$http.get('/api/post/getAllArticles')
           .then((res) => {
             if (res.data.success && res.data.data) {
@@ -96,8 +99,9 @@
           this.tags = res.data.data;
         })
       },
-      getArticlesByTag(id) {
+      getArticlesByTag(id, title) {
         this.articlesList = [];
+        this.articleTitle = title;
         this.$http.get(`/api/getArticlesByTag/${id}`).then((res) => {
           if (res.data.success && res.data.data) {
             if (res.data.data.length === 0) {
@@ -110,6 +114,9 @@
           }
         })
       }
+    },
+    components: {
+      navBar
     }
   }
 </script>
@@ -119,6 +126,7 @@
     position relative
     .header
       margin 20px
+      margin-top 80px
     .article-list
       position relative
       width 640px
