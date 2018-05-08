@@ -2,6 +2,9 @@ const express = require('express');
 const apiRoutes = express.Router();
 const Tags = require('../models/tag');
 
+apiRoutes.get('/test', (req, res) => {
+  res.send("测试接口")
+})
 // get
 apiRoutes.get('/getTag', (req, res) => {
     Tags.find()
