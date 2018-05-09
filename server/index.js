@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const auth = require('./controller/auth');
 const post = require('./controller/post');
 const tag = require('./controller/tag');
+const frontUser = require('./controller/frontUser')
 
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
@@ -23,6 +24,8 @@ app.use(morgan('dev'));
 
 // auth api
 app.use(auth);
+
+app.use(frontUser);
 
 // controller middleware to verify a token
 app.use((req, res, next) => {

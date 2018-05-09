@@ -9,15 +9,15 @@
         <!--<li class="nav-item active">-->
           <!--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
         <!--</li>-->
-        <li class="nav-item">
+        <li class="nav-item" v-if="!hasLogin">
           <a class="nav-link" href="#">登录</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!hasLogin">
           <a class="nav-link" href="#">注册</a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" v-if="hasLogin">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
+            {{currentUserName}}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="#">Action</a>
@@ -36,15 +36,27 @@
     name      : 'navBar',
     data() {
       return {
+        currentUserName: '',
+        hasLogin: false
       }
     },
     mounted   : function () {
+      if (localStorage.getItem('currentUserId')) {
+        this.hasLogin = true;
+        this.getUserName(localStorage.getItem(('currentUserId')));
+      } else {
+        this.hasLogin = false;
+      }
     },
     computed: {
 
     },
     methods   : {
-
+      getUserName(id) {
+        this.$http.get(`/api/getUserById/${id}`).then(res => {
+          this.currentUserName = res.data.data;
+        })
+      },
     },
     components: {}
   }

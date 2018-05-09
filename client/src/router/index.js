@@ -12,6 +12,8 @@ import userManager from '@/components/backend/userManager'
 import articleManager from '@/components/backend/articleManager'
 import tagManager from '@/components/backend/tagManager'
 import articlesList from '@/components/frontend/articlesList'
+import frontRegister from '@/components/frontend/register'
+import frontLogin from '@/components/frontend/login'
 
 Vue.use(Router)
 
@@ -66,6 +68,16 @@ export default new Router({
       path     : '/admin/resetPassword',
       name     : 'resetPassword',
       component: resetPassword
+    },
+    {
+      path     : '/register',
+      name     : 'frontRegister',
+      component: frontRegister
+    },
+    {
+      path     : '/login',
+      name     : 'frontLogin',
+      component: frontLogin
     },
     {
       path     : '/',

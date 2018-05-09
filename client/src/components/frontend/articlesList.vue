@@ -43,20 +43,20 @@
   import removeMd from 'remove-markdown'
 
   export default {
-    name   : 'articlesList',
+    name      : 'articlesList',
     data() {
       return {
-        articlesList: [],
-        tags        : [],
-        hasArticles : true,
-        articleTitle: '所有文章'
+        articlesList   : [],
+        tags           : [],
+        hasArticles    : true,
+        articleTitle   : '所有文章'
       }
     },
-    mounted: function () {
+    mounted   : function () {
       this.getAllArticles();
       this.getTags();
     },
-    methods: {
+    methods   : {
       processArticlesFormat(article) {
         article.forEach((data) => {
           this.$http.get(`/api/getSingleUserById/${data.uid}`).then((res) => {
