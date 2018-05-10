@@ -23,7 +23,13 @@
       <div class="form-group row">
         <div class="col-sm-3"></div>
         <div class="col-sm-9">
-          <button @click="register()" class="btn btn-primary btn-block">注册</button>
+          <button @click="register()" type="button" class="btn btn-primary btn-block">注册</button>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+          已有账户，去 <a href="#/login">登录</a>
         </div>
       </div>
     </form>
@@ -54,11 +60,9 @@
           username: this.username,
           phone   : this.phone,
           password: this.password
-        }
-        console.log(data);
+        };
         this.$http.post('/api/userRegister', data).then(res => {
           if (res.data.success) {
-            console.log(res.data);
             this.errorMessage = '';
             this.displayAlert = false;
             this.$router.push('/');
@@ -88,6 +92,12 @@
       position fixed
       bottom 10px
       right 10px
+
+  @media screen and (max-width: 480px)
+    .register
+      width 100% !important
+      margin-top 0 !important
+      height 100% !important
 
   /*form {
     width: 80%;

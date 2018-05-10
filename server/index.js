@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 const auth = require('./controller/auth');
 const post = require('./controller/post');
 const tag = require('./controller/tag');
-const frontUser = require('./controller/frontUser')
+const frontUser = require('./controller/frontUser');
+const comment = require('./controller/comment');
 
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
@@ -63,6 +64,9 @@ app.use(post);
 
 // tag api
 app.use(tag);
+
+// comment api
+app.use(comment);
 
 const PORT = process.env.NODE_ENV.PORT || 3002
 

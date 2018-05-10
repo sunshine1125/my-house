@@ -7,39 +7,37 @@
         <!--<img :src="imgSrc" alt="">-->
         <h1 class="title">{{title}}</h1>
       </div>
-      <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span></div>
+      <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span>
+      </div>
       <div class="content" v-html="content"></div>
     </div>
     <div class="writeComment">
       <div>
-        <strong>userName：</strong>
-        <textarea class="form-control" rows="3" placeholder="请写下你的评论"></textarea>
+        <strong>{{currentUserName}}：</strong>
+        <textarea class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
       </div>
       <div>
-        <button type="button" class="btn btn-secondary">取消</button>
-        <button type="button" class="btn btn-success">发送</button>
+        <button type="button" @click="cancel()" class="btn btn-secondary">取消</button>
+        <button type="button" @click="send()" class="btn btn-success">发送</button>
       </div>
     </div>
     <div class="comment">
       <div class="title" data-title="评论"></div>
-      <div>
+      <div v-if="hasComment" v-for="(comment, index) in commentInfo">
         <div class="card mb-3">
           <div class="card-body">
             <p class="card-title">
-              <strong>userName</strong>
-              <small>评论于：</small>
+              <strong>{{comment.auth}}</strong>
             </p>
-            <p class="card-text"></p>
-            <p class="card-text">
-              <small class="text-muted">
-                -by
-                <time>article.auth</time>
-                发布于：
-                <time>article.date</time>
-              </small>
+            <p style="font-size: 12px; color: #969696;">
+              <span>{{comment.index + 1}}楼 · {{comment.date}}</span>
             </p>
+            <p class="card-text">{{comment.content}}</p>
           </div>
         </div>
+      </div>
+      <div v-if="!hasComment" style="text-align: center">
+        <p>暂时还没有评论！</p>
       </div>
     </div>
   </div>
@@ -52,19 +50,28 @@
     name      : 'detail',
     data() {
       return {
-        title   : '',
-        date    : '',
-        content : '',
-        imgSrc  : '',
-        tagTitle: '',
-        uid     : '',
-        auth    : ''
+        title          : '',
+        date           : '',
+        content        : '',
+        imgSrc         : '',
+        tagTitle       : '',
+        uid            : '',
+        auth           : '',
+        currentUserName: localStorage.getItem('currentUserName'),
+        newComment     : '',
+        hasComment     : false,
+        commentInfo    : []
       }
     },
     mounted   : function () {
       this.getArticle();
+      this.getComments();
     },
-    computed: {
+    computed  : {
+//      commentFormat: (value) => {
+//        if (!value) return ''
+//        return value.map((item) =)
+//      }
 //      backgroundImage() {
 //        return {
 //          background: url(this.imgSrc) no-repeat center;
@@ -77,7 +84,7 @@
 //      }
     },
     methods   : {
-      getArticle () {
+      getArticle() {
         if (this.$route.params.id) {
           this.$http.get(`/api/post/getDetailPost/${this.$route.params.id}`).then(res => {
             this.title = res.data.title;
@@ -93,6 +100,41 @@
               })
             });
         }
+      },
+      send() {
+        let commentInfo = {
+          auth     : this.currentUserName,
+          authId   : localStorage.getItem('currentUserId'),
+          content  : this.newComment,
+          date     : this.$moment().format('YYYY-MM-DD HH:mm:ss'),
+          articleId: this.$route.params.id
+        }
+        if (this.newComment) {
+          this.$http.post('/api/addComment', commentInfo).then((res) => {
+            if (res.data.success) {
+              this.newComment = '';
+              this.getComments();
+            }
+          })
+        }
+      },
+      getComments() {
+        this.$http.get(`/api/getComments/${this.$route.params.id}`).then(res => {
+          if (res.data.success && res.data.data.length > 0) {
+            this.hasComment = true;
+            this.commentInfo = [];
+            for (let len = res.data.data.length, i = len - 1; i >= 0; i--) {
+              res.data.data[i].date = this.$moment(res.data.data[i].date).format('YYYY-MM-DD HH:mm:ss');
+              res.data.data[i].index = i;
+              this.commentInfo.push(res.data.data[i]);
+            }
+          } else {
+            this.hasComment = false;
+          }
+        })
+      },
+      cancel() {
+        this.newComment = '';
       }
     },
     components: {
@@ -150,6 +192,7 @@
         border 1px solid rgba(64, 158, 255, .2)
     .comment
       text-align left
+      margin-bottom 80px
       .title
         position relative
         padding 40px 20px
@@ -190,9 +233,6 @@
       div:nth-child(2)
         text-align right
 
-
-
-
   /*.detail .header .iconImage {*/
   /*position: absolute;*/
   /*width: 100%;*/
@@ -204,7 +244,6 @@
   /*-webkit-background-size: 100% 150px;*/
   /*background-size: 100% 150px;*/
   /*}*/
-
 
   @media screen and (max-width: 786px)
     .detail

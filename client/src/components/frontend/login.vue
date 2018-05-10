@@ -1,25 +1,38 @@
 <template>
   <div class="login container">
-    <h3>登录</h3>
-    <el-form :model="loginForm" ref="loginForm" label-width="100px">
-      <el-form-item label="邮箱"
-                    prop="email"
-                    :rules="validate_rules({required: true, type: 'email'})">
-        <el-input v-model="loginForm.email" placeholder="请输入邮箱"></el-input>
-      </el-form-item>
-      <el-form-item label="密码"
-                    prop="password"
-                    :rules="validate_rules({required: true, type: 'password'})">
-        <el-input type="password" v-model="loginForm.password" placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="">
-        <el-button type="primary" style="width: 100%" @click="login('loginForm')">登录</el-button>
-        还没有账号，快去
-        <el-button style="margin-left: 0;" type="text" @click="goRegister()">创建</el-button>
-        一个吧！
-        <p style="cursor: pointer" @click="forgotPassword()">忘记密码？</p>
-      </el-form-item>
-    </el-form>
+    <h3>小屋</h3>
+    <form>
+      <div class="form-group row">
+        <label for="phone" class="col-sm-3 col-form-label">手机号</label>
+        <div class="col-sm-9">
+          <input type="text" v-model="phone" class="form-control" id="phone" placeholder="手机号">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="inputPassword" class="col-sm-3 col-form-label">密码</label>
+        <div class="col-sm-9">
+          <input type="password" v-model="password" class="form-control" id="inputPassword" placeholder="密码">
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+          <button @click="login()" type="button" class="btn btn-primary btn-block">登录</button>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-9">
+          还没有账户，去 <a href="#/register">创建 </a>一个吧！
+        </div>
+      </div>
+    </form>
+    <div class="alert alert-warning alert-dismissible fade tipMessage" :class="{show: displayAlert}" role="alert">
+      <span>{{errorMessage}}</span>
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -28,109 +41,57 @@
     name   : 'login',
     data() {
       return {
-        loginForm: {
-          email   : '',
-          password: ''
-        }
+        phone       : '',
+        password    : '',
+        errorMessage: '',
+        displayAlert: false
       }
     },
     mounted: function () {
-      if (this.$route.query == null) {
 
-      } else {
-        if (this.$route.query.passedCheck) {
-          this.$message({
-            message: '邮箱验证成功，请登录!',
-            type   : 'success'
-          })
-        }
-      }
     },
     methods: {
-      login(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            let userInfo = {
-              "email"   : this.loginForm.email,
-              "password": this.loginForm.password
-            };
-            let that = this;
-            this.$http.post('/api/authentication', userInfo)
-              .then((res) => {
-                if (res.data.success) {
-                  if (res.data.token) {
-                    let userInfo = {
-                      'email': this.loginForm.email,
-                      '_id'  : res.data._id,
-                      'token': res.data.token
-                    };
-                    this.$message({
-                      message: res.data.message,
-                      type   : 'success'
-                    });
-                    localStorage.setItem('userInfo', JSON.stringify(userInfo));
-                    that.$router.push('/admin');
-                  }
-                } else {
-                  if (!res.data.check) {
-                    this.$confirm(res.data.message, '提示', {
-                      confirmButtonText: '去验证',
-                      cancelButtonText: '取消',
-                      type: 'warning'
-                    }).then(() => {
-                      let email = {
-                        "email": this.useremail
-                      };
-                      this.$http.post('/api/sendEmail', email).then(res => {
-                        this.$router.push('/admin/checkEmail');
-                      });
-                    }).catch(() => {
-                      this.$message({
-                        type: 'info',
-                        message: '已取消验证'
-                      })
-                    })
-                  } else {
-                    this.$message.error(res.data.message);
-                  }
-                }
-              })
+      login() {
+        let data = {
+          phone   : this.phone,
+          password: this.password
+        }
+        this.$http.post('/api/login', data).then(res => {
+          if (res.data.success) {
+            this.errorMessage = '';
+            this.displayAlert = false;
+            this.$router.push('/');
+            localStorage.setItem('currentUserId', res.data._id);
           } else {
-            return false;
+            this.displayAlert = true;
+            this.errorMessage = res.data.message;
           }
         })
-      },
-      goRegister() {
-        this.$router.push('/admin/register');
-      },
-      forgotPassword() {
-        this.$router.push('/admin/forgotPassword');
       }
     }
   }
 </script>
 <style scoped lang="stylus">
-  .login {
-    width: 30%;
-    margin: auto;
-    background: #eee;
-    padding-top: 40px;
-    padding-bottom: 20px;
-    margin-top: 150px;
-  }
+  .login
+    margin auto
+    width 30%
+    background #eee
+    padding-top 40px
+    padding-bottom 20px
+    margin-top 150px
+    form
+      width 80%
+      margin-top 30px
+      margin-left 30px
+    .tipMessage
+      position fixed
+      bottom 10px
+      right 10px
 
-  form {
-    width: 80%;
-    margin-top: 30px;
-    margin-left: 30px;
-  }
-
-  input, button {
-    outline: none;
-  }
-
-  a {
-    cursor: pointer
-  }
+  @media screen and (max-width: 480px)
+    .register
+      width 100% !important
+      margin-top 0 !important
+      height 100% !important
 
 </style>
