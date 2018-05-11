@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light">
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
     <a class="navbar-brand" href="#/">小屋</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,20 +11,19 @@
         <!--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
         <!--</li>-->
         <li class="nav-item" v-if="!hasLogin">
-          <a class="nav-link" href="#">登录</a>
+          <a class="nav-link" href="#/login">登录</a>
         </li>
         <li class="nav-item" v-if="!hasLogin">
-          <a class="nav-link" href="#">注册</a>
+          <a class="nav-link" href="#/register">注册</a>
         </li>
-        <li class="nav-item dropdown" v-if="hasLogin">
+        <li class="pic nav-item dropdown" v-if="hasLogin">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
              aria-haspopup="true" aria-expanded="false">
-            {{currentUserName}}
+            <img :src="imgSrc" width="40" height="40" alt="">
           </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
+            <a class="dropdown-item" href="#" @click="logout()">设置</a>
           </div>
         </li>
       </ul>
@@ -39,7 +38,8 @@
     data() {
       return {
         currentUserName: '',
-        hasLogin       : false
+        hasLogin       : false,
+        imgSrc         : ''
       }
     },
     mounted   : function () {
@@ -54,9 +54,18 @@
     methods   : {
       getUserName(id) {
         this.$http.get(`/api/getUserById/${id}`).then(res => {
-          this.currentUserName = res.data.data;
-          localStorage.setItem('currentUserName', this.currentUserName);
+          this.currentUserName = res.data.data.username;
+          this.imgSrc = res.data.data.avatar;
+          let userInfo = {
+            currentUserName: this.currentUserName,
+            avatar         : this.imgSrc
+          }
+          localStorage.setItem('currentUserInfo', JSON.stringify(userInfo));
         })
+      },
+      logout() {
+        localStorage.removeItem('currentUserId');
+        localStorage.removeItem('currentUserInfo');
       }
     },
     components: {}
@@ -65,10 +74,12 @@
 <style scoped lang="stylus">
   .navbar
     border-bottom 1px solid #e0e0e0
-    position fixed
-    top 0
-    left 0
     width 100%
     z-index 100
     background-color #f5f5f5
+    .pic
+      .nav-link
+        padding 0 0.5rem
+      img
+        border-radius 50%
 </style>

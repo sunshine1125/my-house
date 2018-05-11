@@ -13,10 +13,13 @@
     </div>
     <div class="writeComment">
       <div>
-        <strong>{{currentUserName}}：</strong>
-        <textarea class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
+        <img class="pic" width="40" height="40" :src="userAvatar"/>
+        <div v-if="!hasLogin" class="form-control needToLogin">
+          <a class="btn btn-success btn-sm" role="button" href="#/login">登录</a> 后发表评论！
+        </div>
+        <textarea v-if="hasLogin" class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
       </div>
-      <div>
+      <div v-if="hasLogin">
         <button type="button" @click="cancel()" class="btn btn-secondary">取消</button>
         <button type="button" @click="send()" class="btn btn-success">发送</button>
       </div>
@@ -26,12 +29,19 @@
       <div v-if="hasComment" v-for="(comment, index) in commentInfo">
         <div class="card mb-3">
           <div class="card-body">
-            <p class="card-title">
-              <strong>{{comment.auth}}</strong>
-            </p>
-            <p style="font-size: 12px; color: #969696;">
-              <span>{{comment.index + 1}}楼 · {{comment.date}}</span>
-            </p>
+            <div class="row card-body">
+              <div class="column">
+                <img class="pic" :src="comment.avatar" width="50" height="50" alt="">
+              </div>
+              <div class="column">
+                <p class="card-title">
+                  <strong>{{comment.auth}}</strong>
+                </p>
+                <p style="font-size: 12px; color: #969696;">
+                  <span>{{comment.index + 1}}楼 · {{comment.date}}</span>
+                </p>
+              </div>
+            </div>
             <p class="card-text">{{comment.content}}</p>
           </div>
         </div>
@@ -57,15 +67,25 @@
         tagTitle       : '',
         uid            : '',
         auth           : '',
-        currentUserName: localStorage.getItem('currentUserName'),
+        currentUserName: '',
         newComment     : '',
         hasComment     : false,
-        commentInfo    : []
+        commentInfo    : [],
+        hasLogin       : false,
+        userAvatar     : ''
       }
     },
     mounted   : function () {
       this.getArticle();
       this.getComments();
+      if (localStorage.getItem('currentUserInfo')) {
+        this.hasLogin = true;
+        this.currentUserName = JSON.parse(localStorage.getItem('currentUserInfo')).currentUserName;
+        this.userAvatar = JSON.parse(localStorage.getItem('currentUserInfo')).avatar;
+      } else {
+        this.hasLogin = false;
+        this.currentUserName = '游客'
+      }
     },
     computed  : {
 //      commentFormat: (value) => {
@@ -107,7 +127,8 @@
           authId   : localStorage.getItem('currentUserId'),
           content  : this.newComment,
           date     : this.$moment().format('YYYY-MM-DD HH:mm:ss'),
-          articleId: this.$route.params.id
+          articleId: this.$route.params.id,
+          avatar   : this.userAvatar
         }
         if (this.newComment) {
           this.$http.post('/api/addComment', commentInfo).then((res) => {
@@ -232,6 +253,12 @@
           outline none
       div:nth-child(2)
         text-align right
+      .needToLogin
+        text-align center !important
+        padding 0.75rem
+    .pic
+      border-radius 50%
+      margin-right 10px
 
   /*.detail .header .iconImage {*/
   /*position: absolute;*/

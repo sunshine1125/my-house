@@ -24,7 +24,8 @@ apiRoutes.post('/userRegister', (req, res) => {
         username          : req.body.username,
         password          : password,// 把加密后的密码存入数据库
         phone             : req.body.phone,
-        roleId            : 3
+        roleId            : 3,
+        avatar            : req.body.avatar
       });
       User.findOne({
         phone: req.body.phone
@@ -43,7 +44,6 @@ apiRoutes.post('/userRegister', (req, res) => {
                   _id     : data._id,
                   username: data.username,
                   roleId  : data.roleId
-
                 }
               })
             }
@@ -58,7 +58,7 @@ apiRoutes.post('/userRegister', (req, res) => {
 // get single user
 apiRoutes.get('/getUserById/:id', (req,res) => {
   User.findOne({_id: req.params.id}, (err, user) => {
-    res.status('200').json({success: true, data: user.username})
+    res.status('200').json({success: true, data: user})
   })
 });
 

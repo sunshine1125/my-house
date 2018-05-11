@@ -5,6 +5,7 @@ let CommentSchema = new Schema({
   auth     : String,
   authId   : String,
   content  : String,
+  avatar   : String,
   date     : {type: Date, default: Date.now},
   articleId: {type: Schema.Types.ObjectId, ref: 'post'}
 });

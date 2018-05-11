@@ -5,7 +5,8 @@ let UserSchema = new Schema({
   username          : String,
   password          : String,
   phone             : Number,
-  roleId            : Number
+  roleId            : Number,
+  avatar            : String
 });
 
 let frontUser = mongoose.model('frontUser', UserSchema);

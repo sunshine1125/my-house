@@ -1,5 +1,6 @@
 <template>
   <div class="register container">
+    <img v-show="false" id="avatar" width="100" height="100" src="../../assets/default.jpg" alt="">
     <h3>小屋</h3>
     <form>
       <div class="form-group row">
@@ -56,22 +57,25 @@
     },
     methods: {
       register() {
-        let data = {
-          username: this.username,
-          phone   : this.phone,
-          password: this.password
-        };
-        this.$http.post('/api/userRegister', data).then(res => {
-          if (res.data.success) {
-            this.errorMessage = '';
-            this.displayAlert = false;
-            this.$router.push('/');
-            localStorage.setItem('currentUserId', res.data.data._id);
-          } else {
-            this.displayAlert = true;
-            this.errorMessage = res.data.message;
-          }
-        })
+        if (this.username && this.phone && this.password) {
+          let data = {
+            username: this.username,
+            phone   : this.phone,
+            password: this.password,
+            avatar  : document.getElementById('avatar').getAttribute('src')
+          };
+          this.$http.post('/api/userRegister', data).then(res => {
+            if (res.data.success) {
+              this.errorMessage = '';
+              this.displayAlert = false;
+              this.$router.push('/');
+              localStorage.setItem('currentUserId', res.data.data._id);
+            } else {
+              this.displayAlert = true;
+              this.errorMessage = res.data.message;
+            }
+          })
+        }
       }
     }
   }
