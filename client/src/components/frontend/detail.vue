@@ -12,14 +12,14 @@
       <div class="content" v-html="content"></div>
     </div>
     <div class="writeComment">
-      <div>
-        <img class="pic" width="40" height="40" :src="userAvatar"/>
+      <div class="commentInput">
+        <img v-if="hasLogin" class="pic" width="40" height="40" :src="userAvatar"/>
         <div v-if="!hasLogin" class="form-control needToLogin">
           <a class="btn btn-success btn-sm" role="button" href="#/login">登录</a> 后发表评论！
         </div>
         <textarea v-if="hasLogin" class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
       </div>
-      <div v-if="hasLogin">
+      <div class="commentBtn" v-if="hasLogin">
         <button type="button" @click="cancel()" class="btn btn-secondary">取消</button>
         <button type="button" @click="send()" class="btn btn-success">发送</button>
       </div>
@@ -29,7 +29,7 @@
       <div v-if="hasComment" v-for="(comment, index) in commentInfo">
         <div class="card mb-3">
           <div class="card-body">
-            <div class="row card-body">
+            <div class="row card-body" style="padding-bottom: 0; padding-top: 0;">
               <div class="column">
                 <img class="pic" :src="comment.avatar" width="50" height="50" alt="">
               </div>
@@ -43,6 +43,26 @@
               </div>
             </div>
             <p class="card-text">{{comment.content}}</p>
+            <!--<p class="card-text" v-if="reply">-->
+              <!--<span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>-->
+            <!--</p>-->
+            <!--<div class="commentInput" v-if="!reply">-->
+              <!--<textarea class="form-control" rows="2" v-model="replyComment"-->
+                        <!--placeholder="请写下你的回复"></textarea>-->
+            <!--</div>-->
+            <!--<div class="commentBtn" v-if="!reply">-->
+              <!--<button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>-->
+              <!--<button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"-->
+                      <!--class="btn btn-success">发送-->
+              <!--</button>-->
+            <!--</div>-->
+            <!--<div>-->
+              <!--<p style="color: #3194d0;">-->
+                <!--<small>{{currentUserName}}：@-->
+                  <!--<small>{{comment.auth}}</small>-->
+                <!--</small>-->
+              <!--</p>-->
+            <!--</div>-->
           </div>
         </div>
       </div>
@@ -72,7 +92,9 @@
         hasComment     : false,
         commentInfo    : [],
         hasLogin       : false,
-        userAvatar     : ''
+        userAvatar     : '',
+        reply          : true,
+        replyComment   : ''
       }
     },
     mounted   : function () {
@@ -156,6 +178,28 @@
       },
       cancel() {
         this.newComment = '';
+      },
+      replyInfo() {
+        this.reply = false;
+      },
+      sendReply(commentId, auth, authId) {
+        this.reply = true;
+        let data = {
+          commentId    : commentId,
+          replyContent : this.replyComment,
+          replyPerson  : auth,
+          replyPersonId: authId
+        }
+        if (this.replyComment) {
+          this.$http.post('/api/addReplyComments', data).then(res => {
+              this.$http.get('/api/getReplyComments').then(res => {
+                console.log(res);
+              })
+          })
+        }
+      },
+      cancelReply() {
+        this.reply = true;
       }
     },
     components: {
@@ -242,20 +286,20 @@
         display flex
         small
           margin-left auto
+    .commentBtn
+      text-align right
+    .commentInput
+      display flex
+      margin-bottom 10px
+      textarea
+        font-size 13px
+        border-radius 4px
+        outline none
     .writeComment
       padding-top 40px
-      div:first-child
-        display flex
-        margin-bottom 10px
-        textarea
-          font-size 13px
-          border-radius 4px
-          outline none
-      div:nth-child(2)
-        text-align right
       .needToLogin
-        text-align center !important
         padding 0.75rem
+        text-align center
     .pic
       border-radius 50%
       margin-right 10px

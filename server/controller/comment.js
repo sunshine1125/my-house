@@ -16,12 +16,13 @@ apiRoutes.get('/getComments/:articleId', (req, res) => {
 // add comment
 apiRoutes.post('/addComment', (req, res, next) => {
   let comment = new Comments({
-    auth     : req.body.auth,
-    authId   : req.body.authId,
-    content  : req.body.content,
-    date     : req.body.date,
-    articleId: req.body.articleId,
-    avatar   : req.body.avatar
+    auth         : req.body.auth,
+    authId       : req.body.authId,
+    content      : req.body.content,
+    date         : req.body.date,
+    articleId    : req.body.articleId,
+    avatar       : req.body.avatar,
+    replyComments: []
   });
   comment.save(next);
   res.status('200').json({success: true, code: 200})

@@ -9,6 +9,7 @@ const post = require('./controller/post');
 const tag = require('./controller/tag');
 const frontUser = require('./controller/frontUser');
 const comment = require('./controller/comment');
+const replyInfo = require('./controller/replyInfo');
 
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
@@ -67,6 +68,9 @@ app.use(tag);
 
 // comment api
 app.use(comment);
+
+// reply api
+app.use(replyInfo);
 
 const PORT = process.env.NODE_ENV.PORT || 3002
 
