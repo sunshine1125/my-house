@@ -56,16 +56,6 @@
         </el-table>
       </el-col>
     </el-row>
-    <!--<el-row>-->
-      <!--<el-col :span="24" class="page">-->
-        <!--<el-pagination layout="prev,pager,next"-->
-                       <!--@current-change="handle"-->
-                       <!--:total="total"-->
-                       <!--:page-size="limit"-->
-                       <!--style="float:right">-->
-        <!--</el-pagination>-->
-      <!--</el-col>-->
-    <!--</el-row>-->
   </div>
 </template>
 

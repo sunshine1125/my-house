@@ -26,11 +26,13 @@ apiRoutes.get('/post/get/:id', (req, res) => {
   Posts.find()
     .populate({path: 'uid'})
     .exec((err, data) => {
+    // console.log(data)
       data.forEach(item => {
-        if (item.uid._id === userId) {
+        if (item.uid._id == userId) {
           matchData.push(item);
         }
       });
+      // console.log(matchData)
       res.status('200').json(matchData);
     });
 });

@@ -62,7 +62,8 @@
                     let userInfo = {
                       'email': this.loginForm.email,
                       '_id'  : res.data._id,
-                      'token': res.data.token
+                      'token': res.data.token,
+                      'roleId': res.data.roleId
                     };
                     this.$message({
                       message: res.data.message,

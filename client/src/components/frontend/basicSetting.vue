@@ -58,11 +58,20 @@
     },
     methods   : {
       initData() {
-        this.$http.get(`/api/getUserById/${localStorage.getItem('currentUserId')}`).then(res => {
-          this.avatar = res.data.data.avatar;
-          this.username = res.data.data.username;
-          this.phone = res.data.data.phone;
-        })
+        if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
+          this.$http.get(`/api/getSingleUserById/${localStorage.getItem('currentUserId')}`).then(res => {
+            this.getData(res);
+          })
+        } else {
+          this.$http.get(`/api/getUserById/${localStorage.getItem('currentUserId')}`).then(res => {
+            this.getData(res);
+          })
+        }
+      },
+      getData(res) {
+        this.avatar = res.data.data.avatar;
+        this.username = res.data.data.username;
+        this.phone = res.data.data.phone;
       },
       upLoad(e) {
         let that = this;
@@ -83,11 +92,19 @@
           phone   : this.phone,
           avatar  : this.avatar
         }
-        this.$http.put(`/api/updateUserInfo/${localStorage.getItem('currentUserId')}`, data).then(res => {
-          if (res.data.success) {
-            window.history.back();
-          }
-        })
+        if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
+          this.$http.put(`/api/updateAdminUserInfo/${localStorage.getItem('currentUserId')}`, data).then(res => {
+            if (res.data.success) {
+              window.history.back();
+            }
+          })
+        } else {
+          this.$http.put(`/api/updateUserInfo/${localStorage.getItem('currentUserId')}`, data).then(res => {
+            if (res.data.success) {
+              window.history.back();
+            }
+          })
+        }
       }
     },
     components: {

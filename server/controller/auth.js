@@ -30,6 +30,8 @@ apiRoutes.post('/register', (req, res) => {
         userTypeId        : req.body.userTypeId,
         userType          : '',
         phone             : null,
+        roleId            : 1,
+        avatar            : req.body.avatar,
         confirmation_token: confirToken,
         changePassword    : false,
         admin             : true,
@@ -212,7 +214,8 @@ apiRoutes.post('/authentication', (req, res) => {
             success: true,
             message: '登录成功',
             _id    : user._id,
-            token  : token
+            token  : token,
+            roleId : user.roleId
           })
         }
       })
@@ -242,6 +245,18 @@ apiRoutes.get('/getSingleUserById/:id', (req, res) => {
       }
 
     })
+});
+
+apiRoutes.put('/updateAdminUserInfo/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    username: req.body.username,
+    phone   : req.body.phone,
+    avatar  : req.body.avatar
+  }, (err, docs) => {
+    if (err) {
+    }
+    res.status('200').json({success: true, code: 200, msg: '信息更新成功'})
+  })
 })
 
 module.exports = apiRoutes;

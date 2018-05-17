@@ -42,7 +42,11 @@
     mounted   : function () {
       if (localStorage.getItem('currentUserId')) {
         this.hasLogin = true;
-        this.getUserName(localStorage.getItem(('currentUserId')));
+        if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
+          this.getAdminUserName(localStorage.getItem(('currentUserId')));
+        } else {
+          this.getUserName(localStorage.getItem(('currentUserId')));
+        }
       } else {
         this.hasLogin = false;
       }
@@ -51,14 +55,22 @@
     methods   : {
       getUserName(id) {
         this.$http.get(`/api/getUserById/${id}`).then(res => {
-          this.currentUserName = res.data.data.username;
-          this.imgSrc = res.data.data.avatar;
-          let userInfo = {
-            currentUserName: this.currentUserName,
-            avatar         : this.imgSrc
-          }
-          localStorage.setItem('currentUserInfo', JSON.stringify(userInfo));
+          this.processUserInfo(res);
         })
+      },
+      getAdminUserName(id) {
+        this.$http.get(`/api/getSingleUserById/${id}`).then(res => {
+          this.processUserInfo(res);
+        })
+      },
+      processUserInfo(res) {
+        this.currentUserName = res.data.data.username;
+        this.imgSrc = res.data.data.avatar;
+        let userInfo = {
+          currentUserName: this.currentUserName,
+          avatar         : this.imgSrc
+        }
+        localStorage.setItem('currentUserInfo', JSON.stringify(userInfo));
       },
       logout() {
         localStorage.removeItem('currentUserId');

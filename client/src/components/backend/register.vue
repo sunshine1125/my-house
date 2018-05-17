@@ -1,10 +1,11 @@
 <template>
   <div class="register container">
     <h3>注册</h3>
+    <img v-show="false" id="avatar" width="100" height="100" src="../../assets/default.jpg" alt="">
     <el-form :model="registerForm" ref="registerForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="用户名"
                     prop="username"
-                    :rules="validate_rules({required: true, min: 3, max: 5})">
+                    :rules="validate_rules({required: true, min: 3, max: 10})">
         <el-input v-model="registerForm.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
       <el-form-item label="邮箱"
@@ -52,7 +53,8 @@
               "username"  : this.registerForm.username,
               "password"  : this.registerForm.password,
               'email'     : this.registerForm.email,
-              'userTypeId': 1
+              'userTypeId': 1,
+              'avatar'    : document.getElementById('avatar').getAttribute('src')
             };
             this.$http.post('/api/register', userInfo)
               .then((res) => {

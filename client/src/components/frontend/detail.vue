@@ -1,10 +1,8 @@
 <template>
-  <div class="detail">
+  <div class="articleDetail">
     <navBar></navBar>
     <div class="article">
       <div class="header">
-        <!--<div class="iconImage" :style="{backgroundImage: 'url(' + imgSrc + ')'}"></div>-->
-        <!--<img :src="imgSrc" alt="">-->
         <h1 class="title">{{title}}</h1>
       </div>
       <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span>
@@ -102,28 +100,24 @@
       this.getComments();
       if (localStorage.getItem('currentUserInfo')) {
         this.hasLogin = true;
-        this.currentUserName = JSON.parse(localStorage.getItem('currentUserInfo')).currentUserName;
-        this.userAvatar = JSON.parse(localStorage.getItem('currentUserInfo')).avatar;
+        if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
+          this.$http.get(`/api/getSingleUserById/${localStorage.getItem('currentUserId')}`).then(res => {
+            this.currentUserName = res.data.data.username;
+            this.userAvatar = res.data.data.avatar;
+          })
+        } else {
+          this.$http.get(`/api/getUserById/${localStorage.getItem('currentUserId')}`).then(res => {
+            this.currentUserName = res.data.data.username;
+            this.userAvatar = res.data.data.avatar;
+          })
+        }
       } else {
         this.hasLogin = false;
         this.currentUserName = '游客'
       }
     },
     computed  : {
-//      commentFormat: (value) => {
-//        if (!value) return ''
-//        return value.map((item) =)
-//      }
-//      backgroundImage() {
-//        return {
-//          background: url(this.imgSrc) no-repeat center;
-//        }
-//      },
-//      getImage() {
-//        return {
-//          backgroundImage: `${this.imgSrc}`
-//        }
-//      }
+
     },
     methods   : {
       getArticle() {
@@ -208,8 +202,8 @@
   }
 </script>
 <style scoped lang="stylus">
-  .detail
-    width 640px
+  .articleDetail
+    width 740px
     height 100%
     margin 20px auto
     margin-top 80px
@@ -235,7 +229,7 @@
         line-height 1.7
         text-align left
         pre
-          background-color #f6f8fa
+          background-color #f6f6f6
           line-height 1.45
           padding 16px
           -ms-word-wrap normal
@@ -243,6 +237,7 @@
           -ms-word-break break-word
           white-space pre
           overflow auto
+          color #000
       .header
         width: 100%
         text-align: center
@@ -304,21 +299,9 @@
       border-radius 50%
       margin-right 10px
 
-  /*.detail .header .iconImage {*/
-  /*position: absolute;*/
-  /*width: 100%;*/
-  /*height: 100%;*/
-  /*display: block;*/
-  /*opacity: 0.6;*/
-  /*background-repeat: no-repeat;*/
-  /*background-position: center;*/
-  /*-webkit-background-size: 100% 150px;*/
-  /*background-size: 100% 150px;*/
-  /*}*/
-
   @media screen and (max-width: 786px)
     .detail
-      width 640px
+      width 90% !important
 
   @media screen and (max-width: 480px)
     .detail

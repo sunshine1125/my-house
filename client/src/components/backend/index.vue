@@ -65,6 +65,7 @@
         }
         if (command === 'goArticlesList') {
           this.$router.push('/');
+          localStorage.setItem('currentUserId', this.userId);
         }
       }
     },
