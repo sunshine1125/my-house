@@ -162,8 +162,7 @@
 
   @media screen and (max-width: 480px)
     .article-list
-      width 70% !important
-      margin-left 8% !important
+      width 90% !important
       .tags-list
-        margin-left 20px !important
+        display none
 </style>

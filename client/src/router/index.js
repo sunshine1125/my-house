@@ -14,6 +14,7 @@ import tagManager from '@/components/backend/tagManager'
 import articlesList from '@/components/frontend/articlesList'
 import frontRegister from '@/components/frontend/register'
 import frontLogin from '@/components/frontend/login'
+import basicSetting from '@/components/frontend/basicSetting'
 
 Vue.use(Router)
 
@@ -88,6 +89,11 @@ export default new Router({
       path     : '/detail/:id',
       name     : 'detail',
       component: detail
+    },
+    {
+      path     : '/basicSetting',
+      name     : 'basicSetting',
+      component: basicSetting
     }
   ]
 })

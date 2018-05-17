@@ -322,6 +322,6 @@
 
   @media screen and (max-width: 480px)
     .detail
-      width 100% !important
-      margin-top 0 !important
+      width 90% !important
+      margin-top 70px !important
 </style>

@@ -7,9 +7,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ml-auto">
-        <!--<li class="nav-item active">-->
-        <!--<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>-->
-        <!--</li>-->
         <li class="nav-item" v-if="!hasLogin">
           <a class="nav-link" href="#/login">登录</a>
         </li>
@@ -23,7 +20,7 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
-            <a class="dropdown-item" href="#" @click="logout()">设置</a>
+            <a class="dropdown-item" href="#/basicSetting">设置</a>
           </div>
         </li>
       </ul>

@@ -7,8 +7,6 @@ const User = require('../models/frontUser');
 
 let config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
 
-app.set('superSecret', config.MongoDB.secret);// secret variable
-
 // user register
 apiRoutes.post('/userRegister', (req, res) => {
   let password = req.body.password;
@@ -21,11 +19,11 @@ apiRoutes.post('/userRegister', (req, res) => {
       password = hash;
 
       let newUser = new User({
-        username          : req.body.username,
-        password          : password,// 把加密后的密码存入数据库
-        phone             : req.body.phone,
-        roleId            : 3,
-        avatar            : req.body.avatar
+        username: req.body.username,
+        password: password,// 把加密后的密码存入数据库
+        phone   : req.body.phone,
+        roleId  : 3,
+        avatar  : req.body.avatar
       });
       User.findOne({
         phone: req.body.phone
@@ -56,11 +54,25 @@ apiRoutes.post('/userRegister', (req, res) => {
 });
 
 // get single user
-apiRoutes.get('/getUserById/:id', (req,res) => {
+apiRoutes.get('/getUserById/:id', (req, res) => {
   User.findOne({_id: req.params.id}, (err, user) => {
     res.status('200').json({success: true, data: user})
   })
 });
+
+// update user info
+apiRoutes.put('/updateUserInfo/:id', (req, res) => {
+  User.findByIdAndUpdate(req.params.id, {
+    username: req.body.username,
+    phone   : req.body.phone,
+    avatar  : req.body.avatar
+  }, (err, docs) => {
+    if (err) {
+
+    }
+    res.status('200').json({success: true, code: 200, msg: '信息更新成功'})
+  })
+})
 
 apiRoutes.post('/login', (req, res) => {
   let password = req.body.password;
