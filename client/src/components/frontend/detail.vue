@@ -228,7 +228,7 @@
         font-weight 400
         line-height 1.7
         text-align left
-        pre
+        >>> pre
           background-color #f6f6f6
           line-height 1.45
           padding 16px
@@ -237,7 +237,11 @@
           -ms-word-break break-word
           white-space pre
           overflow auto
-          color #000
+          color #657b83
+          margin-bottom 20px
+          font-size 13px
+          line-height 1.42857
+          border 1px solid #ccc
       .header
         width: 100%
         text-align: center
