@@ -84,7 +84,6 @@
         }
       },
       changeImg(result) {
-        alert(result);
         this.avatar = result;
       },
       save() {
