@@ -3,26 +3,26 @@
     <h3>小屋</h3>
     <form>
       <div class="form-group row">
-        <label for="phone" class="col-sm-3 col-form-label">手机号</label>
-        <div class="col-sm-9">
+        <label for="phone" class="col-sm-3 col-3 col-form-label customLabel">手机号</label>
+        <div class="col-sm-9 col-9">
           <input type="text" v-model="phone" class="form-control" id="phone" placeholder="手机号">
         </div>
       </div>
       <div class="form-group row">
-        <label for="inputPassword" class="col-sm-3 col-form-label">密码</label>
-        <div class="col-sm-9">
+        <label for="inputPassword" class="col-sm-3 col-form-label col-3 customLabel">密码</label>
+        <div class="col-sm-9 col-9">
           <input type="password" v-model="password" class="form-control" id="inputPassword" placeholder="密码">
         </div>
       </div>
       <div class="form-group row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-9">
+        <div class="col-sm-3 col-3"></div>
+        <div class="col-sm-9 col-9">
           <button @click="login()" type="button" class="btn btn-primary btn-block">登录</button>
         </div>
       </div>
       <div class="form-group row">
-        <div class="col-sm-3"></div>
-        <div class="col-sm-9">
+        <div class="col-sm-3 col-3"></div>
+        <div class="col-sm-9 col-9">
           还没有账户，去 <a href="#/register">创建 </a>一个吧！
         </div>
       </div>
@@ -93,10 +93,30 @@
       bottom 10px
       right 10px
 
-  @media screen and (max-width: 480px)
-    .register
+  @media screen and (max-width: 786px)
+    .login
       width 100% !important
-      margin-top 0 !important
       height 100% !important
+      margin-top 0 !important
+      padding-top 150px !important
+      form
+        width 90% !important
+        margin-left 0!important
+        .customLabel
+          padding-left 0px
+          text-align center
+
+  @media screen and (max-width: 480px)
+    .login
+      width 100% !important
+      height 100% !important
+      margin-top 0 !important
+      padding-top 150px
+      form
+        width 90% !important
+        margin-left 0!important
+        .customLabel
+          padding-left 0px
+          text-align center
 
 </style>
