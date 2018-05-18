@@ -44,7 +44,7 @@
         this.hasLogin = true;
         if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
           this.getAdminUserName(localStorage.getItem(('currentUserId')));
-        } else {
+        } else if(JSON.parse(localStorage.getItem('userInfo')).roleId === 3) {
           this.getUserName(localStorage.getItem(('currentUserId')));
         }
       } else {
@@ -73,8 +73,7 @@
         localStorage.setItem('currentUserInfo', JSON.stringify(userInfo));
       },
       logout() {
-        localStorage.removeItem('currentUserId');
-        localStorage.removeItem('currentUserInfo');
+        localStorage.clear();
       }
     },
     components: {}

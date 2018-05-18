@@ -127,6 +127,7 @@
       },
       goShowData(id) {
         this.$router.push(`/detail/${id}`);
+        localStorage.setItem('currentUserId', this.userId);
       },
       handle(val){
         this.page = val;

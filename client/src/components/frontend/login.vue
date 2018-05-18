@@ -62,6 +62,11 @@
             this.displayAlert = false;
             this.$router.push('/');
             localStorage.setItem('currentUserId', res.data._id);
+            localStorage.setItem('userInfo', JSON.stringify({
+              phone   : this.phone,
+              roleId  : res.data.roleId,
+              token   : res.data.token
+            }))
           } else {
             this.displayAlert = true;
             this.errorMessage = res.data.message;

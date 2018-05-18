@@ -98,7 +98,7 @@
     mounted   : function () {
       this.getArticle();
       this.getComments();
-      if (localStorage.getItem('currentUserInfo')) {
+      if (localStorage.getItem('currentUserId')) {
         this.hasLogin = true;
         if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
           this.$http.get(`/api/getSingleUserById/${localStorage.getItem('currentUserId')}`).then(res => {

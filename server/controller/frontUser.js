@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 const SALT_ROUNDS = 10;
 const express = require('express');
@@ -6,6 +7,8 @@ const apiRoutes = express.Router();
 const User = require('../models/frontUser');
 
 let config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
+
+app.set('superSecret', config.MongoDB.secret);// secret variable
 
 // user register
 apiRoutes.post('/userRegister', (req, res) => {
@@ -23,7 +26,8 @@ apiRoutes.post('/userRegister', (req, res) => {
         password: password,// 把加密后的密码存入数据库
         phone   : req.body.phone,
         roleId  : 3,
-        avatar  : req.body.avatar
+        avatar  : req.body.avatar,
+        admin   : true
       });
       User.findOne({
         phone: req.body.phone
@@ -35,12 +39,17 @@ apiRoutes.post('/userRegister', (req, res) => {
             if (err) {
               res.status('405').json({code: 405, msg: err})
             } else {
+              const payload = {
+                admin: true
+              };
+              let token = jwt.sign(payload, app.get('superSecret'))
               return res.json({
                 success: true,
                 message: '添加成功',
                 data   : {
                   _id     : data._id,
                   username: data.username,
+                  token   : token,
                   roleId  : data.roleId
                 }
               })
@@ -87,10 +96,16 @@ apiRoutes.post('/login', (req, res) => {
         if (!isMatch) {
           res.json({success: false, message: '密码输入错误'})
         } else {
+          const payload = {
+            admin: user.admin
+          };
+          let token = jwt.sign(payload, app.get('superSecret'))
           return res.json({
             success: true,
             message: '登录成功',
-            _id    : user._id
+            _id    : user._id,
+            token  : token,
+            roleId : 3
           })
         }
       })

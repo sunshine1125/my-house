@@ -70,6 +70,13 @@
               this.displayAlert = false;
               this.$router.push('/');
               localStorage.setItem('currentUserId', res.data.data._id);
+              localStorage.setItem('userInfo', JSON.stringify({
+                username: this.username,
+                phone   : this.phone,
+                avatar  : document.getElementById('avatar').getAttribute('src'),
+                roleId  : res.data.data.roleId,
+                token   : res.data.data.token
+              }))
             } else {
               this.displayAlert = true;
               this.errorMessage = res.data.message;

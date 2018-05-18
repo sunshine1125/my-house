@@ -61,7 +61,7 @@
         }
         if (command === 'logout') {
           this.$router.push('/admin/login');
-          localStorage.removeItem('userInfo');
+          localStorage.clear();
         }
         if (command === 'goArticlesList') {
           this.$router.push('/');
