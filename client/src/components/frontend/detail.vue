@@ -304,11 +304,15 @@
       margin-right 10px
 
   @media screen and (max-width: 786px)
-    .detail
+    .articleDetail
       width 90% !important
+      .article
+        padding 40px !important
 
   @media screen and (max-width: 480px)
-    .detail
+    .articleDetail
       width 90% !important
       margin-top 70px !important
+      .article
+        padding 40px !important
 </style>

@@ -29,42 +29,42 @@ app.use(auth);
 
 app.use(frontUser);
 
-// controller middleware to verify a token
-app.use((req, res, next) => {
-    // check header or url parameters or post parameters for token
-    // let token = req.body.token || req.query.token || req.headers['x-access-token'];
-    let token = req.headers.authorization;
-
-    // decode token
-    if (token) {
-
-        // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function (err, decoded) {
-            if (err) {
-                return res.json({success: false, message: 'Failed to authenticate token.'});
-            } else {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                next();
-            }
-        });
-
-    } else {
-
-        // if there is no token
-        // return an error
-        return res.status(403).send({
-            success: false,
-            message: 'No token provided.'
-        });
-    }
-});
-
 // post api
 app.use(post);
 
 // tag api
 app.use(tag);
+
+// controller middleware to verify a token
+// app.use((req, res, next) => {
+//     // check header or url parameters or post parameters for token
+//     // let token = req.body.token || req.query.token || req.headers['x-access-token'];
+//     let token = req.headers.authorization;
+//
+//     // decode token
+//     if (token) {
+//
+//         // verifies secret and checks exp
+//         jwt.verify(token, app.get('superSecret'), function (err, decoded) {
+//             if (err) {
+//                 return res.json({success: false, message: 'Failed to authenticate token.'});
+//             } else {
+//                 // if everything is good, save to request for use in other routes
+//                 req.decoded = decoded;
+//                 next();
+//             }
+//         });
+//
+//     } else {
+//
+//         // if there is no token
+//         // return an error
+//         return res.status(403).send({
+//             success: false,
+//             message: 'No token provided.'
+//         });
+//     }
+// });
 
 // comment api
 app.use(comment);
