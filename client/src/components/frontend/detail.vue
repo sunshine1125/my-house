@@ -1,6 +1,6 @@
 <template>
   <div class="articleDetail">
-    <navBar></navBar>
+    <navBar type="true" :shareUrl="url"></navBar>
     <div class="article">
       <div class="header">
         <h1 class="title">{{title}}</h1>
@@ -8,6 +8,18 @@
       <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span>
       </div>
       <div class="content" v-html="content"></div>
+    </div>
+    <div class="like">
+      <div class="likeNum">
+        <div class="btn like-group" :class="{likeAnimation: isLike }">
+          <div class="btn-like">
+            <a>喜欢</a>
+          </div>
+          <div class="modal-wrap">
+            <a>0</a>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="writeComment">
       <div class="commentInput">
@@ -42,24 +54,24 @@
             </div>
             <p class="card-text">{{comment.content}}</p>
             <!--<p class="card-text" v-if="reply">-->
-              <!--<span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>-->
+            <!--<span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>-->
             <!--</p>-->
             <!--<div class="commentInput" v-if="!reply">-->
-              <!--<textarea class="form-control" rows="2" v-model="replyComment"-->
-                        <!--placeholder="请写下你的回复"></textarea>-->
+            <!--<textarea class="form-control" rows="2" v-model="replyComment"-->
+            <!--placeholder="请写下你的回复"></textarea>-->
             <!--</div>-->
             <!--<div class="commentBtn" v-if="!reply">-->
-              <!--<button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>-->
-              <!--<button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"-->
-                      <!--class="btn btn-success">发送-->
-              <!--</button>-->
+            <!--<button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>-->
+            <!--<button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"-->
+            <!--class="btn btn-success">发送-->
+            <!--</button>-->
             <!--</div>-->
             <!--<div>-->
-              <!--<p style="color: #3194d0;">-->
-                <!--<small>{{currentUserName}}：@-->
-                  <!--<small>{{comment.auth}}</small>-->
-                <!--</small>-->
-              <!--</p>-->
+            <!--<p style="color: #3194d0;">-->
+            <!--<small>{{currentUserName}}：@-->
+            <!--<small>{{comment.auth}}</small>-->
+            <!--</small>-->
+            <!--</p>-->
             <!--</div>-->
           </div>
         </div>
@@ -92,7 +104,9 @@
         hasLogin       : false,
         userAvatar     : '',
         reply          : true,
-        replyComment   : ''
+        replyComment   : '',
+        url            : `http://140.143.192.183:8003/#/detail/${this.$route.params.id}`,
+        isLike         : false
       }
     },
     mounted   : function () {
@@ -116,9 +130,7 @@
         this.currentUserName = '游客'
       }
     },
-    computed  : {
-
-    },
+    computed  : {},
     methods   : {
       getArticle() {
         if (this.$route.params.id) {
@@ -186,9 +198,9 @@
         }
         if (this.replyComment) {
           this.$http.post('/api/addReplyComments', data).then(res => {
-              this.$http.get('/api/getReplyComments').then(res => {
-                console.log(res);
-              })
+            this.$http.get('/api/getReplyComments').then(res => {
+              console.log(res);
+            })
           })
         }
       },
@@ -299,9 +311,51 @@
       .needToLogin
         padding 0.75rem
         text-align center
-    .pic
-      border-radius 50%
-      margin-right 10px
+      .pic
+        border-radius 50%
+        margin-right 10px
+    .like
+      padding-top 40px
+      .likeNum
+        display inline-block
+        .like-animation
+          background-color #ea6f5a
+        .like-group
+          position relative
+          padding 13px 0 15px 0px
+          font-size 0px
+          border 1px solid #ea6f5a
+          border-radius 40px
+          &:hover
+            background-color rgba(236, 97, 73, 0.05)
+            display inline-block
+          .btn-like
+            display inline-block
+            font-size 19px
+            &:before
+              content ''
+              position absolute
+              left 12px
+              top 2px
+              width 50px
+              height 50px
+              background-image url(../../assets/like.png)
+              background-position left
+              background-repeat no-repeat
+              background-size 1000px 50px
+            a
+              position relative
+              padding 18px 30px 18px 55px
+              color #ea6f5a
+          .modal-wrap
+            font-size 18px
+            border-left 1px solid rgba(236, 97, 73, 0.4)
+            display inline-block
+            margin-left -15px
+            a
+              color #ea6f5a
+              padding 18px 26px 18px 18px
+              cursor pointer
 
   @media screen and (max-width: 786px)
     .articleDetail
