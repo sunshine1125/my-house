@@ -1,31 +1,84 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light fixed-top">
-    <a class="navbar-brand" href="#/">小屋</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item" v-if="!hasLogin">
-          <a class="nav-link" href="#/login">登录</a>
-        </li>
-        <li class="nav-item" v-if="!hasLogin">
-          <a class="nav-link" href="#/register">注册</a>
-        </li>
-        <li class="pic nav-item dropdown" v-if="hasLogin">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
-            <img :src="imgSrc" width="40" height="40" alt="">
-          </a>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
-            <a class="dropdown-item" href="#/basicSetting">设置</a>
+  <div>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+      <a class="navbar-brand" href="#/">小屋</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+              aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item" v-if="!hasLogin">
+            <a class="nav-link" href="#/login">登录</a>
+          </li>
+          <li class="nav-item" v-if="!hasLogin">
+            <a class="nav-link" href="#/register">注册</a>
+          </li>
+          <li class="pic nav-item dropdown" v-if="hasLogin">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+              <img :src="imgSrc" width="40" height="40" alt="">
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
+              <a class="dropdown-item" href="#/basicSetting">设置</a>
+              <div class="dropdown-item">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
+                  分享
+                </button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!--Modal-->
+    <div class="modal fade bd-example-modal-lg" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModal" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">分享到：</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-        </li>
-      </ul>
+          <div class="modal-body">
+            <social-sharing url="https://vuejs.org/" inline-template>
+              <div>
+                <network network="facebook">
+                  <i class="fa fa-fw fa-facebook"></i> Facebook
+                </network>
+                <network network="googleplus">
+                  <i class="fa fa-fw fa-google-plus"></i> Google +
+                </network>
+                <network network="linkedin">
+                  <i class="fa fa-fw fa-linkedin"></i> LinkedIn
+                </network>
+                <network network="pinterest">
+                  <i class="fa fa-fw fa-pinterest"></i> Pinterest
+                </network>
+                <network network="reddit">
+                  <i class="fa fa-fw fa-reddit"></i> Reddit
+                </network>
+                <network network="twitter">
+                  <i class="fa fa-fw fa-twitter"></i> Twitter
+                </network>
+                <network network="vk">
+                  <i class="fa fa-vk"></i> VKontakte
+                </network>
+                <network network="weibo">
+                  <i class="fa fa-weibo"></i> Weibo
+                </network>
+                <network network="whatsapp">
+                  <i class="fa fa-fw fa-whatsapp"></i> Whatsapp
+                </network>
+              </div>
+            </social-sharing>
+          </div>
+        </div>
+      </div>
     </div>
-  </nav>
+  </div>
 </template>
 
 <script>
@@ -90,4 +143,7 @@
         padding 0 0.5rem
       img
         border-radius 50%
+  .fa-facebook-f:before, .fa-facebook:before
+    content "\f09a" !important
+
 </style>

@@ -13,6 +13,7 @@ import VueAxios from 'vue-axios'
 import Vuelidate from 'vuelidate'
 import Validate from './tools/validate'
 import moment from 'moment'
+import SocialSharing from 'vue-social-sharing'
 
 
 Vue.config.productionTip = false;
@@ -21,6 +22,7 @@ Vue.use(VueAxios, axios);
 Vue.use(Vuelidate);
 Vue.use(mavonEditor);
 Vue.use(Validate);
+Vue.use(SocialSharing);
 Vue.prototype.$moment = moment;
 
 
