@@ -11,12 +11,15 @@
     </div>
     <div class="like">
       <div class="likeNum">
-        <div class="btn like-group" :class="{likeAnimation: isLike }">
-          <div class="btn-like">
+        <div class="btn like-group" :class="{active: isLike }">
+          <div v-if="!isLike" class="btn-like" @click="giveLike()">
+            <a>喜欢</a>
+          </div>
+          <div v-if="isLike" class="btn-like" @click="deleteLike()">
             <a>喜欢</a>
           </div>
           <div class="modal-wrap">
-            <a>0</a>
+            <a>{{likeNum}}</a>
           </div>
         </div>
       </div>
@@ -106,7 +109,8 @@
         reply          : true,
         replyComment   : '',
         url            : `http://140.143.192.183:8003/#/detail/${this.$route.params.id}`,
-        isLike         : false
+        isLike         : false,
+        likeNum        : 0
       }
     },
     mounted   : function () {
@@ -125,6 +129,18 @@
             this.userAvatar = res.data.data.avatar;
           })
         }
+
+        let that = this;
+        this.$http.get(`/api/like/active/${localStorage.getItem('currentUserId')}`).then(res => {
+          if (res.data.data.length > 0) {
+            res.data.data.forEach(item => {
+              if (item.articleId === that.$route.params.id) {
+                that.isLike = item.active;
+              }
+            })
+          }
+        })
+
       } else {
         this.hasLogin = false;
         this.currentUserName = '游客'
@@ -141,6 +157,7 @@
             this.imgSrc = res.data.image;
             this.tagTitle = res.data.tagTitle;
             this.uid = res.data.uid;
+            this.likeNum = res.data.likeNum || 0;
           })
             .then(() => {
               this.$http.get(`/api/getSingleUserById/${this.uid}`).then((res) => {
@@ -206,6 +223,29 @@
       },
       cancelReply() {
         this.reply = true;
+      },
+      giveLike() {
+        this.isLike = true;
+        this.likeNum ++;
+        let data = {
+          articleId: this.$route.params.id,
+          active   : this.isLike,
+          user     : localStorage.getItem('currentUserId')
+        };
+        this.$http.put(`/api/post/${this.$route.params.id}/like`, {
+          likeNum: this.likeNum
+        }).then(res => {
+          this.$http.post(`/api/like/active`, data);
+        });
+      },
+      deleteLike() {
+        this.isLike = false;
+        this.likeNum --;
+        this.$http.put(`/api/post/${this.$route.params.id}/like`, {
+          likeNum: this.likeNum
+        }).then(res => {
+          this.$http.delete(`/api/like/${this.$route.params.id}/active`);
+        });
       }
     },
     components: {
@@ -318,8 +358,6 @@
       padding-top 40px
       .likeNum
         display inline-block
-        .like-animation
-          background-color #ea6f5a
         .like-group
           position relative
           padding 13px 0 15px 0px
@@ -356,6 +394,19 @@
               color #ea6f5a
               padding 18px 26px 18px 18px
               cursor pointer
+        .active
+          background-color #ea6f5a
+          &:hover
+            background-color #ea6f5a
+          .btn-like
+            &:before
+              background-position right
+            a
+              color white
+          .modal-wrap
+            border-left 1px solid white
+            a
+              color white
 
   @media screen and (max-width: 786px)
     .articleDetail

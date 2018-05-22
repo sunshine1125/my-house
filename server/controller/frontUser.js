@@ -5,6 +5,7 @@ const express = require('express');
 const app = express();
 const apiRoutes = express.Router();
 const User = require('../models/frontUser');
+const Like = require('../models/like');
 
 let config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
 
@@ -27,7 +28,8 @@ apiRoutes.post('/userRegister', (req, res) => {
         phone   : req.body.phone,
         roleId  : 3,
         avatar  : req.body.avatar,
-        admin   : true
+        admin   : true,
+        post    : []
       });
       User.findOne({
         phone: req.body.phone
@@ -81,6 +83,31 @@ apiRoutes.put('/updateUserInfo/:id', (req, res) => {
     }
     res.status('200').json({success: true, code: 200, msg: '信息更新成功'})
   })
+})
+
+apiRoutes.post('/like/active', (req, res) => {
+  let like = new Like({
+    articleId : req.body.articleId,
+    active    : req.body.active,
+    user      : req.body.user
+  })
+  like.save();
+  res.status('200').json({success: true, code: 200})
+})
+
+apiRoutes.delete('/like/:articleId/active', (req, res) => {
+  console.log(req.params.articleId)
+  Like.findOneAndRemove({articleId: req.params.articleId}, (err, data) => {
+    res.status('200').json({success: true, code: 200})
+  })
+})
+
+apiRoutes.get('/like/active/:personId', (req, res) => {
+  Like.find({user: req.params.personId})
+    .exec((err, data) => {
+      if(err) {}
+      res.status('200').json({success: true, code: 200, data: data})
+    })
 })
 
 apiRoutes.post('/login', (req, res) => {

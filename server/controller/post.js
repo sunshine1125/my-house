@@ -88,13 +88,36 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
       content : content,
       date    : date,
       uid     : userId,
-      tagId   : tagId
+      tagId   : tagId,
+      likeNum : 0
     });
     newForm.save(next);
 
   });
 }, (req, res) => {
   res.status('200').json({code: 200, success: true});
+});
+
+apiRoutes.put('/post/:id/like', (req, res) => {
+  Posts.findByIdAndUpdate(req.params.id, {
+    likeNum: req.body.likeNum
+  }, (err, docs) => {
+    if (err) {
+      // console.log(err);
+    }
+    res.status('200').json({code: 200, msg: '数据更新成功'})
+  });
+});
+
+apiRoutes.put('/post/:id/like', (req, res) => {
+  Posts.findByIdAndUpdate(req.params.id, {
+    likeNum: req.body.likeNum
+  }, (err, docs) => {
+    if (err) {
+      // console.log(err);
+    }
+    res.status('200').json({code: 200, msg: '数据更新成功'})
+  });
 });
 
 apiRoutes.put('/post/edit/:id', (req, res) => {
