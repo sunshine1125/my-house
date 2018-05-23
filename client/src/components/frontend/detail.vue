@@ -9,7 +9,7 @@
       </div>
       <div class="content" v-html="content"></div>
     </div>
-    <div class="like">
+    <div class="like" v-if="hasLogin">
       <div class="likeNum">
         <div class="btn like-group" :class="{active: isLike }">
           <div v-if="!isLike" class="btn-like" @click="giveLike()">
@@ -309,6 +309,9 @@
     .comment
       text-align left
       margin-bottom 80px
+      .pic
+        border-radius 50%
+        margin-right 10px
       .title
         position relative
         padding 40px 20px
