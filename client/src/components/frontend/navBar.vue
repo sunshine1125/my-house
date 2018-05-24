@@ -22,81 +22,11 @@
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
               <a class="dropdown-item" href="#/basicSetting">设置</a>
-              <a href="javascript: viod(0)" class="dropdown-item" data-toggle="modal" data-target=".bd-example-modal-lg">分享</a>
             </div>
           </li>
         </ul>
       </div>
     </nav>
-    <!--Modal-->
-    <div class="modal fade bd-example-modal-lg" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="shareModal"
-         aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">分享到：</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <social-sharing :url="shareUrl"
-                            title="来自小屋的分享"
-                            inline-template>
-              <div>
-                <ul class="list-group networks">
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="facebook">
-                      <i class="fa fa-fw fa-facebook"></i> Facebook
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="googleplus">
-                      <i class="fa fa-fw fa-google-plus"></i> Google +
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="linkedin">
-                      <i class="fa fa-fw fa-linkedin"></i> LinkedIn
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="pinterest">
-                      <i class="fa fa-fw fa-pinterest"></i> Pinterest
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="reddit">
-                      <i class="fa fa-fw fa-reddit"></i> Reddit
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="twitter">
-                      <i class="fa fa-fw fa-twitter"></i> Twitter
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="vk">
-                      <i class="fa fa-vk"></i> VKontakte
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="weibo">
-                      <i class="fa fa-weibo"></i> Weibo
-                    </network>
-                  </li>
-                  <li style="cursor: pointer" class="list-group-item" data-dismiss="modal">
-                    <network network="whatsapp">
-                      <i class="fa fa-fw fa-whatsapp"></i> Whatsapp
-                    </network>
-                  </li>
-                </ul>
-              </div>
-            </social-sharing>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -104,7 +34,6 @@
 
   export default {
     name      : 'navBar',
-    props     : ['type', 'shareUrl'],
     data() {
       return {
         currentUserName: '',

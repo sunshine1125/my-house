@@ -1,6 +1,6 @@
 <template>
   <div class="articleDetail">
-    <navBar type="true" :shareUrl="url"></navBar>
+    <navBar></navBar>
     <div class="article">
       <div class="header">
         <h1 class="title">{{title}}</h1>
@@ -9,8 +9,8 @@
       </div>
       <div class="content" v-html="content"></div>
     </div>
-    <div class="like" v-if="hasLogin">
-      <div class="likeNum">
+    <div class="like row" v-if="hasLogin">
+      <div class="likeNum col-sm-6 col-6">
         <div class="btn like-group" :class="{active: isLike }">
           <div v-if="!isLike" class="btn-like" @click="giveLike()">
             <a>喜欢</a>
@@ -23,6 +23,23 @@
           </div>
         </div>
       </div>
+      <!--MOB SHARE BEGIN-->
+      <div class="col-sm-6 col-6">
+        <div class="-mob-share-open btn btn-outline-success">分享</div>
+        <div class="-mob-share-ui" style="display: none">
+          <ul class="-mob-share-list">
+            <li class="-mob-share-weibo"><p>新浪微博</p></li>
+            <li class="-mob-share-qzone"><p>QQ空间</p></li>
+            <li class="-mob-share-qq"><p>QQ好友</p></li>
+            <li class="-mob-share-douban"><p>豆瓣</p></li>
+            <li class="-mob-share-facebook"><p>Facebook</p></li>
+            <li class="-mob-share-twitter"><p>Twitter</p></li>
+          </ul>
+          <div class="-mob-share-close">取消</div>
+        </div>
+        <div class="-mob-share-ui-bg"></div>
+      </div>
+      <!--MOB SHARE END-->
     </div>
     <div class="writeComment">
       <div class="commentInput">
@@ -363,7 +380,7 @@
         display inline-block
         .like-group
           position relative
-          padding 13px 0 15px 0px
+          padding 8px 0
           font-size 0px
           border 1px solid #ea6f5a
           border-radius 40px
@@ -377,7 +394,7 @@
               content ''
               position absolute
               left 12px
-              top 2px
+              top -3px
               width 50px
               height 50px
               background-image url(../../assets/like.png)
