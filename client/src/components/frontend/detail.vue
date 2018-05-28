@@ -45,7 +45,7 @@
       <div class="commentInput">
         <img v-if="hasLogin" class="pic" width="40" height="40" :src="userAvatar"/>
         <div v-if="!hasLogin" class="form-control needToLogin">
-          <a class="btn btn-success btn-sm" role="button" href="#/login">登录</a> 后发表评论！
+          <a class="btn btn-success btn-sm" role="button" href="/login">登录</a> 后发表评论！
         </div>
         <textarea v-if="hasLogin" class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
       </div>

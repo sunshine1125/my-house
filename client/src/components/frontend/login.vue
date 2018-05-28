@@ -23,7 +23,7 @@
       <div class="form-group row">
         <div class="col-sm-3 col-3"></div>
         <div class="col-sm-9 col-9">
-          还没有账户，去 <a href="#/register">创建 </a>一个吧！
+          还没有账户，去 <a href="/register">创建 </a>一个吧！
         </div>
       </div>
     </form>
