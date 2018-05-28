@@ -38,12 +38,13 @@
         </div>
       </div>
     </div>
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
   import navBar from './navBar.vue'
-
+  import myFooter from './myFooter.vue'
   export default {
     name      : 'basicSetting',
     data() {
@@ -108,48 +109,53 @@
       }
     },
     components: {
-      navBar
+      navBar,
+      myFooter
     }
   }
 </script>
 <style scoped lang="stylus">
-  .basicInfo
-    width 640px
-    margin 100px auto 0
-    .saveInfo
-      padding 0.75rem
-      .saveBtn
+  .basicSetting
+    height 100%
+    position relative
+    .basicInfo
+      width 640px
+      margin 100px auto 0
+      .saveInfo
+        padding 0.75rem
+        .saveBtn
+          text-align left
+        button
+          padding-left 1rem
+          padding-right 1rem
+      .infoList
+        padding 0.75rem
+        border-bottom 1px solid #dee2e6
+        width 100%
         text-align left
-      button
-        padding-left 1rem
-        padding-right 1rem
-    .infoList
-      padding 0.75rem
-      border-bottom 1px solid #dee2e6
-      width 100%
-      text-align left
-      .infoTitle
-        text-align center
-      .avatar
-        width 100px
-        height 100px
-        margin auto
-        img
+        .infoTitle
+          text-align center
+        .avatar
+          width 100px
+          height 100px
+          margin auto
+          img
+            width 100%
+            height 100%
+            border-radius 50%
+            border 1px solid #ddd
+        .changePic
           width 100%
           height 100%
-          border-radius 50%
-          border 1px solid #ddd
-      .changePic
-        width 100%
-        height 100%
-        padding-left 15px
-        button
-          position relative
-          input
-            position absolute
-            left 15px
-            width 100%
-            opacity 0
+          padding-left 15px
+          button
+            position relative
+            input
+              position absolute
+              left 15px
+              width 100%
+              opacity 0
+
 
   @media screen and (max-width: 786px)
     .basicInfo

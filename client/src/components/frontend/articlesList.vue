@@ -35,12 +35,14 @@
         </div>
       </div>
     </div>
+    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
   import navBar from './navBar.vue'
   import removeMd from 'remove-markdown'
+  import myFooter from './myFooter.vue'
 
   export default {
     name      : 'articlesList',
@@ -116,13 +118,15 @@
       }
     },
     components: {
-      navBar
+      navBar,
+      myFooter
     }
   }
 </script>
 <style scoped lang="stylus">
   .articlesListView
     width 100%
+    height 100%
     position relative
     .header
       margin 20px

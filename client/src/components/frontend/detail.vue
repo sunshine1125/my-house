@@ -100,11 +100,15 @@
         <p>暂时还没有评论！</p>
       </div>
     </div>
+    <div class="footer">
+      <my-footer></my-footer>
+    </div>
   </div>
 </template>
 
 <script>
   import navBar from './navBar.vue';
+  import myFooter from './myFooter.vue'
 
   export default {
     name      : 'detail',
@@ -184,6 +188,8 @@
         }
       },
       send() {
+        var content = document.getElementsByClassName('content')[0];
+        console.log(content.innerHTML)
         let commentInfo = {
           auth     : this.currentUserName,
           authId   : localStorage.getItem('currentUserId'),
@@ -266,7 +272,8 @@
       }
     },
     components: {
-      navBar
+      navBar,
+      myFooter
     }
   }
 </script>
@@ -276,6 +283,7 @@
     height 100%
     margin 20px auto
     margin-top 80px
+    position relative
     .article
       padding 60px
       background #fff
@@ -325,7 +333,6 @@
         border 1px solid rgba(64, 158, 255, .2)
     .comment
       text-align left
-      margin-bottom 80px
       .pic
         border-radius 50%
         margin-right 10px
@@ -427,6 +434,9 @@
             border-left 1px solid white
             a
               color white
+    .footer
+      min-height 50px
+      position relative
 
   @media screen and (max-width: 786px)
     .articleDetail
