@@ -90,7 +90,7 @@
         }
       }
       this.userId = JSON.parse(localStorage.getItem('userInfo'))._id;
-      this.$http.get('api/getTag').then(res => {
+      this.$http.get('/api/getTag').then(res => {
         this.tags = res.data.data;
       })
     },
