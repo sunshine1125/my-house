@@ -19,6 +19,7 @@ import basicSetting from '@/components/frontend/basicSetting'
 Vue.use(Router)
 
 export default new Router({
+  mode  : 'history',
   routes: [
     {
       path     : '/admin',
@@ -27,15 +28,15 @@ export default new Router({
       redirect : '/admin/articleManager',
       children : [
         {
-          path: '/admin/userManager',
+          path     : '/admin/userManager',
           component: userManager
         },
         {
-          path: '/admin/articleManager',
+          path     : '/admin/articleManager',
           component: articleManager
         },
         {
-          path: '/admin/tagManager',
+          path     : '/admin/tagManager',
           component: tagManager
         },
         {
