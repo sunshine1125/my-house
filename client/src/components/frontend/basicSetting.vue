@@ -1,6 +1,6 @@
 <template>
   <div class="basicSetting">
-    <navBar></navBar>
+    <navBar class="fixed-top"></navBar>
     <div class="basicInfo">
       <div>
         <div class="infoList row">

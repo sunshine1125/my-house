@@ -1,107 +1,116 @@
 <template>
-  <div class="articleDetail">
+  <div>
     <navBar></navBar>
-    <div class="article">
-      <div class="header">
-        <h1 class="title">{{title}}</h1>
-      </div>
-      <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span>
-      </div>
-      <div class="content" v-html="content"></div>
-    </div>
-    <div class="like row" v-if="hasLogin">
-      <div class="likeNum col-sm-6 col-6">
-        <div class="btn like-group" :class="{active: isLike }">
-          <div v-if="!isLike" class="btn-like" @click="giveLike()">
-            <a>喜欢</a>
-          </div>
-          <div v-if="isLike" class="btn-like" @click="deleteLike()">
-            <a>喜欢</a>
-          </div>
-          <div class="modal-wrap">
-            <a>{{likeNum}}</a>
-          </div>
+    <div class="articleDetail">
+      <div class="article" data-spy="scroll" data-target="#navbar-example" style="position: relative; height: auto;">
+        <div class="header">
+          <h1 class="title">{{title}}</h1>
         </div>
-      </div>
-      <!--MOB SHARE BEGIN-->
-      <div class="col-sm-6 col-6">
-        <div class="-mob-share-open btn btn-outline-success">分享</div>
-        <div class="-mob-share-ui" style="display: none">
-          <ul class="-mob-share-list">
-            <li class="-mob-share-weibo"><p>新浪微博</p></li>
-            <li class="-mob-share-qzone"><p>QQ空间</p></li>
-            <li class="-mob-share-qq"><p>QQ好友</p></li>
-            <li class="-mob-share-douban"><p>豆瓣</p></li>
-            <li class="-mob-share-facebook"><p>Facebook</p></li>
-            <li class="-mob-share-twitter"><p>Twitter</p></li>
-          </ul>
-          <div class="-mob-share-close">取消</div>
+        <div class="time"><span class="auth">由 {{auth}}</span> 发布于：<span>{{date}}</span> &nbsp;&nbsp;标签：<span class="tag">{{tagTitle}}</span>
         </div>
-        <div class="-mob-share-ui-bg"></div>
+        <div class="content" v-html="content"></div>
       </div>
-      <!--MOB SHARE END-->
-    </div>
-    <div class="writeComment">
-      <div class="commentInput">
-        <img v-if="hasLogin" class="pic" width="40" height="40" :src="userAvatar"/>
-        <div v-if="!hasLogin" class="form-control needToLogin">
-          <a class="btn btn-success btn-sm" role="button" href="/login">登录</a> 后发表评论！
-        </div>
-        <textarea v-if="hasLogin" class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
+      <div id="navbar-example">
+        <!-- 导航 a中href="#one" 来寻找锚点-->
+        <ul class="nav nav-pills nav-stacked tabLists" role="tablist">
+          <li role="presentation" v-for="list in sideLists"><a :href=" `#${list.jump}`" title="list.title">{{list.title}}</a></li>
+          <li @click="goTop()">返回顶部</li>
+        </ul>
       </div>
-      <div class="commentBtn" v-if="hasLogin">
-        <button type="button" @click="cancel()" class="btn btn-secondary">取消</button>
-        <button type="button" @click="send()" class="btn btn-success">发送</button>
-      </div>
-    </div>
-    <div class="comment">
-      <div class="title" data-title="评论"></div>
-      <div v-if="hasComment" v-for="(comment, index) in commentInfo">
-        <div class="card mb-3">
-          <div class="card-body">
-            <div class="row card-body" style="padding-bottom: 0; padding-top: 0;">
-              <div class="column">
-                <img class="pic" :src="comment.avatar" width="50" height="50" alt="">
-              </div>
-              <div class="column">
-                <p class="card-title">
-                  <strong>{{comment.auth}}</strong>
-                </p>
-                <p style="font-size: 12px; color: #969696;">
-                  <span>{{comment.index + 1}}楼 · {{comment.date}}</span>
-                </p>
-              </div>
+      <div class="like row" v-if="hasLogin">
+        <div class="likeNum col-sm-6 col-6">
+          <div class="btn like-group" :class="{active: isLike }">
+            <div v-if="!isLike" class="btn-like" @click="giveLike()">
+              <a>喜欢</a>
             </div>
-            <p class="card-text">{{comment.content}}</p>
-            <!--<p class="card-text" v-if="reply">-->
-            <!--<span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>-->
-            <!--</p>-->
-            <!--<div class="commentInput" v-if="!reply">-->
-            <!--<textarea class="form-control" rows="2" v-model="replyComment"-->
-            <!--placeholder="请写下你的回复"></textarea>-->
-            <!--</div>-->
-            <!--<div class="commentBtn" v-if="!reply">-->
-            <!--<button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>-->
-            <!--<button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"-->
-            <!--class="btn btn-success">发送-->
-            <!--</button>-->
-            <!--</div>-->
-            <!--<div>-->
-            <!--<p style="color: #3194d0;">-->
-            <!--<small>{{currentUserName}}：@-->
-            <!--<small>{{comment.auth}}</small>-->
-            <!--</small>-->
-            <!--</p>-->
-            <!--</div>-->
+            <div v-if="isLike" class="btn-like" @click="deleteLike()">
+              <a>喜欢</a>
+            </div>
+            <div class="modal-wrap">
+              <a>{{likeNum}}</a>
+            </div>
           </div>
         </div>
+        <!--MOB SHARE BEGIN-->
+        <div class="col-sm-6 col-6">
+          <div class="-mob-share-open btn btn-outline-success">分享</div>
+          <div class="-mob-share-ui" style="display: none">
+            <ul class="-mob-share-list">
+              <li class="-mob-share-weibo"><p>新浪微博</p></li>
+              <li class="-mob-share-qzone"><p>QQ空间</p></li>
+              <li class="-mob-share-qq"><p>QQ好友</p></li>
+              <li class="-mob-share-douban"><p>豆瓣</p></li>
+              <li class="-mob-share-facebook"><p>Facebook</p></li>
+              <li class="-mob-share-twitter"><p>Twitter</p></li>
+            </ul>
+            <div class="-mob-share-close">取消</div>
+          </div>
+          <div class="-mob-share-ui-bg"></div>
+        </div>
+        <!--MOB SHARE END-->
       </div>
-      <div v-if="!hasComment" style="text-align: center">
-        <p>暂时还没有评论！</p>
+      <div class="writeComment">
+        <div class="commentInput">
+          <img v-if="hasLogin" class="pic" width="40" height="40" :src="userAvatar"/>
+          <div v-if="!hasLogin" class="form-control needToLogin">
+            <a class="btn btn-success btn-sm" role="button" href="/login">登录</a> 后发表评论！
+          </div>
+          <textarea v-if="hasLogin" class="form-control" rows="3" v-model="newComment" placeholder="请写下你的评论"></textarea>
+        </div>
+        <div class="commentBtn" v-if="hasLogin">
+          <button type="button" @click="cancel()" class="btn btn-secondary">取消</button>
+          <button type="button" @click="send()" class="btn btn-success">发送</button>
+        </div>
       </div>
-    </div>
-    <div class="footer">
-      <my-footer></my-footer>
+      <div class="comment">
+        <div class="title" data-title="评论"></div>
+        <div v-if="hasComment" v-for="(comment, index) in commentInfo">
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="row card-body" style="padding-bottom: 0; padding-top: 0;">
+                <div class="column">
+                  <img class="pic" :src="comment.avatar" width="50" height="50" alt="">
+                </div>
+                <div class="column">
+                  <p class="card-title">
+                    <strong>{{comment.auth}}</strong>
+                  </p>
+                  <p style="font-size: 12px; color: #969696;">
+                    <span>{{comment.index + 1}}楼 · {{comment.date}}</span>
+                  </p>
+                </div>
+              </div>
+              <p class="card-text">{{comment.content}}</p>
+              <!--<p class="card-text" v-if="reply">-->
+              <!--<span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>-->
+              <!--</p>-->
+              <!--<div class="commentInput" v-if="!reply">-->
+              <!--<textarea class="form-control" rows="2" v-model="replyComment"-->
+              <!--placeholder="请写下你的回复"></textarea>-->
+              <!--</div>-->
+              <!--<div class="commentBtn" v-if="!reply">-->
+              <!--<button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>-->
+              <!--<button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"-->
+              <!--class="btn btn-success">发送-->
+              <!--</button>-->
+              <!--</div>-->
+              <!--<div>-->
+              <!--<p style="color: #3194d0;">-->
+              <!--<small>{{currentUserName}}：@-->
+              <!--<small>{{comment.auth}}</small>-->
+              <!--</small>-->
+              <!--</p>-->
+              <!--</div>-->
+            </div>
+          </div>
+        </div>
+        <div v-if="!hasComment" style="text-align: center">
+          <p>暂时还没有评论！</p>
+        </div>
+      </div>
+      <div class="footer">
+        <my-footer></my-footer>
+      </div>
     </div>
   </div>
 </template>
@@ -131,7 +140,8 @@
         replyComment   : '',
         url            : `http://140.143.192.183:8003/#/detail/${this.$route.params.id}`,
         isLike         : false,
-        likeNum        : 0
+        likeNum        : 0,
+        sideLists      : []
       }
     },
     mounted   : function () {
@@ -169,6 +179,25 @@
     },
     computed  : {},
     methods   : {
+      rightSideBar() {
+//        let tag_h1 = $('.content').children('h1');
+        let tag_h2 = $('.content').children('h2');
+        let childNodes = $('.content').children();
+//        this.rightSideData(tag_h1);
+        this.rightSideData(tag_h2);
+
+      },
+      rightSideData (tags) {
+        let sideList = {};
+        for (let i = 0; i < tags.length; i++ ) {
+          tags[i].setAttribute('id', 'nav-' + i + '-h2')
+          sideList = {
+            title: tags[i].innerHTML,
+            jump : 'nav-' + i + '-h2'
+          }
+          this.sideLists.push(sideList);
+        }
+      },
       getArticle() {
         if (this.$route.params.id) {
           this.$http.get(`/api/post/getDetailPost/${this.$route.params.id}`).then(res => {
@@ -183,13 +212,12 @@
             .then(() => {
               this.$http.get(`/api/getSingleUserById/${this.uid}`).then((res) => {
                 this.auth = res.data.data.username;
+                this.rightSideBar();
               })
             });
         }
       },
       send() {
-        var content = document.getElementsByClassName('content')[0];
-        console.log(content.innerHTML)
         let commentInfo = {
           auth     : this.currentUserName,
           authId   : localStorage.getItem('currentUserId'),
@@ -269,6 +297,9 @@
         }).then(res => {
           this.$http.delete(`/api/like/${this.$route.params.id}/active`);
         });
+      },
+      goTop() {
+        $("html,body").animate({scrollTop:0}, 500);
       }
     },
     components: {
@@ -282,7 +313,6 @@
     width 740px
     height 100%
     margin 20px auto
-    margin-top 80px
     position relative
     .article
       padding 60px
@@ -434,6 +464,23 @@
             border-left 1px solid white
             a
               color white
+    #navbar-example
+      position fixed
+      bottom 40px
+      right 448px
+      .tabLists
+        position fixed
+        bottom 20px
+        right 23%
+        display block
+        li
+          text-align left
+          height 30px
+          font-size 14px
+          cursor pointer
+          a
+            color #666
+
     .footer
       min-height 50px
       position relative

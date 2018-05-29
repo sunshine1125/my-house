@@ -1,6 +1,6 @@
 <template>
   <div class="articlesListView">
-    <navBar></navBar>
+    <navBar class="fixed-top"></navBar>
     <div class="header">
       <h1>{{articleTitle}}</h1>
     </div>
@@ -35,7 +35,9 @@
         </div>
       </div>
     </div>
-    <my-footer></my-footer>
+    <div class="footer">
+      <my-footer></my-footer>
+    </div>
   </div>
 </template>
 
@@ -159,6 +161,9 @@
             padding-left 8px
             padding-right 8px
             cursor pointer
+    .footer
+      min-height 50px
+      position relative
 
   @media screen and (max-width: 786px)
     .article-list
