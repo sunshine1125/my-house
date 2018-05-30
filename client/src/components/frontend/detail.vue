@@ -303,12 +303,7 @@
       },
       handleScroll() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-//        this.displayGoTop = scrollTop > 1000 ? 'true' : 'false';
-        if (scrollTop > 1000) {
-          this.displayGoTop = true;
-        } else {
-          this.displayGoTop = false;
-        }
+        this.displayGoTop = scrollTop > 500 ? true : false;
       }
     },
     components: {
