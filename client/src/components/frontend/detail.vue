@@ -14,7 +14,7 @@
         <!-- 导航 a中href="#one" 来寻找锚点-->
         <ul class="nav nav-pills nav-stacked tabLists" role="tablist">
           <li role="presentation" v-for="list in sideLists"><a :href=" `#${list.jump}`" title="list.title">{{list.title}}</a></li>
-          <li @click="goTop()">返回顶部</li>
+          <li v-show="displayGoTop" @click="goTop()">返回顶部</li>
         </ul>
       </div>
       <div class="like row" v-if="hasLogin">
@@ -141,7 +141,9 @@
         url            : `http://140.143.192.183:8003/#/detail/${this.$route.params.id}`,
         isLike         : false,
         likeNum        : 0,
-        sideLists      : []
+        sideLists      : [],
+        displayGoTop   : false,
+        scrollTop      : document.body.scrollTop || document.documentElement.scrollTop
       }
     },
     mounted   : function () {
@@ -176,24 +178,22 @@
         this.hasLogin = false;
         this.currentUserName = '游客'
       }
+      window.addEventListener('scroll', this.handleScroll)
     },
     computed  : {},
     methods   : {
       rightSideBar() {
-//        let tag_h1 = $('.content').children('h1');
-        let tag_h2 = $('.content').children('h2');
-        let childNodes = $('.content').children();
-//        this.rightSideData(tag_h1);
-        this.rightSideData(tag_h2);
+        let nodes = $('.content').children('h1, h2');
+        this.rightSideData(nodes);
 
       },
       rightSideData (tags) {
         let sideList = {};
         for (let i = 0; i < tags.length; i++ ) {
-          tags[i].setAttribute('id', 'nav-' + i + '-h2')
+          tags[i].setAttribute('id', `nav-child-${i}`)
           sideList = {
             title: tags[i].innerHTML,
-            jump : 'nav-' + i + '-h2'
+            jump : `nav-child-${i}`
           }
           this.sideLists.push(sideList);
         }
@@ -300,6 +300,15 @@
       },
       goTop() {
         $("html,body").animate({scrollTop:0}, 500);
+      },
+      handleScroll() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+//        this.displayGoTop = scrollTop > 1000 ? 'true' : 'false';
+        if (scrollTop > 1000) {
+          this.displayGoTop = true;
+        } else {
+          this.displayGoTop = false;
+        }
       }
     },
     components: {
