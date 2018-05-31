@@ -27,7 +27,7 @@ apiRoutes.post('/userRegister', (req, res) => {
         password: password,// 把加密后的密码存入数据库
         phone   : req.body.phone,
         roleId  : 3,
-        avatar  : req.body.avatar,
+        avatar  : 'https://my-house.pek3b.qingstor.com/default.jpg',
         admin   : true,
         post    : []
       });

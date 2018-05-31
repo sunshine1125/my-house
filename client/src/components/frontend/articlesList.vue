@@ -64,7 +64,6 @@
     methods   : {
       processArticlesFormat(article) {
         article.forEach((data) => {
-          console.log(data);
           this.$http.get(`/api/getSingleUserById/${data.uid}`).then((res) => {
             return res.data.data.username;
           }).then((auth) => {

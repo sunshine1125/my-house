@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage});
 
-apiRoutes.post('/post/uploadImage', upload.single('file'), (req, res) => {
+apiRoutes.post('/uploadImage', upload.single('file'), (req, res) => {
   qingstor.uploadObject(env, req.file.filename, req.file.path, req.file.mimetype).then(res => {
     let folder = fs.existsSync('public/uploads');
     if (folder) {

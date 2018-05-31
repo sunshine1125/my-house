@@ -23,7 +23,7 @@
         // upload image
         let fd = new FormData();
         fd.append('file', file);
-        this.$http.post('/api/post/uploadImage', fd, {
+        this.$http.post('/api/uploadImage', fd, {
           headers: {
             'Content-Type': undefined
           }

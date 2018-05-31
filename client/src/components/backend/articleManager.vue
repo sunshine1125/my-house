@@ -88,7 +88,6 @@
         this.$http.get(`/api/post/get/${this.userId}`).then(res => {
           this.lists = res.data;
           this.lists.find(item => {
-            console.log(item)
             item.date = this.$moment(item.date).format('YYYY-MM-DD HH:mm:ss');
           })
         });

@@ -75,17 +75,16 @@
         this.phone = res.data.data.phone;
       },
       upLoad(e) {
-        let that = this;
         let file = e.target.files[0];
-        let reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (e) => {
-          let result = e.target.result;
-          that.changeImg(result);
-        }
-      },
-      changeImg(result) {
-        this.avatar = result;
+        let fd = new FormData();
+        fd.append('file', file);
+        this.$http.post('/api/uploadImage', fd, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then(res => {
+          this.avatar = res.data.path;
+        });
       },
       save() {
         let data = {
