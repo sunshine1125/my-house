@@ -31,7 +31,7 @@ apiRoutes.post('/register', (req, res) => {
         userType          : '',
         phone             : null,
         roleId            : 1,
-        avatar            : 'https://my-house.pek3b.qingstor.com/default.jpg',
+        avatar            : '//my-house.pek3b.qingstor.com/default.jpg',
         confirmation_token: confirToken,
         changePassword    : false,
         admin             : true,
