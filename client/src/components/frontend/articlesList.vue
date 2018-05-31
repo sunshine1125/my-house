@@ -7,6 +7,7 @@
     <div class="article-list">
       <div>
         <div v-if="hasArticles" class="card mb-3" v-for="article in articlesList">
+          <div class="card-img-top articleCover" :style="`background-image: url(${article.image})`"></div>
           <div class="card-body">
             <h5 @click="getDetail(article._id)" class="card-title articleTitle">{{article.title}}</h5>
             <p class="card-text content" v-html="getContent(article.content)"></p>
@@ -63,6 +64,7 @@
     methods   : {
       processArticlesFormat(article) {
         article.forEach((data) => {
+          console.log(data);
           this.$http.get(`/api/getSingleUserById/${data.uid}`).then((res) => {
             return res.data.data.username;
           }).then((auth) => {
@@ -72,7 +74,8 @@
               date    : this.$moment(data.date).format('YYYY-MM-DD HH:mm:ss'),
               tagTitle: data.tagTitle,
               title   : data.title,
-              _id     : data._id
+              _id     : data._id,
+              image   : data.image
             })
           })
         })
@@ -150,6 +153,13 @@
       .articleDetail
         display inline-block
         float right
+      .articleCover
+        background-repeat no-repeat
+        background-position center
+        -webkit-background-size 100%
+        background-size 100%
+        height 200px
+        width 100%
       .tags-list
         position absolute
         top 0

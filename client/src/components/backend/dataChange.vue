@@ -34,8 +34,8 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
-          <!--<uploadImage></uploadImage>-->
+        <el-col :span="12">
+          <upload-image @imgSrc="getImgUrl" :imgPath="imgPath" :edit="editImg"></upload-image>
         </el-col>
       </el-row>
       <el-row>
@@ -62,22 +62,23 @@
     name      : 'dataChange',
     data() {
       return {
-        type           : this.$route.params.type,
-        img            : '',
-        isEdit         : false,
-        editId         : '',
-        userId         : '',
+        type       : this.$route.params.type,
+        img        : '',
+        isEdit     : false,
+        editId     : '',
+        userId     : '',
 //        imgResult     : '',
 //        imgTemplate   : '',
-//        imgPath       : '',
-        tags           : '',
-        articleData : {
+        imgPath    : '',
+        tags       : '',
+        editImg    : false,
+        articleData: {
           newTitle: '',
           tagInfo : {
             tagTitle: '',
             tagId   : ''
           },
-          content : ''
+          content : '',
         }
       }
     },
@@ -95,20 +96,21 @@
       })
     },
     methods   : {
-      initData () {
+      initData() {
         this.$http.get(`/api/post/getSinglePost/${this.editId}`).then(res => {
           this.articleData.newTitle = res.data.title;
           this.articleData.content = res.data.content;
-//            this.imgPath = res.data.image;
+          this.imgPath = res.data.image;
           this.articleData.tagInfo.tagTitle = res.data.tagTitle;
           this.articleData.tagInfo.tagId = res.data.tagId;
+          this.editImg = true;
         });
       },
       saveData(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let displayData = {
-//            "image"   : this.imgPath,
+              "image"   : this.imgPath,
               "title"   : this.articleData.newTitle,
               "content" : this.articleData.content,
               "date"    : this.$moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -141,8 +143,8 @@
         this.$router.push('/admin/articleManager');
         localStorage.removeItem('canAdd');
       },
-      imgChange(val) {
-//        this.imgPath = val;
+      getImgUrl(val) {
+        this.imgPath = val;
       },
       getTagId(title) {
         this.tags.find((tag) => {
@@ -150,7 +152,15 @@
             this.articleData.tagInfo.tagId = tag._id;
           }
         })
-      }
+      },
+//      upLoadImage(e) {
+//        let file = e.target.files[0];
+//        let filePath = this.getObjectURL(e.target.files[0])
+////        console.log(filePath);
+//        this.$http.post('/api/post/uploadImage', {
+//          filePath: filePath
+//        })
+//      }
     },
     components: {
       uploadImage

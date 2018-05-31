@@ -16,11 +16,12 @@ function init(env) {
 
 /**
  * 上传文件到指定Bucket
- * @param service
+ * @param env
  * @param path
  * @param uploadFile
+ * @param fileType
  */
-function uploadObject(env, path, uploadFile) {
+function uploadObject(env, path, uploadFile, fileType) {
   let service = init(env);
   let bucket = service.Bucket(env.bucket_name, env.location);
 
@@ -28,7 +29,8 @@ function uploadObject(env, path, uploadFile) {
     bucket.putObject(
       path,
       {
-        body: require('fs').readFileSync(uploadFile),
+        'body': require('fs').readFileSync(uploadFile),
+        'Content-Type': fileType
       },
       (err, data) => {
         if (err) {
