@@ -9,10 +9,10 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item" v-if="!hasLogin">
-            <a class="nav-link" href="/login">登录</a>
+            <a class="nav-link" href="#/login">登录</a>
           </li>
           <li class="nav-item" v-if="!hasLogin">
-            <a class="nav-link" href="/register">注册</a>
+            <a class="nav-link" href="#/register">注册</a>
           </li>
           <li class="pic nav-item dropdown" v-if="hasLogin">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
@@ -20,8 +20,8 @@
               <img :src="imgSrc" width="40" height="40" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="/login" @click="logout()">退出</a>
-              <a class="dropdown-item" href="/basicSetting">设置</a>
+              <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
+              <a class="dropdown-item" href="#/basicSetting">设置</a>
             </div>
           </li>
         </ul>
