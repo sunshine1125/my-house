@@ -140,6 +140,7 @@
       width 640px
       margin 20px auto
       text-align left
+      min-height 78%
       .articleTitle
         display inline-block
         &:hover

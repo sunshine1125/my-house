@@ -108,16 +108,12 @@
           <p>暂时还没有评论！</p>
         </div>
       </div>
-      <div class="footer">
-        <my-footer></my-footer>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
   import navBar from './navBar.vue';
-  import myFooter from './myFooter.vue'
 
   export default {
     name      : 'detail',
@@ -307,8 +303,7 @@
       }
     },
     components: {
-      navBar,
-      myFooter
+      navBar
     }
   }
 </script>
@@ -484,10 +479,6 @@
           cursor pointer
           a
             color #666
-
-    .footer
-      min-height 50px
-      position relative
 
   @media screen and (max-width: 786px)
     .articleDetail

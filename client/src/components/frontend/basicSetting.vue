@@ -38,13 +38,11 @@
         </div>
       </div>
     </div>
-    <my-footer></my-footer>
   </div>
 </template>
 
 <script>
   import navBar from './navBar.vue'
-  import myFooter from './myFooter.vue'
   export default {
     name      : 'basicSetting',
     data() {
@@ -108,8 +106,7 @@
       }
     },
     components: {
-      navBar,
-      myFooter
+      navBar
     }
   }
 </script>
