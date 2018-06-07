@@ -181,6 +181,7 @@
     methods   : {
       rightSideBar() {
         let nodes = $('.content').children('h1, h2');
+        console.log(nodes);
         this.rightSideData(nodes);
 
       },
