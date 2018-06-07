@@ -12,7 +12,6 @@
       </div>
       <div id="navbar-example">
         <!-- 导航 a中href="#one" 来寻找锚点-->
-        <pre>{{sideLists}}</pre>
         <ul class="nav nav-pills nav-stacked tabLists" role="tablist">
           <li role="presentation" v-for="list in sideLists"><a :href=" `#${list.jump}`" :title="list.title">{{list.title}}</a></li>
           <li v-show="displayGoTop" @click="goTop()">返回顶部</li>
@@ -181,7 +180,6 @@
     methods   : {
       rightSideBar() {
         let nodes = $('.content').children('h1, h2');
-        console.log(nodes);
         this.rightSideData(nodes);
 
       },
