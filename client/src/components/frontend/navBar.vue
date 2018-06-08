@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="navbar navbar-expand-lg navbar-light">
-      <a class="navbar-brand" href="/">小屋</a>
+      <a class="navbar-brand" href="#/">小屋</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
               aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -20,8 +20,8 @@
               <img :src="imgSrc" width="40" height="40" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
               <a class="dropdown-item" href="#/basicSetting">设置</a>
+              <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
             </div>
           </li>
         </ul>
