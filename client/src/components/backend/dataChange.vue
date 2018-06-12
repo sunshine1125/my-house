@@ -8,24 +8,23 @@
       <el-breadcrumb-item :to="{ path: '/admin' }">文章管理</el-breadcrumb-item>
       <el-breadcrumb-item v-show="isEdit">修改文章</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-form :model="articleData" ref="articleData" label-width="70px" class="rowContainer">
+    <el-form :model="articleData" :rules="rules" ref="articleData" label-width="70px" class="rowContainer">
       <el-row>
         <el-col :span="6">
           <el-form-item label="标题"
                         prop="newTitle"
-                        class="customInput"
-                        :rules="validate_rules({required: true})">
+                        class="customInput">
             <el-input v-model="articleData.newTitle" placeholder="请输入标题"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="6">
           <el-form-item label="标签"
-                        prop="tag"
+                        prop="tagTitle"
                         class="customInput">
-            <el-select v-model="articleData.tagInfo.tagTitle"
+            <el-select v-model="articleData.tagTitle"
                        no-data-text="请先去添加标签"
-                       v-on:change="getTagId(articleData.tagInfo.tagTitle)"
-                       placeholder="请选择">
+                       @change="getTagId(articleData.tagTitle)"
+                       placeholder="请选择标签">
               <el-option v-for="tag in tags"
                          :key="tag.title"
                          :label="tag.title"
@@ -40,8 +39,7 @@
       </el-row>
       <el-row>
         <el-form-item label="内容"
-                      prop="content"
-                      :rules="validate_rules({required: true})">
+                      prop="content">
           <mavon-editor :ishljs="true" v-model="articleData.content"></mavon-editor>
         </el-form-item>
       </el-row>
@@ -74,11 +72,20 @@
         editImg    : false,
         articleData: {
           newTitle: '',
-          tagInfo : {
-            tagTitle: '',
-            tagId   : ''
-          },
-          content : '',
+          tagTitle: '',
+          tagId   : '',
+          content : ''
+        },
+        rules: {
+          newTitle: [
+            {required: true, message: '请输入标题', trigger: 'blur'}
+          ],
+          tagTitle: [
+            {required: true, message: '请选择标签', trigger: 'blur'}
+          ],
+          content: [
+            {required: true, message: '请输入内容', trigger: 'blur'}
+          ]
         }
       }
     },
@@ -101,8 +108,8 @@
           this.articleData.newTitle = res.data.title;
           this.articleData.content = res.data.content;
           this.imgPath = res.data.image;
-          this.articleData.tagInfo.tagTitle = res.data.tagTitle;
-          this.articleData.tagInfo.tagId = res.data.tagId;
+          this.articleData.tagTitle = res.data.tagTitle;
+          this.articleData.tagId = res.data.tagId;
           this.editImg = true;
         });
       },
@@ -114,8 +121,8 @@
               "title"   : this.articleData.newTitle,
               "content" : this.articleData.content,
               "date"    : this.$moment().format('YYYY-MM-DD HH:mm:ss'),
-              "tagId"   : this.articleData.tagInfo.tagId,
-              "tagTitle": this.articleData.tagInfo.tagTitle
+              "tagId"   : this.articleData.tagId,
+              "tagTitle": this.articleData.tagTitle
             };
             if (this.type === 'add') {
               this.$http.post(`/api/post/add/${this.userId}`, displayData).then(res => {
@@ -149,18 +156,10 @@
       getTagId(title) {
         this.tags.find((tag) => {
           if (tag.title === title) {
-            this.articleData.tagInfo.tagId = tag._id;
+            this.articleData.tagId = tag._id;
           }
         })
-      },
-//      upLoadImage(e) {
-//        let file = e.target.files[0];
-//        let filePath = this.getObjectURL(e.target.files[0])
-////        console.log(filePath);
-//        this.$http.post('/api/post/uploadImage', {
-//          filePath: filePath
-//        })
-//      }
+      }
     },
     components: {
       uploadImage
