@@ -62,9 +62,6 @@
       },
       validationGroup: ['phone', 'password']
     },
-    mounted: function () {
-      console.log(phoneValid())
-    },
     methods: {
       login() {
         let data = {

@@ -7,7 +7,7 @@
     <div class="article-list">
       <div>
         <div v-if="hasArticles" class="card mb-3" v-for="article in articlesList">
-          <div class="card-img-top articleCover" :style="`background-image: url(${article.image})`"></div>
+          <div @click="getDetail(article._id)" class="card-img-top articleCover" :style="`background-image: url(${article.image})`"></div>
           <div class="card-body">
             <h5 @click="getDetail(article._id)" class="card-title articleTitle">{{article.title}}</h5>
             <p class="card-text content" v-html="getContent(article.content)"></p>
@@ -98,6 +98,7 @@
         return removeMd(content);
       },
       getDetail(id) {
+        window.location.reload();
         this.$router.push(`/detail/${id}`);
       },
       getTags() {
@@ -160,6 +161,7 @@
         background-size 100%
         height 200px
         width 100%
+        cursor pointer
       .tags-list
         position absolute
         top 0

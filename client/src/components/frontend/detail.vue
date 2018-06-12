@@ -34,19 +34,20 @@
         <!--MOB SHARE BEGIN-->
         <div class="col-sm-6 col-6">
           <div class="-mob-share-open btn btn-outline-success">分享</div>
-          <div class="-mob-share-ui" style="display: none">
-            <ul class="-mob-share-list">
-              <li class="-mob-share-weibo"><p>新浪微博</p></li>
-              <li class="-mob-share-qzone"><p>QQ空间</p></li>
-              <li class="-mob-share-qq"><p>QQ好友</p></li>
-              <li class="-mob-share-douban"><p>豆瓣</p></li>
-              <li class="-mob-share-facebook"><p>Facebook</p></li>
-              <li class="-mob-share-twitter"><p>Twitter</p></li>
-            </ul>
-            <div class="-mob-share-close">取消</div>
-          </div>
-          <div class="-mob-share-ui-bg"></div>
         </div>
+        <div class="-mob-share-ui -mob-share-ui-theme -mob-share-ui-theme-slide-top" style="display: none">
+          <ul class="-mob-share-list">
+            <li class="-mob-share-weibo"><p>新浪微博</p></li>
+            <li class="-mob-share-qzone"><p>QQ空间</p></li>
+            <li class="-mob-share-qq"><p>QQ好友</p></li>
+            <li class="-mob-share-weixin"><p>微信</p></li>
+            <li class="-mob-share-douban"><p>豆瓣</p></li>
+            <li class="-mob-share-facebook"><p>Facebook</p></li>
+            <li class="-mob-share-twitter"><p>Twitter</p></li>
+          </ul>
+          <div class="-mob-share-close">取消</div>
+        </div>
+        <div class="-mob-share-ui-bg"></div>
         <!--MOB SHARE END-->
       </div>
       <div class="writeComment">
@@ -174,10 +175,21 @@
         this.hasLogin = false;
         this.currentUserName = '游客'
       }
-      window.addEventListener('scroll', this.handleScroll)
+      window.addEventListener('scroll', this.handleScroll);
+//      const shareNode = document.createElement('script');
+//      shareNode.setAttribute('id', '-mob-share');
+//      shareNode.setAttribute('src', '//f1.webshare.mob.com/code/mob-share.js?appkey=25fa994ee2f78');
+//      document.getElementsByTagName('body')[0].appendChild(shareNode);
+//      console.log(shareNode);
     },
     computed  : {},
+//    watch: {
+//      '$route': 'fetchData'
+//    },
     methods   : {
+//      fetchData() {
+//        window.location.reload();
+//      },
       rightSideBar() {
         let nodes = $('.content').children('h1, h2');
         this.rightSideData(nodes);
