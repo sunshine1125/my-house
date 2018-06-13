@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import articleList from '@/components/frontend/articlesList'
+import articleDetail from '@/components/frontend/detail'
 
 Vue.use(Router)
 
@@ -69,12 +71,12 @@ export default new Router({
     {
       path     : '/',
       name     : 'articlesList',
-      component: resolve => require.ensure([], () => resolve(require('@/components/frontend/articlesList')), 'articleList')
+      component: articleList
     },
     {
       path     : '/detail/:id',
       name     : 'detail',
-      component: resolve => require.ensure([], () => resolve(require('@/components/frontend/detail')), 'detail')
+      component: articleDetail
     },
     {
       path     : '/basicSetting',
