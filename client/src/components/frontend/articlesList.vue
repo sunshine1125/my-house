@@ -27,12 +27,10 @@
         <div style="text-align: center;" v-if="!hasArticles"><p>您选择的分类下没有文章</p></div>
       </div>
       <div class="tags-list">
-        <h5>Tags</h5>
+        <h5>分类</h5>
         <div class="tag">
-          <span @click="getAllArticles()" class="badge badge-pill badge-info">全部文章</span>
-        </div>
-        <div class="tag" v-for="tag in tags">
-          <span @click="getArticlesByTag(tag._id, tag.title)" class="badge badge-pill badge-info">{{tag.title}}</span>
+          <span @click="getAllArticles()" class="badge badge-pill badge-danger">全部文章</span>
+          <span v-for="(tag, index) in tags" @click="getArticlesByTag(tag._id, tag.title, index)" class="badge badge-pill badge-info">{{tag.title}}</span>
         </div>
       </div>
     </div>
@@ -80,6 +78,8 @@
         })
       },
       getAllArticles() {
+        $('.tag').children().removeClass('badge-danger').addClass('badge-info');
+        $('.tag').children().eq(0).removeClass('badge-info').addClass('badge-danger');
         this.articleTitle = '所有文章';
         this.$http.get('/api/post/getAllArticles')
           .then((res) => {
@@ -106,7 +106,9 @@
           this.tags = res.data.data;
         })
       },
-      getArticlesByTag(id, title) {
+      getArticlesByTag(id, title, index) {
+        $('.tag').children().removeClass('badge-danger').addClass('badge-info');
+        $('.tag').children().eq(index + 1).removeClass('badge-info').addClass('badge-danger');
         this.articlesList = [];
         this.articleTitle = title;
         this.$http.get(`/api/getArticlesByTag/${id}`).then((res) => {
