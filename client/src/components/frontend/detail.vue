@@ -176,20 +176,9 @@
         this.currentUserName = '游客'
       }
       window.addEventListener('scroll', this.handleScroll);
-//      const shareNode = document.createElement('script');
-//      shareNode.setAttribute('id', '-mob-share');
-//      shareNode.setAttribute('src', '//f1.webshare.mob.com/code/mob-share.js?appkey=25fa994ee2f78');
-//      document.getElementsByTagName('body')[0].appendChild(shareNode);
-//      console.log(shareNode);
     },
     computed  : {},
-//    watch: {
-//      '$route': 'fetchData'
-//    },
     methods   : {
-//      fetchData() {
-//        window.location.reload();
-//      },
       rightSideBar() {
         let nodes = $('.content').children('h1, h2');
         this.rightSideData(nodes);
@@ -307,7 +296,7 @@
         });
       },
       goTop() {
-        $("html,body").animate({scrollTop:0}, 500);
+        $('html,body').animate({scrollTop:0}, 500);
       },
       handleScroll() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;

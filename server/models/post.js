@@ -10,7 +10,8 @@ let PostSchema = new Schema({
   uid       : {type: Schema.Types.ObjectId, ref: 'User'},
   tagId     : {type: Schema.Types.ObjectId, ref: 'Tag'},
   likeNum   : Number,
-  likeActive: Boolean
+  likeActive: Boolean,
+  index     : Number
 });
 
 let Post = mongoose.model('Post', PostSchema);

@@ -7,7 +7,8 @@
     <div class="article-list">
       <div>
         <div v-if="hasArticles" class="card mb-3" v-for="article in articlesList">
-          <div @click="getDetail(article._id)" class="card-img-top articleCover" :style="`background-image: url(${article.image})`"></div>
+          <div @click="getDetail(article._id)" class="card-img-top articleCover"
+               :style="`background-image: url(${article.image})`"></div>
           <div class="card-body">
             <h5 @click="getDetail(article._id)" class="card-title articleTitle">{{article.title}}</h5>
             <p class="card-text content" v-html="getContent(article.content)"></p>
@@ -30,7 +31,8 @@
         <h5>分类</h5>
         <div class="tag">
           <span @click="getAllArticles()" class="badge badge-pill badge-danger">全部文章</span>
-          <span v-for="(tag, index) in tags" @click="getArticlesByTag(tag._id, tag.title, index)" class="badge badge-pill badge-info">{{tag.title}}</span>
+          <span v-for="(tag, index) in tags" @click="getArticlesByTag(tag._id, tag.title, index)"
+                class="badge badge-pill badge-info">{{tag.title}}</span>
         </div>
       </div>
     </div>
@@ -49,15 +51,18 @@
     name      : 'articlesList',
     data() {
       return {
-        articlesList   : [],
-        tags           : [],
-        hasArticles    : true,
-        articleTitle   : '所有文章'
+        articlesList: [],
+        tags        : [],
+        hasArticles : true,
+        articleTitle: '所有文章',
+        page        : 0,
+        limit       : 4
       }
     },
     mounted   : function () {
       this.getAllArticles();
       this.getTags();
+      window.addEventListener('scroll', this.handleScroll);
     },
     methods   : {
       processArticlesFormat(article) {
@@ -81,15 +86,21 @@
         $('.tag').children().removeClass('badge-danger').addClass('badge-info');
         $('.tag').children().eq(0).removeClass('badge-info').addClass('badge-danger');
         this.articleTitle = '所有文章';
-        this.$http.get('/api/post/getAllArticles')
+        this.page = 0;
+        this.getAllArticlesDetail();
+      },
+      getAllArticlesDetail() {
+        let skip = this.page * this.limit;
+        this.$http.get(`/api/post/getAllArticles?skip=${skip}&limit=${this.limit}`)
           .then((res) => {
             if (res.data.success && res.data.data) {
-              if (res.data.data.length === 0) {
+              if (res.data.data.length === 0 && !res.data.noData) {
                 this.articlesList = [];
                 this.hasArticles = false;
-              } else {
+              } else if (res.data.noData && res.data.data.length !== 0) {
                 this.hasArticles = true;
                 this.processArticlesFormat(res.data.data);
+                this.page++;
               }
             }
           })
@@ -107,21 +118,45 @@
         })
       },
       getArticlesByTag(id, title, index) {
+        localStorage.setItem('tagCat', JSON.stringify({
+          "selectedTagId"   : id
+        }));
         $('.tag').children().removeClass('badge-danger').addClass('badge-info');
         $('.tag').children().eq(index + 1).removeClass('badge-info').addClass('badge-danger');
         this.articlesList = [];
         this.articleTitle = title;
-        this.$http.get(`/api/getArticlesByTag/${id}`).then((res) => {
+        this.page = 0;
+        this.getArticlesDetailByTag(id);
+      },
+      getArticlesDetailByTag(id) {
+        let skip = this.page * this.limit;
+        this.$http.get(`/api/getArticlesByTag/${id}?skip=${skip}&limit=${this.limit}`).then((res) => {
           if (res.data.success && res.data.data) {
-            if (res.data.data.length === 0) {
+            if (res.data.data.length === 0 && !res.data.noData) {
               this.articlesList = [];
               this.hasArticles = false;
-            } else {
+            } else if (res.data.noData && res.data.data.length !== 0) {
               this.hasArticles = true;
               this.processArticlesFormat(res.data.data);
+              this.page ++;
             }
           }
         })
+      },
+      handleScroll() {
+        let scrollTop = $('html, body').scrollTop();
+        let scrollHeight = $(document).height();
+        let windowHeight = $(window).height();
+        if (scrollTop + windowHeight === scrollHeight) {
+          if (this.articleTitle === '所有文章') {
+            this.getAllArticlesDetail()
+          } else {
+            if (localStorage.getItem('tagCat')) {
+              let tagCatId = JSON.parse(localStorage.getItem('tagCat')).selectedTagId;
+              this.getArticlesDetailByTag(tagCatId);
+            }
+          }
+        }
       }
     },
     components: {

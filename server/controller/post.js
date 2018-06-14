@@ -35,18 +35,6 @@ apiRoutes.post('/uploadImage', upload.single('file'), (req, res) => {
   });
 });
 
-// uploadToQingStor = (sourcePathFile, dest) => {
-//   qingstor.uploadObject(sourcePathFile, dest)
-// }
-
-// try {
-//   const res = await uploadToQingStor(sourcePathFile, dest);
-//   if (res.statusText === 'CREATED') {
-//     log(`Upload ${fileName} to qingstor success, the path is ${dest}`);
-//   }
-// } catch (error) {
-//   log('QY upload error: ' + error);
-// }
 // get user's post
 apiRoutes.get('/post/get/:id', (req, res) => {
   let userId = req.params.id;
@@ -66,12 +54,20 @@ apiRoutes.get('/post/get/:id', (req, res) => {
 });
 
 apiRoutes.get('/post/getAllArticles', (req, res) => {
-  Posts.find()
+  let skip = parseInt(req.query.skip);
+  let limit = parseInt(req.query.limit);
+  let noData = false;
+  Posts.find().sort({"index": 1}).limit(limit).skip(skip)
     .exec((err, posts) => {
       posts.forEach((post) => {
         post.content = md.render(post.content);
       })
-      res.status('200').json({success: true, data: posts});
+      if (skip === 0 && posts.length === 0) {
+        noData = false;
+      } else {
+        noData = true;
+      }
+      res.status('200').json({success: true, data: posts, noData: noData});
     })
 })
 
@@ -109,17 +105,22 @@ apiRoutes.post('/post/add/:id', (req, res, next) => {
     if (data) {
       res.status('200').json({success: false, code: 100, msg: '数据已经存在'})
     }
-    let newForm = new Posts({
-      image   : image,
-      title   : title,
-      tagTitle: tagTitle,
-      content : content,
-      date    : date,
-      uid     : userId,
-      tagId   : tagId,
-      likeNum : 0
-    });
-    newForm.save(next);
+    Posts.find()
+      .exec((err, posts) => {
+        let newForm = new Posts({
+          image   : image,
+          title   : title,
+          tagTitle: tagTitle,
+          content : content,
+          date    : date,
+          uid     : userId,
+          tagId   : tagId,
+          likeNum : 0,
+          index   : posts.length + 1
+        });
+        newForm.save(next);
+      })
+
 
   });
 }, (req, res) => {
@@ -174,14 +175,21 @@ apiRoutes.delete('/post/remove/:id', (req, res) => {
 });
 
 apiRoutes.get('/getArticlesByTag/:id', (req, res) => {
-  Posts.find({tagId: req.params.id}, (err, data) => {
-    if (err) {
-
-    } else {
-      res.status('200').json({success: true, data: data});
-    }
-
-  })
+  let skip = parseInt(req.query.skip);
+  let limit = parseInt(req.query.limit);
+  let noData = false;
+  Posts.find({tagId: req.params.id}).sort({"index": 1}).limit(limit).skip(skip)
+    .exec((err, posts) => {
+      posts.forEach((post) => {
+        post.content = md.render(post.content);
+      })
+      if (skip === 0 && posts.length === 0) {
+        noData = false;
+      } else {
+        noData = true;
+      }
+      res.status('200').json({success: true, data: posts, noData: noData});
+    })
 
 })
 
