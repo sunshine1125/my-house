@@ -56,4 +56,4 @@ app.use((req, res, next) => {
 app.use(post);
 
 app.listen(3000);
-console.log('success listen on port 3000');
+console.log('success listen on port 3000')
