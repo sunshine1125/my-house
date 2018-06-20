@@ -82,26 +82,7 @@
                 </div>
               </div>
               <p class="card-text">{{comment.content}}</p>
-              <!--<p class="card-text" v-if="reply">-->
-              <!--<span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>-->
-              <!--</p>-->
-              <!--<div class="commentInput" v-if="!reply">-->
-              <!--<textarea class="form-control" rows="2" v-model="replyComment"-->
-              <!--placeholder="请写下你的回复"></textarea>-->
-              <!--</div>-->
-              <!--<div class="commentBtn" v-if="!reply">-->
-              <!--<button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>-->
-              <!--<button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"-->
-              <!--class="btn btn-success">发送-->
-              <!--</button>-->
-              <!--</div>-->
-              <!--<div>-->
-              <!--<p style="color: #3194d0;">-->
-              <!--<small>{{currentUserName}}：@-->
-              <!--<small>{{comment.auth}}</small>-->
-              <!--</small>-->
-              <!--</p>-->
-              <!--</div>-->
+              <comment-reply :comment="comment" :currentUserName="currentUserName"></comment-reply>
             </div>
           </div>
         </div>
@@ -115,7 +96,7 @@
 
 <script>
   import navBar from './navBar.vue';
-
+  import commentReply from './commentReply.vue'
   export default {
     name      : 'detail',
     data() {
@@ -133,8 +114,6 @@
         commentInfo    : [],
         hasLogin       : false,
         userAvatar     : '',
-        reply          : true,
-        replyComment   : '',
         url            : `http://140.143.192.183:8003/#/detail/${this.$route.params.id}`,
         isLike         : false,
         likeNum        : 0,
@@ -250,28 +229,6 @@
       cancel() {
         this.newComment = '';
       },
-      replyInfo() {
-        this.reply = false;
-      },
-      sendReply(commentId, auth, authId) {
-        this.reply = true;
-        let data = {
-          commentId    : commentId,
-          replyContent : this.replyComment,
-          replyPerson  : auth,
-          replyPersonId: authId
-        }
-        if (this.replyComment) {
-          this.$http.post('/api/addReplyComments', data).then(res => {
-            this.$http.get('/api/getReplyComments').then(res => {
-              console.log(res);
-            })
-          })
-        }
-      },
-      cancelReply() {
-        this.reply = true;
-      },
       giveLike() {
         this.isLike = true;
         this.likeNum ++;
@@ -304,7 +261,8 @@
       }
     },
     components: {
-      navBar
+      navBar,
+      commentReply
     }
   }
 </script>

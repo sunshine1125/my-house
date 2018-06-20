@@ -9,6 +9,7 @@ apiRoutes.get('/getReplyComments', (req, res) => {
       if (err) {
         // console.log(err);
       }
+      console.log(data.length)
       res.status('200').json({success: true, code: 200, data: data})
     })
 });
@@ -16,13 +17,16 @@ apiRoutes.get('/getReplyComments', (req, res) => {
 // add comment
 apiRoutes.post('/addReplyComments', (req, res) => {
   let reply = new replyInfos({
-    commentId    : req.body.commentId,
-    replyContent : req.body.replyContent,
-    replyPerson  : req.body.replyPerson,
-    replyPersonId: req.body.replyPersonId
+    commentId   : req.body.commentId,
+    content     : req.body.content,
+    targetUser  : req.body.auth,
+    targetUserId: req.body.authId,
+    user        : req.body.user,
+    userId      : req.body.userId,
+    create_at   : req.body.create_at
   });
   reply.save();
   res.status('200').json({success: true, code: 200})
-});
+})
 
 module.exports = apiRoutes;
