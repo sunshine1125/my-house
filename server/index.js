@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const auth = require('./controller/auth');
-const post = require('./controller/post')
+const post = require('./controller/post');
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
 // use body parser so we can get info from post or url parameters
@@ -56,4 +56,4 @@ app.use((req, res, next) => {
 app.use(post);
 
 app.listen(3000);
-console.log('success listen on port 3000 !');
+console.log('success listen on port 3000');
