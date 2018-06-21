@@ -22,7 +22,7 @@ apiRoutes.post('/addComment', (req, res, next) => {
     date         : req.body.date,
     articleId    : req.body.articleId,
     avatar       : req.body.avatar,
-    replyComments: []
+    replyInfo    : []
   });
   comment.save(next);
   res.status('200').json({success: true, code: 200})

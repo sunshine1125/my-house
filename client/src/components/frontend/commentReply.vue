@@ -1,18 +1,12 @@
 <template>
   <div>
-    <p class="card-text" v-if="reply">
-      <span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>
-    </p>
     <div v-if="!reply">
       <div class="commentInput">
-      <textarea class="form-control" rows="2" v-model="replyComment"
-                placeholder="请写下你的回复"></textarea>
+        <textarea class="form-control" rows="2" v-model="replyComment" placeholder="请写下你的回复"></textarea>
       </div>
       <div class="commentBtn">
         <button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>
-        <button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)"
-                class="btn btn-success">发送
-        </button>
+        <button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)" class="btn btn-success">发送</button>
       </div>
     </div>
     <div style="font-size: 14px;">
@@ -26,29 +20,18 @@
 
   export default {
     name    : 'commentReply',
-    props   : ['comment', 'currentUserName'],
+    props   : ['comment', 'currentUserName', 'reply'],
     data() {
       return {
-        reply       : true,
         replyComment: ''
       }
     },
     mounted : function () {
-      this.getCommentReply();
     },
     computed: {},
     methods : {
-      getCommentReply() {
-        this.$http.get('/api/getReplyComments').then(res => {
-          this.replyComment = res.data.data.content;
-          console.log(res.data.data)
-        })
-      },
-      replyInfo() {
-        this.reply = false;
-      },
       sendReply(commentId, auth, authId) {
-        this.reply = true;
+        this.$emit('toReply', true);
         let data = {
           commentId: commentId,
           content  : this.replyComment,
@@ -60,14 +43,14 @@
         }
           if(this.replyComment) {
             this.$http.post('/api/addReplyComments', data).then(res => {
-              this.$http.get('/api/getReplyComments').then(res => {
-                console.log(res);
+              this.$http.get(`/api/getReplyComments/comment/${commentId}`).then(res => {
+                this.replyComment = res.data.data.content;
               })
             })
           }
       },
       cancelReply() {
-        this.reply = true;
+        this.$emit('toReply', true);
       }
   },
   components: {

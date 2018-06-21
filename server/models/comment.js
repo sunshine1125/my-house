@@ -7,7 +7,8 @@ let CommentSchema = new Schema({
   content      : String,
   avatar       : String,
   date         : {type: Date, default: Date.now},
-  articleId    : {type: Schema.Types.ObjectId, ref: 'post'}
+  articleId    : {type: Schema.Types.ObjectId, ref: 'post'},
+  replyInfo    : [{type: Schema.Types.Object, ref: 'replyInfo'}]
 });
 
 let Comment = mongoose.model('Comment', CommentSchema);

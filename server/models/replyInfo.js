@@ -4,10 +4,10 @@ const Schema = mongoose.Schema;
 let replyInfoSchema = new Schema({
   content     : String,
   targetUser  : String,
-  targetUserId: Number,
+  targetUserId: String,
   user        : String,
-  userId      : Number,
-  commentId   : {type: Schema.Types.ObjectId, ref: 'post'},
+  userId      : String,
+  commentId   : {type: Schema.Types.ObjectId, ref: 'comment'},
   create_at   : {type: Date, default: Date.now}
 });
 

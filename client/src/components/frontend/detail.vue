@@ -82,7 +82,19 @@
                 </div>
               </div>
               <p class="card-text">{{comment.content}}</p>
-              <comment-reply :comment="comment" :currentUserName="currentUserName"></comment-reply>
+              <p class="card-text" v-if="reply">
+                <span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>
+              </p>
+              <!--<div v-for="info in getCommentReply(comment._id)">-->
+              <div>
+                <button @click="getCommentReply(comment._id)">获取</button>
+                <code>{{comment._id}}</code>
+                <comment-reply @toReply="toReply"
+                               :comment="comment"
+                               :currentUserName="currentUserName"
+                               :reply="reply">
+                </comment-reply>
+              </div>
             </div>
           </div>
         </div>
@@ -119,7 +131,9 @@
         likeNum        : 0,
         sideLists      : [],
         displayGoTop   : false,
-        scrollTop      : document.body.scrollTop || document.documentElement.scrollTop
+        scrollTop      : document.body.scrollTop || document.documentElement.scrollTop,
+        reply          : true,
+        replyMessage   : []
       }
     },
     mounted   : function () {
@@ -156,7 +170,9 @@
       }
       window.addEventListener('scroll', this.handleScroll);
     },
-    computed  : {},
+    computed  : {
+
+    },
     methods   : {
       rightSideBar() {
         let nodes = $('.content').children('h1, h2');
@@ -258,6 +274,22 @@
       handleScroll() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         this.displayGoTop = scrollTop > 500 ? true : false;
+      },
+      replyInfo() {
+        this.reply = false;
+      },
+      toReply(val) {
+        this.reply = val;
+      },
+      getCommentReply(commentId) {
+        this.$http.get(`/api/getComments/comment/${commentId}`).then(res => {
+//          res.data.data.forEach((data) => {
+//            console.log(data);
+//          })
+          console.log(res.data.data);
+          this.replyMessage = res.data.data;
+//          return res.data.data;
+        })
       }
     },
     components: {
