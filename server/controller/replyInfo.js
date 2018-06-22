@@ -19,7 +19,7 @@ apiRoutes.get('/getReplyComments/comment/:commentId', (req, res) => {
   replyInfos.find({commentId: req.params.commentId})
     .exec((err, data) => {
       if (err) {
-        // console.log(err);
+        console.log(err);
       }
       res.status('200').json({success: true, code: 200, data: data})
     })
