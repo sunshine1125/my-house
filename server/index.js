@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 const auth = require('./controller/auth');
 const post = require('./controller/post');
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
