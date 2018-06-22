@@ -9,7 +9,7 @@ apiRoutes.get('/getComments/comment/:commentId', (req, res) => {
       if (err) {
         // console.log(err);
       }
-      // console.log(data);
+      console.log(data);
       res.status('200').json({success: true, code: 200, data: data})
     })
 });
