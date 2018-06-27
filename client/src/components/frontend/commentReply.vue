@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: 20px;">
     <div v-if="!reply">
       <div class="commentInput">
         <textarea class="form-control" rows="2" v-model="replyComment" placeholder="请写下你的回复"></textarea>
@@ -8,10 +8,6 @@
         <button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>
         <button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)" class="btn btn-success">发送</button>
       </div>
-    </div>
-    <div style="font-size: 14px;">
-      <small style="color: #3194d0;">{{currentUserName}}：</small>
-      <span><small style="color: #3194d0;">@{{comment.auth}} </small>{{replyComment}}</span>
     </div>
   </div>
 </template>
@@ -39,12 +35,12 @@
           authId   : authId,
           user     : this.currentUserName,
           userId   : localStorage.getItem('currentUserId'),
-          create_at: this.$moment().format('YYYY-MM-DD')
+          create_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
         }
           if(this.replyComment) {
-            this.$http.post('/api/addReplyComments', data).then(res => {
-              this.$http.get(`/api/getReplyComments/comment/${commentId}`).then(res => {
-                this.replyComment = res.data.data.content;
+            this.$http.post(`/api/addReplyComments`, data).then(res => {
+              this.$http.get(`/api/comment/${commentId}/getReply`).then(res => {
+                this.$emit('replyData', res.data);
               })
             })
           }

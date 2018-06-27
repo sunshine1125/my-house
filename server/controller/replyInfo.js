@@ -1,16 +1,19 @@
 const express = require('express');
 const apiRoutes = express.Router();
 const replyInfos = require('../models/replyInfo');
-const Comments = require('../models/comment');
 
-apiRoutes.get('/getComments/comment/:commentId', (req, res) => {
-  Comments.find({_id: req.params.commentId})
+apiRoutes.get('/comment/:commentId/getReply', (req, res) => {
+  let commentId = req.params.commentId;
+  let matchData = [];
+  replyInfos.find()
+    .populate('commentId')
     .exec((err, data) => {
-      if (err) {
-        // console.log(err);
-      }
-      console.log(data);
-      res.status('200').json({success: true, code: 200, data: data})
+      data.forEach(item => {
+        if (item.commentId._id == commentId) {
+          matchData.push(item);
+        }
+      });
+      res.status(200).json(matchData);
     })
 });
 

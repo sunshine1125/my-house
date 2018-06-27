@@ -85,11 +85,13 @@
               <p class="card-text" v-if="reply">
                 <span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>
               </p>
-              <!--<div v-for="info in getCommentReply(comment._id)">-->
-              <div>
-                <button @click="getCommentReply(comment._id)">获取</button>
-                <code>{{comment._id}}</code>
+              <div class="sub-comment-list">
+                <div v-for="reply in replyData" style="font-size: 14px;">
+                  <small style="color: #3194d0;">{{reply.user}}：</small>
+                  <span><small style="color: #3194d0;">@{{reply.targetUser}} </small>{{reply.content}}</span>
+                </div>
                 <comment-reply @toReply="toReply"
+                               @replyData="getReplyData"
                                :comment="comment"
                                :currentUserName="currentUserName"
                                :reply="reply">
@@ -133,7 +135,7 @@
         displayGoTop   : false,
         scrollTop      : document.body.scrollTop || document.documentElement.scrollTop,
         reply          : true,
-        replyMessage   : []
+        replyData      : []
       }
     },
     mounted   : function () {
@@ -169,6 +171,7 @@
         this.currentUserName = '游客'
       }
       window.addEventListener('scroll', this.handleScroll);
+      this.getReplyData();
     },
     computed  : {
 
@@ -281,16 +284,16 @@
       toReply(val) {
         this.reply = val;
       },
-      getCommentReply(commentId) {
-        this.$http.get(`/api/getComments/comment/${commentId}`).then(res => {
-//          res.data.data.forEach((data) => {
-//            console.log(data);
+      getInitReply(){
+//        this.commentInfo.forEach(comment => {
+//          this.$http.get(`/api/comment/${comment._id}/getReply`).then(res => {
+//            this.replyData = res.data;
 //          })
-          console.log(res.data.data);
-          this.replyMessage = res.data.data;
-//          return res.data.data;
-        })
-      }
+//        })
+      },
+      getReplyData(val) {
+        this.replyData = val;
+      },
     },
     components: {
       navBar,
@@ -454,6 +457,11 @@
             border-left 1px solid white
             a
               color white
+    .sub-comment-list
+      margin-top 20px
+      padding 5px 0 5px 20px
+      border-left 2px solid #d9d9d9
+
     #navbar-example
       position fixed
       bottom 40px

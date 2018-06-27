@@ -7,7 +7,7 @@ let replyInfoSchema = new Schema({
   targetUserId: String,
   user        : String,
   userId      : String,
-  commentId   : {type: Schema.Types.ObjectId, ref: 'comment'},
+  commentId   : {type: Schema.Types.ObjectId, ref: 'Comment'},
   create_at   : {type: Date, default: Date.now}
 });
 
