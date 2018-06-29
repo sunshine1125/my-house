@@ -86,9 +86,21 @@
                 <span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>
               </p>
               <div class="sub-comment-list">
-                <div v-for="reply in replyData" style="font-size: 14px;">
-                  <small style="color: #3194d0;">{{reply.user}}：</small>
-                  <span><small style="color: #3194d0;">@{{reply.targetUser}} </small>{{reply.content}}</span>
+                <div class="sub-comment" v-for="reply in replyData" style="font-size: 14px;">
+                  <div class="tool-group-custom">
+                    <div class="v-tooltip-container">
+                      <div class="v-tooltip-content">
+                        <a href="">{{reply.user}}</a>：
+                      </div>
+                    </div>
+                    <span>
+                      <a href="">@{{reply.targetUser}}</a> {{reply.content}}
+                    </span>
+                  </div>
+                  <div class="sub-tool-group">
+                    <span>{{reply.create_at}}</span>
+                    <span style="margin-left: 10px; cursor: pointer" @click="replyInfo()">回复</span>
+                  </div>
                 </div>
                 <comment-reply @toReply="toReply"
                                @replyData="getReplyData"
@@ -135,7 +147,7 @@
         displayGoTop   : false,
         scrollTop      : document.body.scrollTop || document.documentElement.scrollTop,
         reply          : true,
-        replyData      : []
+        replyData      : {}
       }
     },
     mounted   : function () {
@@ -461,6 +473,30 @@
       margin-top 20px
       padding 5px 0 5px 20px
       border-left 2px solid #d9d9d9
+      .sub-comment
+        margin-bottom 15px
+        padding-bottom 15px
+        border-bottom 1px dashed #f0f0f0
+      .tool-group-custom
+        margin 0 0 5px
+        font-size 14px
+        line-height 1.5
+        a
+          color #3194d0
+        .v-tooltip-container
+          position relative
+          display inline-block
+          .v-tooltip-content
+            display inline-block
+       .sub-tool-group
+          font-size 12px
+          color #969696
+         a
+            margin-left 10px
+            color #969696
+           span
+            vertical-align middle
+
 
     #navbar-example
       position fixed

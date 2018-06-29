@@ -39,7 +39,11 @@
         }
           if(this.replyComment) {
             this.$http.post(`/api/addReplyComments`, data).then(res => {
+              this.replyComment = '';
               this.$http.get(`/api/comment/${commentId}/getReply`).then(res => {
+                res.data.forEach(data => {
+                  data.create_at = this.$moment(data.create_at).format('YYYY-MM-DD HH:mm:ss');
+                })
                 this.$emit('replyData', res.data);
               })
             })
