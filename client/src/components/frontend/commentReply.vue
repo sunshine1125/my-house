@@ -6,7 +6,8 @@
       </div>
       <div class="commentBtn">
         <button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>
-        <button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)" class="btn btn-success">发送</button>
+        <button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)" class="btn btn-success">发送
+        </button>
       </div>
     </div>
   </div>
@@ -15,17 +16,17 @@
 <script>
 
   export default {
-    name    : 'commentReply',
-    props   : ['comment', 'currentUserName', 'reply'],
+    name      : 'commentReply',
+    props     : ['comment', 'currentUserName', 'reply'],
     data() {
       return {
         replyComment: ''
       }
     },
-    mounted : function () {
+    mounted   : function () {
     },
-    computed: {},
-    methods : {
+    computed  : {},
+    methods   : {
       sendReply(commentId, auth, authId) {
         this.$emit('toReply', true);
         let data = {
@@ -37,24 +38,21 @@
           userId   : localStorage.getItem('currentUserId'),
           create_at: this.$moment().format('YYYY-MM-DD HH:mm:ss')
         }
-          if(this.replyComment) {
-            this.$http.post(`/api/addReplyComments`, data).then(res => {
-              this.replyComment = '';
-              this.$http.get(`/api/comment/${commentId}/getReply`).then(res => {
-                res.data.forEach(data => {
-                  data.create_at = this.$moment(data.create_at).format('YYYY-MM-DD HH:mm:ss');
-                })
-                this.$emit('replyData', res.data);
-              })
-            })
-          }
+        if (this.replyComment) {
+          this.$http.post(`/api/addReplyComments`, data).then(res => {
+            this.replyComment = '';
+            this.$emit('replyData', {
+              reply    : data,
+              commentId: commentId
+            });
+          })
+        }
       },
       cancelReply() {
         this.$emit('toReply', true);
       }
-  },
-  components: {
-  }
+    },
+    components: {}
   }
 </script>
 <style scoped lang="stylus">

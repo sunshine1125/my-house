@@ -86,20 +86,22 @@
                 <span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>
               </p>
               <div class="sub-comment-list">
-                <div class="sub-comment" v-for="reply in replyData" style="font-size: 14px;">
-                  <div class="tool-group-custom">
-                    <div class="v-tooltip-container">
-                      <div class="v-tooltip-content">
-                        <a href="">{{reply.user}}</a>：
+                <div class="sub-comment" v-for="reply in comment.reply" style="font-size: 14px;">
+                  <div v-if="reply.commentId._id == comment._id">
+                    <div class="tool-group-custom">
+                      <div class="v-tooltip-container">
+                        <div class="v-tooltip-content">
+                          <a href="">{{reply.user}}</a>：
+                        </div>
                       </div>
-                    </div>
-                    <span>
+                      <span>
                       <a href="">@{{reply.targetUser}}</a> {{reply.content}}
                     </span>
-                  </div>
-                  <div class="sub-tool-group">
-                    <span>{{reply.create_at}}</span>
-                    <span style="margin-left: 10px; cursor: pointer" @click="replyInfo()">回复</span>
+                    </div>
+                    <div class="sub-tool-group">
+                      <span>{{reply.create_at}}</span>
+                      <span style="margin-left: 10px; cursor: pointer" @click="replyInfo()">回复</span>
+                    </div>
                   </div>
                 </div>
                 <comment-reply @toReply="toReply"
@@ -183,7 +185,6 @@
         this.currentUserName = '游客'
       }
       window.addEventListener('scroll', this.handleScroll);
-      this.getReplyData();
     },
     computed  : {
 
@@ -250,6 +251,9 @@
             for (let len = res.data.data.length, i = len - 1; i >= 0; i--) {
               res.data.data[i].date = this.$moment(res.data.data[i].date).format('YYYY-MM-DD HH:mm:ss');
               res.data.data[i].index = i;
+              this.getInitReply(res.data.data[i]._id).then(reply => {
+                res.data.data[i].reply = reply;
+              });
               this.commentInfo.push(res.data.data[i]);
             }
           } else {
@@ -296,15 +300,18 @@
       toReply(val) {
         this.reply = val;
       },
-      getInitReply(){
-//        this.commentInfo.forEach(comment => {
-//          this.$http.get(`/api/comment/${comment._id}/getReply`).then(res => {
-//            this.replyData = res.data;
-//          })
-//        })
+      getInitReply(commentId) {
+        return this.$http.get(`/api/comment/${commentId}/getReply`).then(res => {
+          res.data.forEach(item => {
+            item.create_at = this.$moment(item.create_at).format('YYYY-MM-DD HH:mm:ss');
+          });
+          return res.data;
+        })
       },
       getReplyData(val) {
-        this.replyData = val;
+        if (val) {
+          window.location.reload();
+        }
       },
     },
     components: {

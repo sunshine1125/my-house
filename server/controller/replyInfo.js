@@ -17,20 +17,18 @@ apiRoutes.get('/comment/:commentId/getReply', (req, res) => {
     })
 });
 
-// get comment
-apiRoutes.get('/getReplyComments/comment/:commentId', (req, res) => {
-  replyInfos.find({commentId: req.params.commentId})
+apiRoutes.get('/reply/:replyId', (req, res) => {
+  let replyId = req.params.replyId;
+  replyInfos.findOne({_id: replyId})
     .exec((err, data) => {
-      if (err) {
-        console.log(err);
-      }
-      res.status('200').json({success: true, code: 200, data: data})
+      res.status(200).json(data);
     })
-});
+})
 
 // add comment
+let newData = {};
 apiRoutes.post('/addReplyComments', (req, res, next) => {
-  let reply = new replyInfos({
+  newData = {
     commentId   : req.body.commentId,
     content     : req.body.content,
     targetUser  : req.body.auth,
@@ -38,10 +36,11 @@ apiRoutes.post('/addReplyComments', (req, res, next) => {
     user        : req.body.user,
     userId      : req.body.userId,
     create_at   : req.body.create_at
-  });
+  }
+  let reply = new replyInfos(newData);
   reply.save(next);
 }, (req, res) => {
-  res.status('200').json({success: true, code: 200})
+  res.status('200').json({success: true, code: 200, data: newData})
 })
 
 module.exports = apiRoutes;
