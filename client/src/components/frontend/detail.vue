@@ -82,8 +82,8 @@
                 </div>
               </div>
               <p class="card-text">{{comment.content}}</p>
-              <p class="card-text" v-if="reply">
-                <span><small style="cursor: pointer" @click="replyInfo()">回复</small></span>
+              <p class="card-text" v-if="comment.hasReply">
+                <span><small style="cursor: pointer" @click="replyInfo(comment._id)">回复</small></span>
               </p>
               <div class="sub-comment-list">
                 <div class="sub-comment" v-for="reply in comment.reply" style="font-size: 14px;">
@@ -100,7 +100,7 @@
                     </div>
                     <div class="sub-tool-group">
                       <span>{{reply.create_at}}</span>
-                      <span style="margin-left: 10px; cursor: pointer" @click="replyInfo()">回复</span>
+                      <span style="margin-left: 10px; cursor: pointer" @click="replyInfo(comment._id)">回复</span>
                     </div>
                   </div>
                 </div>
@@ -108,7 +108,7 @@
                                @replyData="getReplyData"
                                :comment="comment"
                                :currentUserName="currentUserName"
-                               :reply="reply">
+                               :reply="comment.hasReply">
                 </comment-reply>
               </div>
             </div>
@@ -148,8 +148,7 @@
         sideLists      : [],
         displayGoTop   : false,
         scrollTop      : document.body.scrollTop || document.documentElement.scrollTop,
-        reply          : true,
-        replyData      : {}
+        reply          : true
       }
     },
     mounted   : function () {
@@ -249,6 +248,7 @@
             this.hasComment = true;
             this.commentInfo = [];
             for (let len = res.data.data.length, i = len - 1; i >= 0; i--) {
+              res.data.data[i].hasReply = true;
               res.data.data[i].date = this.$moment(res.data.data[i].date).format('YYYY-MM-DD HH:mm:ss');
               res.data.data[i].index = i;
               this.getInitReply(res.data.data[i]._id).then(reply => {
@@ -294,11 +294,20 @@
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         this.displayGoTop = scrollTop > 500 ? true : false;
       },
-      replyInfo() {
-        this.reply = false;
+      replyInfo(commentId) {
+        this.commentInfo.forEach(comment => {
+          if(comment._id === commentId) {
+            comment.hasReply = false;
+          }
+        })
+//        this.reply = false;
       },
       toReply(val) {
-        this.reply = val;
+        this.commentInfo.forEach(comment => {
+          if(comment._id === val) {
+            comment.hasReply = true;
+          }
+        })
       },
       getInitReply(commentId) {
         return this.$http.get(`/api/comment/${commentId}/getReply`).then(res => {
@@ -499,7 +508,6 @@
           font-size 12px
           color #969696
          a
-            margin-left 10px
             color #969696
            span
             vertical-align middle

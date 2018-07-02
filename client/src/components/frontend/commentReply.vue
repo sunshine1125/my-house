@@ -5,7 +5,7 @@
         <textarea class="form-control" rows="2" v-model="replyComment" placeholder="请写下你的回复"></textarea>
       </div>
       <div class="commentBtn">
-        <button type="button" @click="cancelReply()" class="btn btn-secondary">取消</button>
+        <button type="button" @click="cancelReply(comment._id)" class="btn btn-secondary">取消</button>
         <button type="button" @click="sendReply(comment._id, comment.auth, comment.authId)" class="btn btn-success">发送
         </button>
       </div>
@@ -48,8 +48,8 @@
           })
         }
       },
-      cancelReply() {
-        this.$emit('toReply', true);
+      cancelReply(commentId) {
+        this.$emit('toReply', commentId);
       }
     },
     components: {}
