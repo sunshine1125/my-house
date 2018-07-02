@@ -147,8 +147,7 @@
         likeNum        : 0,
         sideLists      : [],
         displayGoTop   : false,
-        scrollTop      : document.body.scrollTop || document.documentElement.scrollTop,
-        reply          : true
+        scrollTop      : document.body.scrollTop || document.documentElement.scrollTop
       }
     },
     mounted   : function () {
@@ -300,7 +299,6 @@
             comment.hasReply = false;
           }
         })
-//        this.reply = false;
       },
       toReply(val) {
         this.commentInfo.forEach(comment => {
