@@ -155,11 +155,10 @@
       this.getComments();
       if (localStorage.getItem('gitHubLogin')) {
         this.hasLogin = true;
-        let gitHubUser = JSON.parse(localStorage.getItem('gitHubUser'));
+        let gitHubUser = JSON.parse(localStorage.getItem('gitUserInfo'));
         this.currentUserName = gitHubUser.currentUserName;
-        this.userAvatar = gitHubUser.imgSrc;
-      }
-      if (localStorage.getItem('currentUserId')) {
+        this.userAvatar = gitHubUser.avatar;
+      } else if (localStorage.getItem('currentUserId')) {
         this.hasLogin = true;
         if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
           this.$http.get(`/api/getSingleUserById/${localStorage.getItem('currentUserId')}`).then(res => {

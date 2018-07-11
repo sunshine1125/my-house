@@ -42,22 +42,11 @@
       }
     },
     mounted   : function () {
-      let code = window.location.search.split('=')[1];
-      if (code) {
-        this.$http.get(`/api/github/oauth?code=${code}`).then(res => {
-          let user = res.data.user;
-          localStorage.setItem('gitHubLogin', true);
-          let gitHubUser = {
-            'currentUserName': user.name,
-            'imgSrc'         : user.avatar,
-            'user_id'        : user.user_id
-          };
-          localStorage.setItem('gitHubUser', JSON.stringify(gitHubUser));
-        });
-        let gitHubUser = JSON.parse(localStorage.getItem('gitHubUser'));
-        this.currentUserName = gitHubUser.currentUserName;
+      if (localStorage.getItem('gitHubLogin')) {
         this.hasLogin = true;
-        this.imgSrc = gitHubUser.imgSrc;
+        let gitHubUser = JSON.parse(localStorage.getItem('gitUserInfo'));
+        this.currentUserName = gitHubUser.currentUserName;
+        this.imgSrc = gitHubUser.avatar;
       } else {
         if (localStorage.getItem('currentUserId')) {
           this.hasLogin = true;

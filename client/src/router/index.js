@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import articleList from '@/components/frontend/articlesList'
 import articleDetail from '@/components/frontend/detail'
+import callback from '@/components/frontend/callback'
 
 Vue.use(Router)
 
@@ -82,6 +83,11 @@ export default new Router({
       path     : '/basicSetting',
       name     : 'basicSetting',
       component: resolve => require.ensure([], () => resolve(require('@/components/frontend/basicSetting')), 'basic')
+    },
+    {
+      path     : '/github/oauth/callback',
+      name     : 'callback',
+      component: callback
     }
   ]
 })
