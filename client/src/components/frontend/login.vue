@@ -29,6 +29,15 @@
           还没有账户，去 <a href="#/register">创建 </a>一个吧！
         </div>
       </div>
+      <div class="form-group row">
+        <div class="col-sm-3 col-3"></div>
+        <div class="col-sm-9 col-9">
+          <p>快捷登录</p>
+          <div>
+            <img @click="toGitHub()" class="gitHubIcon" src="https://my-house.pek3b.qingstor.com/github.png" alt="gitHub">
+          </div>
+        </div>
+      </div>
     </form>
     <div class="alert alert-warning alert-dismissible fade tipMessage" :class="{show: displayAlert}" role="alert">
       <span>{{errorMessage}}</span>
@@ -84,6 +93,11 @@
             this.errorMessage = res.data.message;
           }
         })
+      },
+      toGitHub() {
+        this.$http.get('/api/authGitHub').then(res => {
+          window.location.href = res.data.auth_url;
+        });
       }
     }
   }
@@ -103,6 +117,10 @@
       .form-error
         font-size smaller
         margin-left 30%
+      .gitHubIcon
+        width 40px
+        height 40px
+        cursor pointer
     .tipMessage
       position fixed
       bottom 10px

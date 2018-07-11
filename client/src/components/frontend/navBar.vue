@@ -20,8 +20,8 @@
               <img :src="imgSrc" width="40" height="40" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#/basicSetting">设置</a>
-              <a class="dropdown-item" href="#/login" @click="logout()">退出</a>
+              <a class="dropdown-item" href="/#/basicSetting">设置</a>
+              <a class="dropdown-item" href="/#/login" @click="logout()">退出</a>
             </div>
           </li>
         </ul>
@@ -42,15 +42,33 @@
       }
     },
     mounted   : function () {
-      if (localStorage.getItem('currentUserId')) {
+      let code = window.location.search.split('=')[1];
+      if (code) {
+        this.$http.get(`/api/github/oauth?code=${code}`).then(res => {
+          let user = res.data.user;
+          localStorage.setItem('gitHubLogin', true);
+          let gitHubUser = {
+            'currentUserName': user.name,
+            'imgSrc'         : user.avatar,
+            'user_id'        : user.user_id
+          };
+          localStorage.setItem('gitHubUser', JSON.stringify(gitHubUser));
+        });
+        let gitHubUser = JSON.parse(localStorage.getItem('gitHubUser'));
+        this.currentUserName = gitHubUser.currentUserName;
         this.hasLogin = true;
-        if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
-          this.getAdminUserName(localStorage.getItem(('currentUserId')));
-        } else if (JSON.parse(localStorage.getItem('userInfo')).roleId === 3) {
-          this.getUserName(localStorage.getItem(('currentUserId')));
-        }
+        this.imgSrc = gitHubUser.imgSrc;
       } else {
-        this.hasLogin = false;
+        if (localStorage.getItem('currentUserId')) {
+          this.hasLogin = true;
+          if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
+            this.getAdminUserName(localStorage.getItem(('currentUserId')));
+          } else if (JSON.parse(localStorage.getItem('userInfo')).roleId === 3) {
+            this.getUserName(localStorage.getItem(('currentUserId')));
+          }
+        } else {
+          this.hasLogin = false;
+        }
       }
     },
     computed  : {},

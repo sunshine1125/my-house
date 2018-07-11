@@ -153,6 +153,12 @@
     mounted   : function () {
       this.getArticle();
       this.getComments();
+      if (localStorage.getItem('gitHubLogin')) {
+        this.hasLogin = true;
+        let gitHubUser = JSON.parse(localStorage.getItem('gitHubUser'));
+        this.currentUserName = gitHubUser.currentUserName;
+        this.userAvatar = gitHubUser.imgSrc;
+      }
       if (localStorage.getItem('currentUserId')) {
         this.hasLogin = true;
         if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
@@ -319,7 +325,7 @@
         if (val) {
           window.location.reload();
         }
-      },
+      }
     },
     components: {
       navBar,

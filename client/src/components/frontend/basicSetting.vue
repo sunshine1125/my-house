@@ -57,6 +57,11 @@
     },
     methods   : {
       initData() {
+        if (localStorage.getItem('gitHubLogin')) {
+          let gitHubUser = JSON.parse(localStorage.getItem('gitHubUser'));
+          this.userName = gitHubUser.currentUserName;
+          this.avatar = gitHubUser.imgSrc;
+        }
         if (JSON.parse(localStorage.getItem('userInfo')).roleId === 1) {
           this.$http.get(`/api/getSingleUserById/${localStorage.getItem('currentUserId')}`).then(res => {
             this.getData(res);

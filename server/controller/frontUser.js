@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt-nodejs');
 const SALT_ROUNDS = 10;
 const express = require('express');
 const app = express();
+const request = require('request');
+const qs = require('querystring');
 const apiRoutes = express.Router();
 const User = require('../models/frontUser');
 const Like = require('../models/like');
@@ -10,6 +12,46 @@ const Like = require('../models/like');
 let config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
 
 app.set('superSecret', config.MongoDB.secret);// secret variable
+
+const getGitHubUserInfo = code => {
+  return new Promise((resolve, reject) => {
+    request.get({
+      url: `${config.github.token_url}?client_id=${config.github.client_Id}&client_secret=${config.github.client_Secret}&code=${code}`
+    }, (err, res, body) => {
+      token = qs.parse(body).access_token;
+      resolve(token);
+    })
+  }).then(token => {
+    return new Promise((resolve, reject) => {
+      request.get({
+        url    : `${config.github.getUser}?access_token=${token}`,
+        headers: {
+          'User-Agent': 'Awesome-Octocat-App'
+        }
+      }, (err, res, body) => {
+        resolve(JSON.parse(body));
+      })
+    })
+  })
+};
+
+apiRoutes.get('/authGitHub', (req, res) => {
+  let auth_url = `${config.github.auth_url}?client_id=${config.github.client_Id}&redirect_uri=${config.github.redirect_uri}`;
+  res.status(200).json({success: true, auth_url: auth_url});
+});
+
+apiRoutes.get('/github/oauth', (req, res) => {
+  getGitHubUserInfo(req.query.code).then(userInfo => {
+    let user = {
+      name   : userInfo.login,
+      avatar : userInfo.avatar_url,
+      user_id: userInfo.id
+    };
+    console.log(user);
+    res.status(200).json({success: true, user: user});
+  });
+});
+
 
 // user register
 apiRoutes.post('/userRegister', (req, res) => {
@@ -87,9 +129,9 @@ apiRoutes.put('/updateUserInfo/:id', (req, res) => {
 
 apiRoutes.post('/like/active', (req, res) => {
   let like = new Like({
-    articleId : req.body.articleId,
-    active    : req.body.active,
-    user      : req.body.user
+    articleId: req.body.articleId,
+    active   : req.body.active,
+    user     : req.body.user
   })
   like.save();
   res.status('200').json({success: true, code: 200})
@@ -105,7 +147,8 @@ apiRoutes.delete('/like/:articleId/active', (req, res) => {
 apiRoutes.get('/like/active/:personId', (req, res) => {
   Like.find({user: req.params.personId})
     .exec((err, data) => {
-      if(err) {}
+      if (err) {
+      }
       res.status('200').json({success: true, code: 200, data: data})
     })
 })
