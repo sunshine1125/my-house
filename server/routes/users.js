@@ -1,24 +1,31 @@
+const models = require('../models');
 const express = require('express');
-const apiRoutes = express.Router();
+const router = express.Router();
 const bcrypt = require('bcrypt-nodejs');
 const SALT_ROUNDS = 10;
-const user = require('../models/user2');
 
-// register
-apiRoutes.post('/register', (req, res) => {
+// 用户注册
+router.post('/register', (req, res) => {
     let data = req.body;
     let password = data.password;
-    let noop = function () {
-    };
+    let noop = () => {};
     // 生成salt并获取hash值
     bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
         bcrypt.hash(password, salt, noop, (err, hash) => {
             // 把hash值赋值给password变量
             password = hash;
-
-            user.findByEmail(data.email).then((result) => {
+            console.log(password);
+            models.User.findOne({
+                where: {
+                    email: data.email
+                }
+            }).then((result) => {
                 if (!result) {
-                    user.addUser(data.username, data.email, password).then(() => {
+                    models.User.create({
+                        username: data.username,
+                        email   : data.email,
+                        password: password
+                    }).then(() => {
                         res.status('200').json({success: true, msg: '注册成功'});
                     })
                 } else {
@@ -26,19 +33,24 @@ apiRoutes.post('/register', (req, res) => {
                 }
             })
         })
-    })
+    });
 });
-// login
-apiRoutes.post('/authentication', (req, res) => {
+
+// 用户登录
+router.post('/auth', (req, res) => {
     let data = req.body;
     let password = data.password;
-    user.findByEmail(data.email).then(result => {
+    models.User.findOne({
+        where: {
+            email: data.email
+        }
+    }).then(result => {
         if (result) {
             bcrypt.compare(password, result.dataValues.password, (err, isMatch) => {
                 if (isMatch) {
                     let currentUser = {
-                        userId  : result.dataValues.userId,
-                        userName: result.dataValues.userName,
+                        id      : result.dataValues.id,
+                        username: result.dataValues.username,
                         email   : result.dataValues.email,
                         phone   : result.dataValues.phone,
                         avatar  : result.dataValues.avatar
@@ -54,17 +66,22 @@ apiRoutes.post('/authentication', (req, res) => {
     })
 });
 
-apiRoutes.get('/getUser/:email', (req, res) => {
-    user.findByEmail(req.params.email).then(response => {
-        let currentUser = {
-            userId  : response.dataValues.userId,
-            userName: response.dataValues.userName,
-            email   : response.dataValues.email,
-            phone   : response.dataValues.phone,
-            avatar  : response.dataValues.avatar
-        };
-        res.status('200').json({success: true, currentUserInfo: currentUser});
+router.get('/:user_id', (req, res) => {
+    models.User.findById(req.params.user_id).then((user) => {
+        res.status('200').json({success: true, user: user});
     });
 });
 
-module.exports = apiRoutes;
+// 删除用户
+router.delete('/:user_id', (req, res) => {
+    models.User.destroy({
+        where: {
+            id: req.params.user_id
+        }
+    }).then(() => {
+        res.status('200').json('注销成功');
+    });
+});
+
+
+module.exports = router;

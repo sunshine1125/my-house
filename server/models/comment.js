@@ -1,18 +1,39 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
+module.exports = (sequelize, DataTypes) => {
+    const Comment = sequelize.define('Comment', {
+        //id
+        id       : {
+            type         : DataTypes.INTEGER,
+            primaryKey   : true,
+            autoIncrement: true
+        },
+        // 评论内容
+        content  : {
+            type: DataTypes.STRING
+        },
+        // 评论发表时间
+        create_at: {
+            type: DataTypes.DATE
+        },
+    }, {
+        freezeTableName: true,
+        timestamps     : false
+    });
 
-let CommentSchema = new Schema({
-  auth         : String,
-  authId       : String,
-  content      : String,
-  avatar       : String,
-  date         : {type: Date, default: Date.now},
-  articleId    : {type: Schema.Types.ObjectId, ref: 'post'},
-  replyInfo    : [{type: Schema.Types.Object, ref: 'replyInfo'}]
-});
+    Comment.associate = function (models) {
+        models.Comment.belongsTo(models.Post, {
+            onDelete  : "CASCADE",
+            foreignKey: {
+                allowNull: false
+            }
+        });
+        models.Comment.belongsTo(models.User, {
+            foreignKey: {
+                allowNull: false
+            }
+        })
+    };
 
-let Comment = mongoose.model('Comment', CommentSchema);
-module.exports = Comment;
-
-
+    return Comment;
+};
 

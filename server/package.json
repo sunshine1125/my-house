@@ -1,31 +1,23 @@
 {
-  "name": "node-token-jwt",
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
-  "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon",
-    "deploy:prod": "pm2 deploy ecosystem.config.js production"
-  },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "cross-env": "^5.2.0",
+    "debug": "^3.1.0",
     "express": "^4.16.3",
-    "express-session": "^1.15.6",
-    "jsonwebtoken": "^8.3.0",
-    "markdown-it": "^8.4.2",
-    "mongoose": "^5.2.7",
     "morgan": "^1.9.0",
-    "multer": "^1.3.1",
-    "multiparty": "^4.2.0",
     "mysql2": "^1.6.1",
-    "nodemailer": "^4.6.7",
-    "qingstor-sdk": "^2.2.13",
-    "querystring": "^0.2.0",
-    "request": "^2.87.0",
-    "sequelize": "^4.38.0"
+    "sequelize": "^4.38.0",
+    "sequelize-cli": "^4.0.0"
   },
-  "devDependencies": {
-    "mocha": "^5.2.0",
-    "supertest": "^3.1.0"
-  }
+  "devDependencies": {},
+  "scripts": {
+    "start": "cross-env DEBUG=express-sequelize nodemon ./bin/www"
+  },
+  "author": "",
+  "license": "ISC"
 }
