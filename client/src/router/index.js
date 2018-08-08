@@ -1,93 +1,51 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import articleList from '@/components/frontend/articlesList'
-import articleDetail from '@/components/frontend/detail'
-import callback from '@/components/frontend/callback'
+import articleList from '@/components/articleList'
+import login from '@/components/login'
+import register from '@/components/register'
+import index from '@/components/index'
+// import addArticle from '@/components/addArticle'
 
 Vue.use(Router)
 
 export default new Router({
-  // mode  : 'history',
+  mode  : 'history',
   routes: [
+    {
+      path     : '/register',
+      name     : 'register',
+      component: register
+    },
+    {
+      path     : '/login',
+      name     : 'login',
+      component: login
+    },
+    {
+      path     : '/',
+      name     : 'articleList',
+      component: articleList
+    },
     {
       path     : '/admin',
       name     : 'index',
-      component: resolve => require.ensure([], () => resolve(require('@/components/backend/index')), 'admin'),
+      component: index,
       redirect : '/admin/articleManager',
       children : [
         {
-          path     : '/admin/userManager',
-          component: resolve => require.ensure([], () => resolve(require('@/components/backend/userManager')), 'admin'),
-        },
-        {
           path     : '/admin/articleManager',
-          component: resolve => require.ensure([], () => resolve(require('@/components/backend/articleManager')), 'admin'),
+          component: resolve => require.ensure([], () => resolve(require('@/components/articleManager')), 'admin'),
         },
         {
           path     : '/admin/tagManager',
-          component: resolve => require.ensure([], () => resolve(require('@/components/backend/tagManager')), 'admin'),
+          component: resolve => require.ensure([], () => resolve(require('@/components/tagManager')), 'admin'),
         },
         {
           path     : '/admin/dataChange/:type',
           name     : 'dataChange',
-          component: resolve => require.ensure([], () => resolve(require('@/components/backend/dataChange')), 'admin')
-        },
+          component: resolve => require.ensure([], () => resolve(require('@/components/dataChange')), 'admin')
+        }
       ]
-    },
-    {
-      path     : '/admin/login',
-      name     : 'login',
-      component: resolve => require.ensure([], () => resolve(require('@/components/backend/login')), 'adminLogin')
-    },
-    {
-      path     : '/admin/register',
-      name     : 'register',
-      component: resolve => require.ensure([], () => resolve(require('@/components/backend/register')), 'adminRegister')
-    },
-    {
-      path     : '/admin/checkEmail',
-      name     : 'checkEmail',
-      component: resolve => require.ensure([], () => resolve(require('@/components/backend/checkEmail')), 'admin')
-    },
-    {
-      path     : '/admin/forgotPassword',
-      name     : 'forgotPassword',
-      component: resolve => require.ensure([], () => resolve(require('@/components/backend/forgotPassword')), 'admin')
-    },
-    {
-      path     : '/admin/resetPassword',
-      name     : 'resetPassword',
-      component: resolve => require.ensure([], () => resolve(require('@/components/backend/resetPassword')), 'admin')
-    },
-    {
-      path     : '/register',
-      name     : 'frontRegister',
-      component: resolve => require.ensure([], () => resolve(require('@/components/frontend/register')), 'admin')
-    },
-    {
-      path     : '/login',
-      name     : 'frontLogin',
-      component: resolve => require.ensure([], () => resolve(require('@/components/frontend/login')), 'login')
-    },
-    {
-      path     : '/',
-      name     : 'articlesList',
-      component: articleList
-    },
-    {
-      path     : '/detail/:id',
-      name     : 'detail',
-      component: articleDetail
-    },
-    {
-      path     : '/basicSetting',
-      name     : 'basicSetting',
-      component: resolve => require.ensure([], () => resolve(require('@/components/frontend/basicSetting')), 'basic')
-    },
-    {
-      path     : '/github/oauth/callback',
-      name     : 'callback',
-      component: callback
     }
   ]
 })

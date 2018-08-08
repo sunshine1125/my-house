@@ -4,7 +4,7 @@ const SALT_ROUNDS = 10;
 const express = require('express');
 const app = express();
 const apiRoutes = express.Router();
-const User = require('../models/user');
+const User = require('../models/user2');
 const confirToken = require('../tools/confirToken');
 const sendEmail = require('../tools/sendMail');
 

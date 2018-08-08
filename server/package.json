@@ -7,23 +7,25 @@
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.18.2",
-    "cross-env": "^5.1.4",
-    "express": "^4.16.2",
+    "body-parser": "^1.18.3",
+    "cross-env": "^5.2.0",
+    "express": "^4.16.3",
     "express-session": "^1.15.6",
-    "jsonwebtoken": "^8.1.1",
-    "markdown-it": "^8.4.1",
-    "mongoose": "^5.0.4",
+    "jsonwebtoken": "^8.3.0",
+    "markdown-it": "^8.4.2",
+    "mongoose": "^5.2.7",
     "morgan": "^1.9.0",
-    "multer": "^1.3.0",
-    "multiparty": "^4.1.3",
-    "nodemailer": "^4.6.0",
-    "qingstor-sdk": "^2.2.12",
+    "multer": "^1.3.1",
+    "multiparty": "^4.2.0",
+    "mysql2": "^1.6.1",
+    "nodemailer": "^4.6.7",
+    "qingstor-sdk": "^2.2.13",
     "querystring": "^0.2.0",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "sequelize": "^4.38.0"
   },
   "devDependencies": {
-    "mocha": "^5.0.4",
-    "supertest": "^3.0.0"
+    "mocha": "^5.2.0",
+    "supertest": "^3.1.0"
   }
 }

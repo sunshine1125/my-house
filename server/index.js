@@ -4,12 +4,14 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-const auth = require('./controller/auth');
-const post = require('./controller/post');
+// const auth = require('./controller/auth2');
+// const post = require('./controller/post2');
 const tag = require('./controller/tag');
 const frontUser = require('./controller/frontUser');
 const comment = require('./controller/comment');
 const replyInfo = require('./controller/replyInfo');
+const user = require('./controller/user');
+const post = require('./controller/post');
 
 let config = process.env.NODE_ENV === 'development' ? require('./config/dev') : require('./config/prod')
 
@@ -25,15 +27,15 @@ app.set('superSecret', config.MongoDB.secret);// secret variable
 app.use(morgan('dev'));
 
 // auth api
-app.use(auth);
+app.use(user);
 
-app.use(frontUser);
+// app.use(frontUser);
 
 // post api
 app.use(post);
 
 // tag api
-app.use(tag);
+// app.use(tag);
 
 // controller middleware to verify a token
 // app.use((req, res, next) => {
