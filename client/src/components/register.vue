@@ -48,14 +48,14 @@
               "password"  : this.registerForm.password,
               'email'     : this.registerForm.email
             };
-            this.$http.post('/api/register', userInfo).then((res) => {
+            this.$http.post('/api/user/register', userInfo).then((res) => {
               if(res.data.success) {
                 this.$message({
                   message: res.data.msg,
                   type   : 'success'
                 });
-                this.$http.get(`/api/getUser/${this.registerForm.email}`).then(response => {
-                  localStorage.setItem('currentUser', JSON.stringify(response.data.currentUserInfo));
+                this.$http.get(`/api/user/${this.registerForm.email}`).then(response => {
+                  localStorage.setItem('currentUser', JSON.stringify(response.data.user));
                 });
                 this.$router.push('/');
               } else {

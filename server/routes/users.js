@@ -55,7 +55,7 @@ router.post('/auth', (req, res) => {
                         phone   : result.dataValues.phone,
                         avatar  : result.dataValues.avatar
                     };
-                    res.status('200').json({success: true, msg: '登录成功', currentUserInfo: currentUser});
+                    res.status('200').json({success: true, msg: '登录成功', user: currentUser});
                 } else {
                     res.status('201').json({success: false, msg: '您输入的密码不正确'})
                 }
@@ -66,8 +66,20 @@ router.post('/auth', (req, res) => {
     })
 });
 
+// 获取单个用户
+router.get('/:email', (req, res) => {
+    models.User.findOne({
+        where: {
+            email: req.params.email
+        }
+    }).then(user => {
+        res.status('200').json({success: true, user: user});
+    })
+});
+
+// 获取某个用户
 router.get('/:user_id', (req, res) => {
-    models.User.findById(req.params.user_id).then((user) => {
+    models.User.findById(req.params.user_id).then(user => {
         res.status('200').json({success: true, user: user});
     });
 });

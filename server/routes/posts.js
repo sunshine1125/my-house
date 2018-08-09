@@ -22,7 +22,7 @@ router.get('/user/:user_id/post', (req, res) => {
 
 // 获取单个文章
 router.get('/post/:post_id', (req, res) => {
-   models.findById(req.params.post_id).then(post => {
+   models.Post.findById(req.params.post_id).then(post => {
        res.status('200').json({success: true, data: post});
    })
 });
@@ -36,6 +36,7 @@ router.post('/user/:user_id/post/create', (req, res) => {
         content  : data.content,
         create_at: data.create_at,
         UserId   : req.params.user_id,
+        TagId    : data.TagId
     }).then(function () {
         res.status('200').json({success: true, msg: '添加成功'});
     });

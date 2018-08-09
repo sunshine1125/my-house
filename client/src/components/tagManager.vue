@@ -1,10 +1,12 @@
 <template>
   <div>
-    <el-row style="text-align: left">
+    <el-row>
       <strong>标签管理</strong>
     </el-row>
-    <el-row>
-      <el-button @click="addTag()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
+    <el-row class="tool">
+      <el-button @click="addTag()" type="primary" plain round icon="el-icon-plus"
+                 class="circle el-button--small"></el-button>
+      <el-button class="goBack" type="text" @click="goBack()">返回 >></el-button>
     </el-row>
     <el-table :data="tags" border style="width: 100%;">
       <el-table-column
@@ -18,8 +20,10 @@
       <el-table-column
         label="操作">
         <template slot-scope="scope">
-          <el-button @click="editTag(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
-          <el-button @click="removeTag(scope.row._id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
+          <el-button @click="editTag(scope.row.id, scope.row.title)" type="primary" icon="el-icon-edit" plain round
+                     class="circle"></el-button>
+          <el-button @click="removeTag(scope.row.id)" type="danger" icon="el-icon-delete" plain round
+                     class="circle"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -32,7 +36,8 @@
     name   : 'articleManager',
     data() {
       return {
-        tags: []
+        tags  : [],
+        userId: JSON.parse(localStorage.getItem('currentUser')).id
       }
     },
     mounted: function () {
@@ -40,89 +45,98 @@
     },
     methods: {
       refreshData() {
-        this.$http.get('/api/getTag').then(res => this.tags = res.data.data);
+        this.$http.get(`/api/user/${this.userId}/tag`).then(res => this.tags = res.data.data);
       },
       addTag() {
         this.$prompt('请输入标题', '新增', {
           confirmButtonText: '确定',
-          cancelButtonText: '取消',
-        }).then(({ value }) => {
-          let tag  = {
-            title : value
+          cancelButtonText : '取消',
+        }).then(({value}) => {
+          let tag = {
+            title: value
           };
-          this.$http.post('/api/addTag', tag).then( (res) => {
-            this.tags = res.data.data;
+          this.$http.post(`/api/user/${this.userId}/tag/create`, tag).then((res) => {
+            this.refreshData();
             this.$message({
-              type: 'success',
+              type   : 'success',
               message: '添加成功'
             })
           });
         }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '取消输入'
-            })
-
+          this.$message({
+            type   : 'info',
+            message: '取消输入'
           })
+        })
       },
       editTag(id, title) {
         this.$prompt('请输入标题', '编辑', {
           confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputValue: title
-        }).then(({ value }) => {
-          let tag  = {
-            title : value
+          cancelButtonText : '取消',
+          inputValue       : title
+        }).then(({value}) => {
+          let tag = {
+            title: value
           };
-          this.$http.put(`/api/editTag/${id}`, tag).then( (res) => {
+          this.$http.put(`/api/tag/${id}/update`, tag).then((res) => {
             this.refreshData();
             this.$message({
-              type: 'success',
+              type   : 'success',
               message: '更新成功'
             })
           });
         }).catch(() => {
           this.$message({
-            type: 'info',
+            type   : 'info',
             message: '取消输入'
           })
         })
       },
       removeTag(id) {
-        this.$confirm('确定删除该条记录？', '提示', {
+        this.$confirm('确定删除该标签，同时删除该标签下的文章？', '提示', {
           confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
+          cancelButtonText : '取消',
+          type             : 'warning'
         }).then(() => {
-          this.$http.delete(`/api/removeTag/${id}`).then( (res) => {
+          this.$http.delete(`/api/tag/${id}/destroy`).then((res) => {
             this.refreshData();
             this.$message({
-              type: 'success',
+              type   : 'success',
               message: '删除成功'
             })
           });
         }).catch(() => {
           this.$message({
-            type: 'info',
+            type   : 'info',
             message: '已取消删除'
           })
         })
+      },
+      goBack() {
+        window.history.back();
       }
     }
   }
 </script>
 <style scoped lang="stylus">
-  .el-button.circle {
-    padding: 6px 6px;
+  .tool {
+    position relative
+    .goBack {
+      position absolute
+      right 5px
+      top 0
+    }
   }
-
   .el-button {
     outline: none
   }
-
+  .circle {
+    padding 6px 6px;
+  }
   .el-row {
     text-align: left;
     margin-bottom: 10px;
   }
+
 
 </style>

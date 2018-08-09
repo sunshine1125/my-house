@@ -50,13 +50,13 @@
               "email"   : this.loginForm.email,
               "password": this.loginForm.password
             };
-            this.$http.post('/api/authentication', userInfo).then(res => {
+            this.$http.post('/api/user/auth', userInfo).then(res => {
               if (res.data.success) {
                 this.$message({
                   message: res.data.msg,
                   type   : 'success'
                 });
-                localStorage.setItem('currentUser', JSON.stringify(res.data.currentUserInfo));
+                localStorage.setItem('currentUser', JSON.stringify(res.data.user));
                 this.$router.push('/');
               } else {
                 this.$message.error(res.data.msg);

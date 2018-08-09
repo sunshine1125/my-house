@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-row style="text-align: left">
+    <el-row>
       <strong>文章管理</strong>
     </el-row>
     <el-row>
       <el-button @click="addData()" type="primary" plain round icon="el-icon-plus" class="circle el-button--small"></el-button>
     </el-row>
-    <el-row style="text-align: center">
+    <el-row>
       <el-col :span="24">
         <el-table :data="lists" border style="width: 100%;">
           <el-table-column
@@ -15,11 +15,11 @@
             min-width="10%">
           </el-table-column>
           <el-table-column
-            prop="image"
+            prop="cover"
             label="封面"
             min-width="5%" style="overflow: hidden">
             <template slot-scope="scope">
-              <div class="cover" :style="`background-image: url(${scope.row.image})`"></div>
+              <div class="cover" :style="`background-image: url(${scope.row.cover})`"></div>
             </template>
           </el-table-column>
           <el-table-column
@@ -39,7 +39,7 @@
             class="content">
           </el-table-column>
           <el-table-column
-            prop="date"
+            prop="create_at"
             label="日期"
             min-width="10%">
           </el-table-column>
@@ -47,9 +47,9 @@
             label="操作"
             min-width="20%">
             <template slot-scope="scope">
-              <el-button @click="goShowData(scope.row._id)" type="success" icon="el-icon-view" plain round class="circle"></el-button>
-              <el-button @click="editData(scope.row._id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
-              <el-button @click="removeData(scope.row._id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
+              <el-button @click="goShowData(scope.row.id)" type="success" icon="el-icon-view" plain round class="circle"></el-button>
+              <el-button @click="editData(scope.row.id)" type="primary" icon="el-icon-edit" plain round class="circle"></el-button>
+              <el-button @click="removeData(scope.row.id)" type="danger" icon="el-icon-delete" plain round class="circle"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -64,30 +64,32 @@
     name   : 'articleManager',
     data() {
       return {
-        active  : true,
-        username: '',
         lists   : [],
-        userId  : '',
-        total   : 0,
-        page    : 1,
-        limit   : 2
+        userId  : JSON.parse(localStorage.getItem('currentUser')).id,
+        tags    : []
       }
     },
     mounted: function () {
-
+      this.getTag();
+      this.refreshData();
     },
     methods: {
       refreshData() {
-        this.$http.get(`/api/post/get/${this.userId}`).then(res => {
-          this.lists = res.data;
+        this.$http.get(`/api/user/${this.userId}/post`).then(res => {
+          this.lists = res.data.data;
           this.lists.find(item => {
-            item.date = this.$moment(item.date).format('YYYY-MM-DD HH:mm:ss');
+            item.create_at = this.$moment(item.create_at).format('YYYY-MM-DD HH:mm:ss');
+            item.tagTitle = this.tags.find(tag => {
+              return tag.id === item.TagId;
+            }).title;
           })
         });
       },
+      getTag() {
+        this.$http.get(`/api/user/${this.userId}/tag`).then(res => this.tags = res.data.data);
+      },
       addData() {
-        this.$router.push('/admin/dataChange/add');
-        this.newTitle = '';
+        this.$router.push('/admin/articleManager/add');
       },
       removeData(id) {
         this.$confirm('确定删除这篇文章吗？', '提示', {
@@ -95,7 +97,7 @@
           cancelButtonText : '取消',
           type             : 'warning'
         }).then((value) => {
-          this.$http.delete(`/api/post/remove/${id}`)
+          this.$http.delete(`/api/post/${id}/destroy`)
             .then(() => this.refreshData())
             .then(() => {
               this.$message({
@@ -111,20 +113,11 @@
         })
       },
       editData(id) {
-        this.$router.push('/admin/dataChange/edit');
-        let canEdit = {
-          "editId": id
-        };
-        localStorage.setItem('canEdit', JSON.stringify(canEdit));
+        this.$router.push(`/admin/articleManager/edit/${id}`);
       },
       goShowData(id) {
         this.$router.push(`/detail/${id}`);
-        localStorage.setItem('currentUserId', this.userId);
-      },
-      handle(val){
-        this.page = val;
-        this.refreshData()
-      },
+      }
     }
   }
 </script>

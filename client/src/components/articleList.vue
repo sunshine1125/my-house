@@ -18,7 +18,10 @@
       }
     },
     mounted: function () {
-
+      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (! currentUser) {
+        this.$router.push('/login');
+      }
     },
     methods: {
 

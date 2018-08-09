@@ -43,4 +43,9 @@
       }
     }
   }
+
+  @media (max-width: 768px)
+    .aside {
+      display none
+    }
 </style>

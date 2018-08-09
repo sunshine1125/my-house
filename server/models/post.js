@@ -36,6 +36,12 @@ module.exports = (sequelize, DataTypes) => {
             }
         });
         models.Post.hasMany(models.Comment);
+        models.Post.belongsTo(models.Tag, {
+            onDelete  : "CASCADE",
+            foreignKey: {
+                allowNull: false
+            }
+        });
     };
 
     return Post;

@@ -22,10 +22,14 @@
     name   : 'topNav',
     data() {
       return {
-        avatar: JSON.parse(localStorage.getItem('currentUser')).avatar
+        avatar: ''
       }
     },
     mounted: function () {
+      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      if (currentUser) {
+        this.avatar = currentUser.avatar;
+      }
     },
     methods: {
       handleCommand(command) {

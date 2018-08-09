@@ -6,7 +6,9 @@ const morgan = require('morgan');
 const routes = require('./routes/index');
 const users  = require('./routes/users');
 const posts = require('./routes/posts');
-const comments = require('./routes/comment')
+const comments = require('./routes/comment');
+const tags = require('./routes/tag');
+const upload = require('./routes/upload');
 
 app.use(express.static('public'));
 
@@ -21,5 +23,7 @@ app.use(routes);
 app.use('/user', users);
 app.use(posts);
 app.use(comments);
+app.use(tags);
+app.use(upload);
 
 module.exports = app;
