@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="articleManager">
     <el-row>
       <strong>文章管理</strong>
     </el-row>
@@ -65,12 +65,10 @@
     data() {
       return {
         lists   : [],
-        userId  : JSON.parse(localStorage.getItem('currentUser')).id,
-        tags    : []
+        userId  : JSON.parse(localStorage.getItem('currentUser')).id
       }
     },
     mounted: function () {
-      this.getTag();
       this.refreshData();
     },
     methods: {
@@ -79,14 +77,9 @@
           this.lists = res.data.data;
           this.lists.find(item => {
             item.create_at = this.$moment(item.create_at).format('YYYY-MM-DD HH:mm:ss');
-            item.tagTitle = this.tags.find(tag => {
-              return tag.id === item.TagId;
-            }).title;
+            item.tagTitle = item.Tag.title;
           })
         });
-      },
-      getTag() {
-        this.$http.get(`/api/user/${this.userId}/tag`).then(res => this.tags = res.data.data);
       },
       addData() {
         this.$router.push('/admin/articleManager/add');
@@ -121,24 +114,29 @@
     }
   }
 </script>
-<style scoped lang="stylus">
-  .el-button.circle
-    padding 6px 6px
+<style lang="stylus">
+  .articleManager {
+    .el-button.circle {
+      padding 6px 6px
+    }
 
-  .el-button
-    outline none
+    .el-button {
+      outline none
+    }
 
-  .el-row
-    text-align left
-    margin-bottom 10px
+    .el-row {
+      text-align left
+      margin-bottom 10px
+    }
 
-  .cover
-    width 50px
-    height 50px
-    margin auto
-    background-repeat no-repeat
-    background-position center
-    -webkit-background-size cover
-    background-size cover
-
+    .cover {
+      width 50px
+      height 50px
+      margin auto
+      background-repeat no-repeat
+      background-position center
+      -webkit-background-size cover
+      background-size cover
+    }
+  }
 </style>

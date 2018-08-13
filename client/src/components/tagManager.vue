@@ -45,7 +45,7 @@
     },
     methods: {
       refreshData() {
-        this.$http.get(`/api/user/${this.userId}/tag`).then(res => this.tags = res.data.data);
+        this.$http.get(`/api/tag`).then(res => this.tags = res.data.data);
       },
       addTag() {
         this.$prompt('请输入标题', '新增', {
@@ -55,7 +55,7 @@
           let tag = {
             title: value
           };
-          this.$http.post(`/api/user/${this.userId}/tag/create`, tag).then((res) => {
+          this.$http.post(`/api/tag/create`, tag).then((res) => {
             this.refreshData();
             this.$message({
               type   : 'success',

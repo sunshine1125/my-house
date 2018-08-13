@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         // 文章内容
         content  : {
-            type: DataTypes.STRING
+            type: DataTypes.TEXT
         },
         // 文章发表时间
         create_at: {

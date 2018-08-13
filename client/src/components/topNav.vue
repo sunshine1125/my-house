@@ -1,6 +1,6 @@
 <template>
-  <div class="header-wrapper">
-    <el-header>
+  <el-header>
+    <div class="header-wrapper">
       <h2 class="navBar"><a href="/">小屋</a></h2>
       <el-dropdown class="header-operations" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -13,8 +13,8 @@
           <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-    </el-header>
-  </div>
+    </div>
+  </el-header>
 </template>
 
 <script>
@@ -51,16 +51,13 @@
   }
 </script>
 <style lang="stylus">
-  .header-wrapper {
+  .el-header {
     width 100%
     background-color #fff
-    position fixed
-    top 0
     z-index 250
-    border-bottom 1px solid #f1f1f1
-    .el-header {
-      max-width 960px
-      min-width 768px
+    border-bottom 1px solid #e0e0e0
+    padding .5rem 1rem
+    .header-wrapper {
       height 100%
       margin 0 auto
       padding 0
@@ -69,9 +66,12 @@
         font-weight normal
         cursor pointer
         padding-left 20px
+        margin 0
+        height 100%
         a {
           text-decoration none
           color #606266
+          font-size 1.25rem
         }
       }
       .header-operations {

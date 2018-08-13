@@ -56,8 +56,8 @@
                 });
                 this.$http.get(`/api/user/${this.registerForm.email}`).then(response => {
                   localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+                  this.$router.push('/');
                 });
-                this.$router.push('/');
               } else {
                 this.$message.error(res.data.msg);
               }

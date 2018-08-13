@@ -1,10 +1,19 @@
 const models = require('../models');
 const express = require('express');
+const sequelize = require('sequelize');
 const router = express.Router();
+const md = require('markdown-it')();
 
 // 获取全部文章
 router.get('/post', (req, res) => {
-    models.Post.findAll().then(post => {
+    models.Post.findAll({
+        offset : parseInt(req.query.skip),
+        limit  : parseInt(req.query.limit),
+        include: ['Tag', 'User']
+    }).then(post => {
+        post.forEach(item => {
+            item.content = md.render(item.content);
+        });
         res.status('200').json({success: true, data: post})
     })
 });
@@ -14,15 +23,45 @@ router.get('/user/:user_id/post', (req, res) => {
    models.Post.findAll({
        where: {
            UserId: req.params.user_id
-       }
+       },
+       include: ['Tag']
    }).then(post => {
+       post.forEach(item => {
+           item.content = md.render(item.content);
+       });
        res.status('200').json({success: true, data: post});
    })
 });
 
+// 获取某个标签下的全部文章
+router.get('/tag/:tag_id/post', (req, res) => {
+    models.Post.findAll({
+        where: {
+            TagId: req.params.tag_id
+        },
+        offset : parseInt(req.query.skip),
+        limit  : parseInt(req.query.limit),
+        include: ['User']
+    }).then(post => {
+        if (post) {
+            post.forEach(item => {
+                item.content = md.render(item.content);
+            });
+        }
+        res.status('200').json({success: true, data: post});
+    })
+});
+
 // 获取单个文章
-router.get('/post/:post_id', (req, res) => {
-   models.Post.findById(req.params.post_id).then(post => {
+router.get('/post/:post_id/:edit?', (req, res) => {
+   models.Post.findOne({include: ['Tag', 'User']}, {
+       where: {
+           id: req.params.post_id
+       }
+   }).then(post => {
+       if (! req.params.edit) {
+           post.content = md.render(post.content);
+       }
        res.status('200').json({success: true, data: post});
    })
 });
@@ -48,7 +87,8 @@ router.put('/post/:post_id/update', (req, res) => {
     models.Post.update({
         cover    : data.cover,
         title    : data.title,
-        content  : data.content
+        content  : data.content,
+        TagId    : data.TagId
     }, {
         where: {
             id: req.params.post_id

@@ -26,7 +26,7 @@
     }
   }
 </script>
-<style scoped lang="stylus">
+<style lang="stylus">
   .admin {
     width 100%
     height 100%
@@ -39,6 +39,16 @@
           .goHome {
             border-bottom 1px solid #f1f1f1
           }
+        }
+      }
+    }
+    main {
+      .el-table {
+        .cell {
+          overflow hidden
+          -ms-text-overflow: ellipsis
+          text-overflow: ellipsis
+          white-space nowrap
         }
       }
     }

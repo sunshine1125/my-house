@@ -102,12 +102,12 @@
     },
     methods   : {
       initData() {
-        this.$http.get(`/api/post/${this.postId}`).then(res => {
+        this.$http.get(`/api/post/${this.postId}/true`).then(res => {
           this.articleData = res.data.data;
         });
       },
       getTagList() {
-        this.$http.get(`/api/user/${this.userId}/tag`).then(res => this.tags = res.data.data);
+        this.$http.get(`/api/tag`).then(res => this.tags = res.data.data);
       },
       addTag() {
         this.$router.push('/admin/tagManager');

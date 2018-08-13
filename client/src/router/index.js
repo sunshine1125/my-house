@@ -5,6 +5,7 @@ import detail from '@/components/detail'
 import login from '@/components/login'
 import register from '@/components/register'
 import index from '@/components/index'
+import test from '@/components/test'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path     : '/detail/:id',
       name     : 'detail',
       component: detail
+    },
+    {
+      path     : '/test',
+      name     : 'test',
+      component: test
     },
     {
       path     : '/admin',
