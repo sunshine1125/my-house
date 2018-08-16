@@ -4,7 +4,7 @@
       <h2 class="navBar"><a href="/">小屋</a></h2>
       <el-dropdown class="header-operations" @command="handleCommand">
           <span class="el-dropdown-link">
-            <img :src="avatar" alt="" width="40" height="40"><i class="el-icon-arrow-down el-icon--right"></i>
+            <img class="image" :src="avatar" alt="" width="40" height="40"><i class="el-icon-arrow-down el-icon--right"></i>
           </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="goAdmin">后台管理</el-dropdown-item>
@@ -77,6 +77,11 @@
       .header-operations {
         float right
         height 100%
+        .image {
+          -webkit-border-radius 50%
+          -moz-border-radius 50%
+          border-radius 50%
+        }
       }
     }
   }

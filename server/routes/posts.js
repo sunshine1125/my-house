@@ -1,6 +1,5 @@
 const models = require('../models');
 const express = require('express');
-const sequelize = require('sequelize');
 const router = express.Router();
 const md = require('markdown-it')();
 

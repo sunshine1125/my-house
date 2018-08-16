@@ -16,12 +16,15 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING
         },
         password: {
-            type     : DataTypes.STRING,
-            allowNull: false
+            type     : DataTypes.STRING
         },
         avatar  : {
             type        : DataTypes.STRING,
             defaultValue: 'https://my-blog.pek3b.qingstor.com/default.jpg'
+        },
+        gitHubId :{
+            type        : DataTypes.INTEGER,
+            defaultValue: null
         }
     }, {
         freezeTableName: true,

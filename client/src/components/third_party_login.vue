@@ -19,9 +19,9 @@
     },
     methods: {
       toGitHub() {
-//        this.$http.get('/api/authGitHub').then(res => {
-//          window.location.href = res.data.auth_url;
-//        });
+        this.$http.get('/api/user/authGitHub').then(res => {
+          window.location.href = res.data.auth_url;
+        });
       }
     }
   }

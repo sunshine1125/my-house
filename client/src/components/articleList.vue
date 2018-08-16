@@ -2,7 +2,7 @@
   <el-container class="wrapper is-vertical">
     <top-nav></top-nav>
     <el-main>
-      <h2>全部文章</h2>
+      <h2>{{pageTitle}}</h2>
       <el-row v-if="articleLists.length === 0"><h5 style="margin-top: 20px;">您选择的分类下没有文章</h5></el-row>
       <el-row v-else class="article" :key="article.title" v-for="article in articleLists">
         <el-card :body-style="{ padding: '0px' }">
@@ -24,7 +24,7 @@
             <el-button :type="selectedTagId === 0 ? 'primary' : null" :plain="selectedTagId === 0" @click="clickGetAll()" size="small">全部文章</el-button>
           </el-badge>
           <el-badge class="item" v-for="tag in tagLists" :key="tag.id" :index="tag.id">
-            <el-button :type="selectedTagId === tag.id ? 'primary' : null" :plain="selectedTagId === tag.id" @click="switchTag(tag.id)" size="small">{{tag.title}}</el-button>
+            <el-button :type="selectedTagId === tag.id ? 'primary' : null" :plain="selectedTagId === tag.id" @click="switchTag(tag.id, tag.title)" size="small">{{tag.title}}</el-button>
           </el-badge>
         </div>
       </el-row>
@@ -45,7 +45,8 @@
         page         : 0,
         limit        : 4,
         selectedTagId: 0,
-        temp         : null
+        temp         : null,
+        pageTitle    : '全部文章'
       }
     },
     mounted   : function () {
@@ -60,6 +61,7 @@
     },
     methods   : {
       clickGetAll() {
+        this.pageTitle = '全部文章';
         this.page = 0;
         this.articleLists = [];
         this.getAllPosts();
@@ -94,7 +96,8 @@
       readAll(id) {
         this.$router.push(`/detail/${id}`);
       },
-      switchTag(id) {
+      switchTag(id, title) {
+        this.pageTitle = title;
         this.page = 0;
         this.articleLists = [];
         this.getTagArticles(id);
