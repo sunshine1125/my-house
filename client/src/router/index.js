@@ -7,6 +7,7 @@ import register from '@/components/register'
 import index from '@/components/index'
 import test from '@/components/test'
 import callback from '@/components/callback'
+import setting from '@/components/setting'
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
       path     : '/test',
       name     : 'test',
       component: test
+    },
+    {
+      path     : '/setting',
+      name     : 'setting',
+      component: setting
     },
     {
       path     : '/github/oauth/callback',

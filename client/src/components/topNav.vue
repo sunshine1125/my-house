@@ -37,7 +37,7 @@
           this.$router.push('/admin');
         }
         if (command === 'goSetting') {
-          this.$router.push('/basicSetting');
+          this.$router.push('/setting');
         }
         if (command === 'resetPassword') {
           this.$router.push('/admin/resetPassword');

@@ -26,8 +26,8 @@ Vue.prototype.$moment = moment;
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
+  el        : '#app',
   router,
-  components: { App },
-  template: '<App/>'
+  components: {App},
+  template  : '<App/>'
 });

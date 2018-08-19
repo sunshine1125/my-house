@@ -28,7 +28,7 @@ router.post('/upload', upload.single('file'), (req, res) => {
         }
         return res.url;
     }).then(url => {
-        res.json({success: true, path: url});
+        res.json({success: true, path: url, msg: '上传成功'});
     });
 });
 

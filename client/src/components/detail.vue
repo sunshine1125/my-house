@@ -162,6 +162,16 @@
       }
     }
   }
+  @media screen and (max-width: 1300px)
+    .articleDetail {
+      .el-main {
+        #navbar-example {
+          .tabLists {
+            right 15%
+          }
+        }
+      }
+    }
 
   @media screen and (max-width: 786px)
     .articleDetail {

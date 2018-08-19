@@ -39,7 +39,7 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .uploadImage{
+  .uploadImage {
     position relative
     width 100%
     height 100%
@@ -70,14 +70,5 @@
       background-size cover
     }
   }
-
-    /*input, button*/
-      /*position absolute*/
-      /*left 0px*/
-      /*width 15%*/
-      /*cursor pointer*/
-    /*input*/
-      /*opacity 0*/
-      /*z-index 10*/
 
 </style>

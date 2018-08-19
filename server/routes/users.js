@@ -60,7 +60,7 @@ const getUserByGitHubId = (id, res, userInfo) => {
 
 router.get('/github/oauth', (req, res) => {
     getGitHubUserInfo(req.query.code).then(userInfo => {
-        if (! userInfo.message) {
+        if (!userInfo.message) {
             getUserByGitHubId(userInfo.id, res, userInfo);
         } else {
             res.status(500).json({success: true, msg: userInfo.message});
@@ -168,6 +168,21 @@ router.delete('/:user_id', (req, res) => {
         res.status('200').json('注销成功');
     });
 });
+
+//修改用户信息
+router.put('/:user_id', (req, res) => {
+    let data = req.body;
+    models.User.update({
+        username: data.username,
+        phone   : data.phone
+    }, {
+        where: {
+            id: req.params.user_id
+        }
+    }).then(() => {
+        res.status('200').json({success: true, msg: '更新成功'});
+    })
+})
 
 
 module.exports = router;

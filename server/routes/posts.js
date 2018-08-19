@@ -53,10 +53,11 @@ router.get('/tag/:tag_id/post', (req, res) => {
 
 // 获取单个文章
 router.get('/post/:post_id/:edit?', (req, res) => {
-   models.Post.findOne({include: ['Tag', 'User']}, {
+   models.Post.findOne({
        where: {
            id: req.params.post_id
-       }
+       },
+       include: ['Tag', 'User']
    }).then(post => {
        if (! req.params.edit) {
            post.content = md.render(post.content);
@@ -92,7 +93,7 @@ router.put('/post/:post_id/update', (req, res) => {
         where: {
             id: req.params.post_id
         }
-    }).then(function () {
+    }).then(() => {
         res.status('200').json({success: true, msg: '更新成功'});
     });
 });
