@@ -71,6 +71,7 @@
         this.$router.push('/register');
       },
       forgotPassword() {
+        this.$router.push('/password/forgot');
       }
     },
     components: {

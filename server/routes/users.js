@@ -5,6 +5,7 @@ const request = require('request');
 const qs = require('querystring');
 const bcrypt = require('bcrypt-nodejs');
 const SALT_ROUNDS = 10;
+const sendEmail = require('../tools/sendEMail');
 
 const config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
 
@@ -58,6 +59,25 @@ const getUserByGitHubId = (id, res, userInfo) => {
     })
 };
 
+const matchPassword = (req) => {
+    let data = req.body;
+    let password = data.password;
+    return new Promise((resolve, reject) => {
+        models.User.findOne({
+            where: {
+                email: data.email
+            }
+        }).then(result => {
+            if (result) {
+                bcrypt.compare(password, result.dataValues.password, (err, isMatch) => {
+                    resolve(isMatch);
+                })
+            }
+        })
+    })
+
+};
+
 router.get('/github/oauth', (req, res) => {
     getGitHubUserInfo(req.query.code).then(userInfo => {
         if (!userInfo.message) {
@@ -96,9 +116,9 @@ router.post('/register', (req, res) => {
             }).then((result) => {
                 if (!result) {
                     models.User.create({
-                        username: data.username,
-                        email   : data.email,
-                        password: password
+                        username          : data.username,
+                        email             : data.email,
+                        password          : password
                     }).then(() => {
                         res.status('200').json({success: true, msg: '注册成功'});
                     })
@@ -174,7 +194,8 @@ router.put('/:user_id', (req, res) => {
     let data = req.body;
     models.User.update({
         username: data.username,
-        phone   : data.phone
+        phone   : data.phone,
+        avatar  : data.avatar
     }, {
         where: {
             id: req.params.user_id
@@ -182,7 +203,70 @@ router.put('/:user_id', (req, res) => {
     }).then(() => {
         res.status('200').json({success: true, msg: '更新成功'});
     })
-})
+});
 
+router.put('/:user_id?/password/:type', (req, res) => {
+    if (req.params.type === 'reset') {
+        matchPassword(req).then(isMatch => {
+            if (isMatch) {
+                updatePass(req, res, {
+                    id: req.params.user_id
+                });
+            } else {
+                res.status('202').json({success: false, msg: '您输入的旧密码不正确'})
+            }
+        })
+    } else {
+        updatePass(req, res, {
+            email: req.body.email
+        });
+    }
+});
 
+const updatePass = (req, res, query) => {
+    let data = req.body;
+    let newPass = data.newPass;
+    let noop = () => {
+    };
+    // 生成salt并获取hash值
+    bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
+        bcrypt.hash(newPass, salt, noop, (err, hash) => {
+            // 把hash值赋值给password变量
+            newPass = hash;
+            models.User.update({
+                password: newPass
+            }, {
+                where: query
+            }).then(() => {
+                res.status('200').json({success: true, msg: '更新成功'});
+            })
+        })
+    })
+}
+
+const apiPort = config.http.apiPort;
+const sender = config.email.user;
+// 邮箱验证
+router.post('/sendMail', (req, res) => {
+    let options = {
+        from   : '"测试"' + sender,
+        to     : '"测试"' + req.body.email,
+        subject: '一封来自sunshine1125的邮件',
+        text   : '一封来自sunshine1125的邮件',
+        html   : `<h1>修改密码</h1>
+                  <p>确认修改密码吗？</p>
+                  <a href="${apiPort}/checkPassword/?email=${req.body.email}">修改密码</a>`
+    };
+    sendEmail(options, res);
+});
+
+router.get('/checkPassword', (req, res) => {
+    User.update({email: req.query.email}, {changePassword: true}, (err, doc) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.redirect(config.http.password)
+        }
+    })
+});
 module.exports = router;

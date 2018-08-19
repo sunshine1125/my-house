@@ -1,30 +1,35 @@
 'use strict';
+const confirToken = require('../tools/confirToken');
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
-        id      : {
+        id            : {
             type         : DataTypes.INTEGER,
             primaryKey   : true,
             autoIncrement: true
         },
-        username: {
+        username      : {
             type: DataTypes.STRING
         },
-        email   : {
+        email         : {
             type: DataTypes.STRING
         },
-        phone   : {
+        phone         : {
             type: DataTypes.STRING
         },
-        password: {
-            type     : DataTypes.STRING
+        password      : {
+            type: DataTypes.STRING
         },
-        avatar  : {
+        avatar        : {
             type        : DataTypes.STRING,
             defaultValue: 'https://my-blog.pek3b.qingstor.com/default.jpg'
         },
-        gitHubId :{
+        gitHubId      : {
             type        : DataTypes.INTEGER,
             defaultValue: null
+        },
+        changePassword: {
+            type        : DataTypes.BOOLEAN,
+            defaultValue: false
         }
     }, {
         freezeTableName: true,

@@ -40,7 +40,7 @@
           this.$router.push('/setting');
         }
         if (command === 'resetPassword') {
-          this.$router.push('/admin/resetPassword');
+          this.$router.push('/password/reset');
         }
         if (command === 'logout') {
           this.$router.push('/login');

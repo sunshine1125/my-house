@@ -8,6 +8,7 @@ import index from '@/components/index'
 import test from '@/components/test'
 import callback from '@/components/callback'
 import setting from '@/components/setting'
+import password from '@/components/password'
 
 Vue.use(Router)
 
@@ -43,6 +44,11 @@ export default new Router({
       path     : '/setting',
       name     : 'setting',
       component: setting
+    },
+    {
+      path     : '/password/:type',
+      name     : 'password',
+      component: password
     },
     {
       path     : '/github/oauth/callback',
