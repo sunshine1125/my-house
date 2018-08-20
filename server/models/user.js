@@ -29,7 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         },
         changePassword: {
             type        : DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: 0
+        },
+        admin         : {
+            type        : DataTypes.BOOLEAN,
+            defaultValue: 0
         }
     }, {
         freezeTableName: true,
@@ -41,7 +45,6 @@ module.exports = (sequelize, DataTypes) => {
     User.associate = function (models) {
         models.User.hasMany(models.Post);
         models.User.hasMany(models.Comment);
-        // models.User.hasMany(models.Tag);
     };
 
     return User;

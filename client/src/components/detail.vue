@@ -91,13 +91,12 @@
     height 100%
     .el-main {
       width 960px
-      height 100%
       margin-left auto
       margin-right auto
       position relative
       overflow visible
       .article {
-        width 70%
+        width 80%
         margin 0 auto
         padding 60px
         background #fff

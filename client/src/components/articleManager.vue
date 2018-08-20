@@ -138,5 +138,8 @@
       -webkit-background-size cover
       background-size cover
     }
+    tr, th{
+      text-align center
+    }
   }
 </style>

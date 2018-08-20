@@ -9,6 +9,33 @@ const sendEmail = require('../tools/sendEMail');
 
 const config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
 
+const apiPort = config.http.apiPort;
+const sender = config.email.user;
+// 邮箱验证
+router.post('/sendMail', (req, res) => {
+    let options = {
+        from   : '"测试"' + sender,
+        to     : '"测试"' + req.body.email,
+        subject: '一封来自sunshine1125的邮件',
+        text   : '一封来自sunshine1125的邮件',
+        html   : `<h1>修改密码</h1>
+                  <p>确认修改密码吗？</p>
+                  <a href="${apiPort}/user/checkEmail/?email=${req.body.email}">修改密码</a>`
+    };
+    sendEmail(options, res);
+});
+
+router.get('/checkEmail', (req, res) => {
+    models.User.update({changePassword: 1}, {
+        where: {
+            email: req.query.email
+        }
+    }).then(() => {
+        let url = `${config.http.password}/?checkEmail=${req.query.email}`;
+        res.redirect(url)
+    })
+});
+
 const getGitHubUserInfo = code => {
     return new Promise((resolve, reject) => {
         request.get({
@@ -30,7 +57,6 @@ const getGitHubUserInfo = code => {
         })
     })
 };
-
 // 用github登录
 router.get('/authGitHub', (req, res) => {
     let auth_url = `${config.github.auth_url}?client_id=${config.github.client_Id}&redirect_uri=${config.github.redirect_uri}`;
@@ -44,7 +70,8 @@ const getUserByGitHubId = (id, res, userInfo) => {
         }
     }).then(user => {
         if (user) {
-            res.status('200').json({success: true, user: user, hasUser: true})
+            let currentUser = currentUserInfo(user);
+            res.status('200').json({success: true, user: currentUser, hasUser: true})
         } else {
             let user = {
                 username: userInfo.login,
@@ -116,9 +143,9 @@ router.post('/register', (req, res) => {
             }).then((result) => {
                 if (!result) {
                     models.User.create({
-                        username          : data.username,
-                        email             : data.email,
-                        password          : password
+                        username: data.username,
+                        email   : data.email,
+                        password: password
                     }).then(() => {
                         res.status('200').json({success: true, msg: '注册成功'});
                     })
@@ -129,6 +156,19 @@ router.post('/register', (req, res) => {
         })
     });
 });
+
+const currentUserInfo = result => {
+    return {
+        id            : result.dataValues.id,
+        username      : result.dataValues.username,
+        email         : result.dataValues.email,
+        phone         : result.dataValues.phone,
+        avatar        : result.dataValues.avatar,
+        admin         : result.dataValues.admin,
+        gitHubId      : result.dataValues.gitHubId,
+        changePassword: result.dataValues.changePassword
+    }
+};
 
 // 用户登录
 router.post('/auth', (req, res) => {
@@ -142,13 +182,7 @@ router.post('/auth', (req, res) => {
         if (result) {
             bcrypt.compare(password, result.dataValues.password, (err, isMatch) => {
                 if (isMatch) {
-                    let currentUser = {
-                        id      : result.dataValues.id,
-                        username: result.dataValues.username,
-                        email   : result.dataValues.email,
-                        phone   : result.dataValues.phone,
-                        avatar  : result.dataValues.avatar
-                    };
+                    let currentUser = currentUserInfo(result);
                     res.status('200').json({success: true, msg: '登录成功', user: currentUser});
                 } else {
                     res.status('201').json({success: false, msg: '您输入的密码不正确'})
@@ -167,7 +201,8 @@ router.get('/:email', (req, res) => {
             email: req.params.email
         }
     }).then(user => {
-        res.status('200').json({success: true, user: user});
+        let currentUser = currentUserInfo(user);
+        res.status('200').json({success: true, user: currentUser});
     })
 });
 
@@ -244,29 +279,4 @@ const updatePass = (req, res, query) => {
     })
 }
 
-const apiPort = config.http.apiPort;
-const sender = config.email.user;
-// 邮箱验证
-router.post('/sendMail', (req, res) => {
-    let options = {
-        from   : '"测试"' + sender,
-        to     : '"测试"' + req.body.email,
-        subject: '一封来自sunshine1125的邮件',
-        text   : '一封来自sunshine1125的邮件',
-        html   : `<h1>修改密码</h1>
-                  <p>确认修改密码吗？</p>
-                  <a href="${apiPort}/checkPassword/?email=${req.body.email}">修改密码</a>`
-    };
-    sendEmail(options, res);
-});
-
-router.get('/checkPassword', (req, res) => {
-    User.update({email: req.query.email}, {changePassword: true}, (err, doc) => {
-        if (err) {
-            res.send(err);
-        } else {
-            res.redirect(config.http.password)
-        }
-    })
-});
 module.exports = router;

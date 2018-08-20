@@ -2,26 +2,23 @@
 module.exports = (sequelize, DataTypes) => {
     const Tag = sequelize.define('Tag', {
         //id
-        id       : {
+        id    : {
             type         : DataTypes.INTEGER,
             primaryKey   : true,
             autoIncrement: true
         },
         // 标题
-        title    : {
+        title : {
             type: DataTypes.STRING
+        },
+        UserId: {
+            type: DataTypes.INTEGER,
         }
     }, {
         freezeTableName: true
     });
 
     Tag.associate = function (models) {
-        // models.Tag.belongsTo(models.User, {
-        //     onDelete  : "CASCADE",
-        //     foreignKey: {
-        //         allowNull: false
-        //     }
-        // });
         models.Tag.hasMany(models.Post);
     };
 

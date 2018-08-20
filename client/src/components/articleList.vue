@@ -63,6 +63,7 @@
       clickGetAll() {
         this.pageTitle = '全部文章';
         this.page = 0;
+        this.temp = null;
         this.articleLists = [];
         this.getAllPosts();
       },
@@ -99,6 +100,7 @@
       switchTag(id, title) {
         this.pageTitle = title;
         this.page = 0;
+        this.temp = null;
         this.articleLists = [];
         this.getTagArticles(id);
       },
