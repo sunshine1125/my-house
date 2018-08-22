@@ -20,12 +20,16 @@
       <el-row class="tagList">
         <h5 class="tagTitle">分类</h5>
         <div style="text-align: left;">
-          <el-badge index="0" :key="0" class="item">
-            <el-button :type="selectedTagId === 0 ? 'primary' : null" :plain="selectedTagId === 0" @click="clickGetAll()" size="small">全部文章</el-button>
-          </el-badge>
-          <el-badge class="item" v-for="tag in tagLists" :key="tag.id" :index="tag.id">
-            <el-button :type="selectedTagId === tag.id ? 'primary' : null" :plain="selectedTagId === tag.id" @click="switchTag(tag.id, tag.title)" size="small">{{tag.title}}</el-button>
-          </el-badge>
+          <el-row>
+            <el-badge index="0" :key="0" class="item">
+              <el-button :type="selectedTagId === 0 ? 'primary' : null" :plain="selectedTagId === 0" @click="clickGetAll()" size="small">全部文章</el-button>
+            </el-badge>
+          </el-row>
+          <el-row v-for="tag in tagLists">
+            <el-badge class="item" :key="tag.id" :index="tag.id">
+              <el-button :type="selectedTagId === tag.id ? 'primary' : null" :plain="selectedTagId === tag.id" @click="switchTag(tag.id, tag.title)" size="small">{{tag.title}}</el-button>
+            </el-badge>
+          </el-row>
         </div>
       </el-row>
     </el-main>
@@ -61,6 +65,7 @@
     },
     methods   : {
       clickGetAll() {
+        $('html,body').animate({scrollTop:0}, 500);
         this.pageTitle = '全部文章';
         this.page = 0;
         this.temp = null;
@@ -98,6 +103,7 @@
         this.$router.push(`/detail/${id}`);
       },
       switchTag(id, title) {
+        $('html,body').animate({scrollTop:0}, 500);
         this.pageTitle = title;
         this.page = 0;
         this.temp = null;
@@ -115,7 +121,7 @@
         let scrollTop = $('html, body').scrollTop();
         let scrollHeight = $(document).height();
         let windowHeight = $(window).height();
-        if (scrollTop + windowHeight === scrollHeight) {
+        if (scrollTop + windowHeight === scrollHeight && this.page !== 0) {
           if (this.temp !== this.page) {
             if (this.selectedTagId === 0) {
               this.getAllPosts();
@@ -194,9 +200,9 @@
         }
       }
       .tagList {
-        position absolute
-        top 66px
-        left 88%
+        position fixed
+        top 95px
+        left 70%
         .tagTitle {
           text-align left
           padding-left 10px
@@ -219,6 +225,14 @@
       .el-main {
         width 100%
         padding 0
+        .article{
+          width 85%
+        }
+        .tagList {
+          left 0
+          z-index 100
+          opacity 0.8
+        }
       }
     }
 </style>

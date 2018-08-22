@@ -7,11 +7,12 @@ import router from './router';
 import ElmentUI from 'element-ui';
 import Validate from './tools/validate';
 import moment from 'moment';
-import mavonEditor from 'mavon-editor';
+import mavonEditor from 'mavon-editor'
 import 'bootstrap/dist/css/bootstrap.css';
 import $ from 'jquery'
 import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/common.css';
+import 'mavon-editor/dist/css/index.css';
 
 
 import App from './App'
