@@ -1,13 +1,13 @@
 # myBlog
 > 一个简单的博客系统，主要通过vue+node+express+mySql实现。
-### 主要功能：
+### 主要功能
 * 注册
 * 登录
 * 文章管理
 * 标签管理
 * 评论
 * 设置
-### 前端：
+### 前端
 * [vue](https://cn.vuejs.org/v2/guide/), [vue-router](https://router.vuejs.org/guide/#html)
 * 使用[vue-axios](https://www.npmjs.com/package/vue-axios)，管理http请求
 * 使用[element-ui](http://element-cn.eleme.io/#/zh-CN/component/installation)框架,省去了许多繁琐的css代码
