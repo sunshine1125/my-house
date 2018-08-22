@@ -44,7 +44,7 @@
 </template>
 
 <script>
-  import topNav from './topNav.vue';
+  import topNav from '../topNav.vue';
 
   export default {
     name      : 'forgotPassword',

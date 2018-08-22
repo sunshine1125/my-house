@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import articleList from '@/components/articleList'
-import detail from '@/components/detail'
-import login from '@/components/login'
-import register from '@/components/register'
+import articleList from '@/components/views/articleList'
+import detail from '@/components/views/detail'
+import login from '@/components/views/login'
+import register from '@/components/views/register'
 import index from '@/components/index'
 import test from '@/components/test'
 import callback from '@/components/callback'
-import setting from '@/components/setting'
-import password from '@/components/password'
+import setting from '@/components/views/setting'
+import password from '@/components/views/password'
 
 Vue.use(Router)
 
@@ -63,16 +63,16 @@ export default new Router({
       children : [
         {
           path     : '/admin/articleManager',
-          component: resolve => require.ensure([], () => resolve(require('@/components/articleManager')), 'admin')
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/articleManager')), 'admin')
         },
         {
           path     : '/admin/tagManager',
-          component: resolve => require.ensure([], () => resolve(require('@/components/tagManager')), 'admin'),
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/tagManager')), 'admin'),
         },
         {
           path     : '/admin/articleManager/:type/:id?',
           name     : 'articleChange',
-          component: resolve => require.ensure([], () => resolve(require('@/components/articleChange')), 'admin')
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/articleChange')), 'admin')
         }
       ]
     }

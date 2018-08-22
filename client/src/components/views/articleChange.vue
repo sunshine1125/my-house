@@ -58,7 +58,7 @@
 </template>
 
 <script>
-  import uploadImage from './upLoadImage.vue'
+  import uploadImage from '../upLoadImage.vue'
 
   export default {
     name      : 'dataChange',

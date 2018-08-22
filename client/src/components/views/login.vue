@@ -1,21 +1,25 @@
 <template>
-  <div class="register">
+  <div class="login">
     <div class="main container">
-      <h3>注 册</h3>
-      <el-form :model="registerForm" ref="registerForm" class="demo-ruleForm">
-        <el-form-item prop="username" :rules="validate_rules({required: true})">
-          <el-input v-model="registerForm.username" placeholder="用户名"></el-input>
-        </el-form-item>
+      <h3>登 录</h3>
+      <el-form :model="loginForm" ref="loginForm">
         <el-form-item prop="email" :rules="validate_rules({required: true, type: 'email'})">
-          <el-input v-model="registerForm.email" placeholder="邮箱"></el-input>
+          <el-input v-model="loginForm.email" placeholder="手机号或邮箱"></el-input>
         </el-form-item>
         <el-form-item prop="password" :rules="validate_rules({required: true, type: 'password'})">
-          <el-input type="password" v-model="registerForm.password" placeholder="密码"></el-input>
+          <el-input type="password" v-model="loginForm.password" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" style="width: 100%" @click="register('registerForm')">注册</el-button>
-          已有账号，去
-          <el-button style="margin-left: 0;" type="text" @click="goLogin()">登录</el-button>
+          <el-button type="primary" style="width: 100%" @click="login('loginForm')">登录</el-button>
+          <el-row type="flex" class="row-bg">
+            <el-col :span="12" style="text-align: left">
+              没有账号？
+              <el-button type="text" @click="goRegister()">注册</el-button>
+            </el-col>
+            <el-col :span="6" :offset="6" style="text-align: right;">
+              <a @click="forgotPassword()">忘记密码</a>
+            </el-col>
+          </el-row>
           <third-party-login></third-party-login>
         </el-form-item>
       </el-form>
@@ -24,13 +28,12 @@
 </template>
 
 <script>
-  import thirdPartyLogin from './third_party_login.vue'
+  import thirdPartyLogin from '../third_party_login.vue'
   export default {
-    name   : 'register',
+    name   : 'login',
     data() {
       return {
-        registerForm: {
-          username: '',
+        loginForm: {
           email   : '',
           password: ''
         }
@@ -40,35 +43,35 @@
 
     },
     methods: {
-      register(formName) {
+      login(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             let userInfo = {
-              "username"  : this.registerForm.username,
-              "password"  : this.registerForm.password,
-              'email'     : this.registerForm.email
+              "email"   : this.loginForm.email,
+              "password": this.loginForm.password
             };
-            this.$http.post('/api/user/register', userInfo).then((res) => {
-              if(res.data.success) {
+            this.$http.post('/api/user/auth', userInfo).then(res => {
+              if (res.data.success) {
                 this.$message({
                   message: res.data.msg,
                   type   : 'success'
                 });
-                this.$http.get(`/api/user/${this.registerForm.email}`).then(response => {
-                  localStorage.setItem('currentUser', JSON.stringify(response.data.user));
-                  this.$router.push('/');
-                });
+                localStorage.setItem('currentUser', JSON.stringify(res.data.user));
+                this.$router.push('/');
               } else {
                 this.$message.error(res.data.msg);
               }
-            });
+            })
           } else {
             return false;
           }
         })
       },
-      goLogin() {
-        this.$router.push('/login');
+      goRegister() {
+        this.$router.push('/register');
+      },
+      forgotPassword() {
+        this.$router.push('/password/forgot');
       }
     },
     components: {
@@ -77,7 +80,7 @@
   }
 </script>
 <style scoped lang="stylus">
-  .register {
+  .login {
     height 100%
     font-size 14px
     width 100%
@@ -102,20 +105,20 @@
         margin-top 30px
         margin-left 33px
         input, button {
-          outline none;
+          outline none
         }
         a {
           cursor pointer
         }
         p {
-          margin-top 0;
+          margin-top 0
         }
       }
     }
   }
 
   @media (max-width: 768px)
-    .register {
+    .login {
       background-color transparent
       .main {
         position absolute

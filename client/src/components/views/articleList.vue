@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import topNav from './topNav.vue'
+  import topNav from '../topNav.vue'
   import removeMd from 'remove-markdown'
 
   export default {
