@@ -5,17 +5,11 @@ module.exports = {
      */
     apps: [
         {
-            name           : 'my-house',
+            name           : 'blog',
             script         : 'bin/www',
             env: {
                 NODE_ENV: 'production',
                 PORT: 3002,
-            },
-            env_development: {
-                NODE_ENV: 'development'
-            },
-            env_production: {
-                NODE_ENV: 'production'
             }
         }
     ],
@@ -25,13 +19,13 @@ module.exports = {
      * http://pm2.keymetrics.io/docs/usage/deployment/
      */
     deploy: {
-        production: {
+        master: {
             user         : 'liut',
             host         : ['140.143.192.183'],
             port         : '5722',
             ref          : 'origin/master',
             repo         : 'git@github.com:sunshine1125/my-house.git',
-            path         : '/home/liut/vue-express',
+            path         : '/home/liut/blog',
             // "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
             'post-deploy': 'chmod u+x ./post-deploy.sh && source ./post-deploy.sh'
         }
