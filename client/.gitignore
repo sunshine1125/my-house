@@ -5,4 +5,3 @@ node_modules
 .idea
 npm-debug.log
 dist/
-src/components/frontend
