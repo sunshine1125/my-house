@@ -3,11 +3,9 @@
     <top-nav></top-nav>
     <el-main>
       <div class="article" data-spy="scroll" data-target="#navbar-example">
+        <el-button v-if="currentUser.id === data.authId" size="small" type="info" plain round class="edit" @click="edit()">编辑文章</el-button>
         <div class="header">
-          <h1 class="title">
-            {{data.title}}
-            <el-button v-if="currentUser.id === data.authId" size="small" type="info" plain round class="edit" @click="edit()">编辑文章</el-button>
-          </h1>
+          <h1 class="title">{{data.title}}</h1>
         </div>
         <div class="time">
           <span class="auth">{{data.auth}}</span>&nbsp;&nbsp;
@@ -107,21 +105,21 @@
         width 80%
         margin 0 auto
         padding 60px
+        padding-top 70px
         background #fff
         box-shadow 0 0 2px 0 rgba(0, 0, 0, .36)
         position relative
+        .edit {
+          position absolute
+          top 0.5%
+          right 2%
+        }
         .header {
           .title {
             font-size 34px
             font-weight 700
             line-height 34px
             padding-bottom 20px
-            position: relative
-            .edit {
-              position absolute
-              top 0
-              right 0
-            }
           }
           .time {
             font-size 14px
@@ -161,7 +159,7 @@
         .tabLists {
           position fixed
           bottom 20px
-          right 25%
+          left 72%
           display block
           li {
             text-align left
@@ -181,7 +179,9 @@
       .el-main {
         #navbar-example {
           .tabLists {
-            right 15%
+            left 2%
+            z-index 100
+            opacity 0.8
           }
         }
       }
@@ -195,6 +195,7 @@
         .article {
           width 100%
           padding 35px
+          padding-top 70px
           position relative
           .header {
             .title {
