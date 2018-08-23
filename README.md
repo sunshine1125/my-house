@@ -14,7 +14,7 @@
 * [markdown编辑器](https://www.npmjs.com/package/mavon-editor)，功能强大且好用
 ### 后端
 * [express](http://www.expressjs.com.cn/)
-* [Sequelize](Sequelize) 是一个基于 promise 的 Node.js ORM, 目前支持 Postgres, MySQL, SQLite 和 Microsoft SQL Server. 它具有强大的事务支持, 关联关系, 读取和复制等功能.
+* [Sequelize](https://github.com/demopark/sequelize-docs-Zh-CN) 是一个基于 promise 的 Node.js ORM, 目前支持 Postgres, MySQL, SQLite 和 Microsoft SQL Server. 它具有强大的事务支持, 关联关系, 读取和复制等功能.
 * 使用[Nodemailer](https://nodemailer.com/about/)实现发送邮件功能
 * 上传的图片上传到青云，数据库只存储图片地址
 

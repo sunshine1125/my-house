@@ -7,13 +7,8 @@ const basename  = path.basename(__filename);
 const db        = {};
 
 const config = process.env.NODE_ENV === 'development' ? require('../config/dev'): require('../config/prod');
-let sequelize = '';
 
-if (config.MySql.use_env_variable) {
-    sequelize = new Sequelize(process.env[config.MySql.use_env_variable], config.MySql);
-} else {
-    sequelize = new Sequelize(config.MySql.database, config.MySql.username, config.MySql.password, config.MySql);
-}
+let sequelize = new Sequelize(config.MySql.database, config.MySql.username, config.MySql.password, config.MySql);
 
 fs
   .readdirSync(__dirname)
