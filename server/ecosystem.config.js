@@ -6,7 +6,7 @@ module.exports = {
     apps: [
         {
             name           : 'my-house',
-            script         : 'index.js',
+            script         : 'bin/www',
             env: {
                 NODE_ENV: 'production',
                 PORT: 3002,
