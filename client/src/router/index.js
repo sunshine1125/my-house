@@ -5,7 +5,6 @@ import detail from '@/components/views/detail'
 import login from '@/components/views/login'
 import register from '@/components/views/register'
 import index from '@/components/index'
-import test from '@/components/test'
 import callback from '@/components/callback'
 import setting from '@/components/views/setting'
 import password from '@/components/views/password'
@@ -34,11 +33,6 @@ export default new Router({
       path     : '/detail/:id',
       name     : 'detail',
       component: detail
-    },
-    {
-      path     : '/test',
-      name     : 'test',
-      component: test
     },
     {
       path     : '/setting',
