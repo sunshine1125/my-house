@@ -13,6 +13,7 @@
           <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+      <el-button round icon="el-icon-edit" class="write" @click="write()">写文章</el-button>
     </div>
   </el-header>
 </template>
@@ -46,6 +47,9 @@
           this.$router.push('/login');
           localStorage.clear();
         }
+      },
+      write() {
+        this.$router.push('/admin/articleManager/add');
       }
     }
   }
@@ -73,6 +77,11 @@
           color #606266
           font-size 1.25rem
         }
+      }
+      .write {
+        float right
+        margin-right 20px
+        padding 12px 16px
       }
       .header-operations {
         float right

@@ -4,12 +4,15 @@
     <el-main>
       <div class="article" data-spy="scroll" data-target="#navbar-example">
         <div class="header">
-          <h1 class="title">{{data.title}}</h1>
+          <h1 class="title">
+            {{data.title}}
+            <el-button v-if="currentUser.id === data.authId" size="small" type="info" plain round class="edit" @click="edit()">编辑文章</el-button>
+          </h1>
         </div>
         <div class="time">
-          <span class="auth">由 {{data.auth}}</span>
-          发布于：<span>{{data.create_at}}</span>&nbsp;&nbsp;标签：
-          <el-tag>{{data.tagTitle}}</el-tag>
+          <span class="auth">{{data.auth}}</span>&nbsp;&nbsp;
+          <span>{{data.create_at}}</span>&nbsp;&nbsp;
+          <el-tag type="info" size="small">{{data.tagTitle}}</el-tag>
         </div>
         <div class="content" v-html="data.content"></div>
       </div>
@@ -30,6 +33,7 @@
     name      : 'detail',
     data() {
       return {
+        currentUser    : JSON.parse(localStorage.getItem('currentUser')),
         postId         : this.$route.params.id,
         data           : '',
         sideLists      : [],
@@ -49,8 +53,9 @@
         this.$http.get(`/api/post/${this.postId}`).then(res => {
           if (res.data.success) {
             this.data = res.data.data;
-            this.data.create_at = this.$moment(this.data.create_at).format('YYYY-MM-DD HH:mm:ss');
+            this.data.create_at = this.$moment(this.data.create_at).format('YYYY.MM.DD HH:mm:ss');
             this.data.auth = res.data.data.User.username;
+            this.data.authId = res.data.data.UserId;
             this.data.tagTitle = res.data.data.Tag.title;
           }
         }).then(() => {
@@ -78,6 +83,9 @@
       handleScroll() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         this.toTop = scrollTop > 500 ? true : false;
+      },
+      edit() {
+        this.$router.push(`/admin/articleManager/edit/${this.postId}`);
       }
     },
     components: {
@@ -108,6 +116,12 @@
             font-weight 700
             line-height 34px
             padding-bottom 20px
+            position: relative
+            .edit {
+              position absolute
+              top 0
+              right 0
+            }
           }
           .time {
             font-size 14px
@@ -118,6 +132,7 @@
           }
         }
         .content {
+          margin-top 35px
           color #2f2f2f
           font-size 16px
           font-weight 400
@@ -146,7 +161,7 @@
         .tabLists {
           position fixed
           bottom 20px
-          right 23%
+          right 25%
           display block
           li {
             text-align left
@@ -180,6 +195,7 @@
         .article {
           width 100%
           padding 35px
+          position relative
           .header {
             .title {
               font-size 30px
