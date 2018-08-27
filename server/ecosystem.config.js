@@ -7,9 +7,13 @@ module.exports = {
         {
             name           : 'blog',
             script         : 'bin/www',
-            env: {
-                NODE_ENV: 'production',
-                PORT: 3002,
+            env_development: {
+                NODE_ENV: 'development',
+                PORT: 3002
+            },
+            env_production : {
+                NODE_ENV: "production",
+                PORT: 3002
             }
         }
     ],
@@ -19,7 +23,7 @@ module.exports = {
      * http://pm2.keymetrics.io/docs/usage/deployment/
      */
     deploy: {
-        master: {
+        production: {
             user         : 'liut',
             host         : ['140.143.192.183'],
             port         : '5722',
