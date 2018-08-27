@@ -5,7 +5,7 @@ const request = require('request');
 const qs = require('querystring');
 const bcrypt = require('bcrypt-nodejs');
 const SALT_ROUNDS = 10;
-const sendEmail = require('../tools/sendEMail');
+const sendEmail = require('../tools/sendEmail');
 
 const config = process.env.NODE_ENV === 'development' ? require('../config/dev') : require('../config/prod');
 
