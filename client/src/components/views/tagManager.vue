@@ -52,6 +52,8 @@
         this.$prompt('请输入标题', '新增', {
           confirmButtonText: '确定',
           cancelButtonText : '取消',
+          inputPattern     : /\S/,
+          inputErrorMessage: '请输入标签'
         }).then(({value}) => {
           let tag = {
             title: value
@@ -75,6 +77,8 @@
           this.$prompt('请输入标题', '编辑', {
             confirmButtonText: '确定',
             cancelButtonText : '取消',
+            inputPattern     : /\S/,
+            inputErrorMessage: '请输入标签',
             inputValue       : title
           }).then(({value}) => {
             let tag = {

@@ -55,6 +55,8 @@
             this.data.auth = res.data.data.User.username;
             this.data.authId = res.data.data.UserId;
             this.data.tagTitle = res.data.data.Tag.title;
+          } else if(res.data.notFound) {
+             this.$router.push('/404');
           }
         }).then(() => {
           this.rightSideBar();

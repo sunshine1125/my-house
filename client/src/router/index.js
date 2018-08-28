@@ -8,6 +8,7 @@ import index from '@/components/index'
 import callback from '@/components/callback'
 import setting from '@/components/views/setting'
 import password from '@/components/views/password'
+import NotFoundComponent from '@/components/notFound'
 
 Vue.use(Router)
 
@@ -69,6 +70,15 @@ export default new Router({
           component: resolve => require.ensure([], () => resolve(require('@/components/views/articleChange')), 'admin')
         }
       ]
+    },
+    {
+      path     : '/404',
+      name     : '404',
+      component: NotFoundComponent
+    },
+    {
+      path     : '*',
+      component: NotFoundComponent
     }
   ]
 })

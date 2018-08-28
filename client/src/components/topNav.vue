@@ -60,7 +60,7 @@
     background-color #fff
     z-index 250
     border-bottom 1px solid #e0e0e0
-    padding .5rem 1rem
+    padding .5rem 1rem !important
     .header-wrapper {
       height 100%
       margin 0 auto

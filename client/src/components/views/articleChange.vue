@@ -10,14 +10,16 @@
     </el-breadcrumb>
     <el-form :model="articleData" :rules="rules" ref="articleData" label-width="70px" class="rowContainer">
       <el-row>
-        <el-col :span="6">
+        <el-col :span="12">
           <el-form-item label="标题"
                         prop="title"
                         class="customInput">
             <el-input v-model="articleData.title" placeholder="请输入标题"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="6">
+      </el-row>
+      <el-row>
+        <el-col :span="7">
           <el-form-item label="标签"
                         prop="TagId"
                         class="customInput">
@@ -37,7 +39,7 @@
             <upload-image @imgSrc="getImgUrl" :imgPath="articleData.cover" :edit="edit"></upload-image>
           </el-form-item>
         </el-col>
-        <el-col :span="4">
+        <el-col :span="4" :offset="5">
           <el-button type="text" @click="addTag()">去添加标签 >></el-button>
         </el-col>
       </el-row>
@@ -92,18 +94,28 @@
       }
     },
     mounted   : function () {
-      this.getTagList();
-      if (this.postId) {
+      if (this.type === 'edit' && this.postId) {
+        this.getTagList();
         this.initData();
         this.edit = true;
+      } else if (this.type === 'add') {
+          this.edit = false;
+          this.$router.push('/admin/articleManager/add');
       } else {
+        this.articleData.content = null;
         this.edit = false;
+        window.location.reload();
+        this.$router.push('/404');
       }
     },
     methods   : {
       initData() {
         this.$http.get(`/api/post/${this.postId}/true`).then(res => {
-          this.articleData = res.data.data;
+          if (res.data.success) {
+            this.articleData = res.data.data;
+          } else if (res.data.notFound) {
+            this.$router.push('/404');
+          }
         });
       },
       getTagList() {

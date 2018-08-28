@@ -59,10 +59,14 @@ router.get('/post/:post_id/:edit?', (req, res) => {
        },
        include: ['Tag', 'User']
    }).then(post => {
-       if (! req.params.edit) {
-           post.content = md.render(post.content);
+       if (post) {
+           if (! req.params.edit) {
+               post.content = md.render(post.content);
+           }
+           res.status('200').json({success: true, data: post});
+       } else {
+           res.status('202').json({success: false, notFound: true});
        }
-       res.status('200').json({success: true, data: post});
    })
 });
 
