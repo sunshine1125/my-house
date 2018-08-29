@@ -94,8 +94,8 @@
       }
     },
     mounted   : function () {
+      this.getTagList();
       if (this.type === 'edit' && this.postId) {
-        this.getTagList();
         this.initData();
         this.edit = true;
       } else if (this.type === 'add') {
