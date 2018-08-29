@@ -13,6 +13,7 @@ import $ from 'jquery'
 import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/common.css';
 import 'mavon-editor/dist/css/index.css';
+import '../static/css/github-markdown.css';
 
 
 import App from './App'

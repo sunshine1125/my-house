@@ -12,7 +12,7 @@
           <span>{{data.create_at}}</span>&nbsp;&nbsp;
           <el-tag type="info" size="small">{{data.tagTitle}}</el-tag>
         </div>
-        <div class="content" v-html="data.content"></div>
+        <div class="content markdown-body" v-html="data.content"></div>
       </div>
       <div id="navbar-example">
         <!-- 导航 a中href="#one" 来寻找锚点-->
@@ -27,6 +27,7 @@
 
 <script>
   import topNav from '../topNav.vue';
+
   export default {
     name      : 'detail',
     data() {
