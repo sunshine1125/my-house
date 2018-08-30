@@ -10,7 +10,7 @@
     </el-breadcrumb>
     <el-form :model="articleData" :rules="rules" ref="articleData" label-width="70px" class="rowContainer">
       <el-row>
-        <el-col :span="12">
+        <el-col>
           <el-form-item label="标题"
                         prop="title"
                         class="customInput">
@@ -46,7 +46,7 @@
       <el-row>
         <el-form-item label="内容"
                       prop="content">
-          <mavon-editor :ishljs="true" v-model="articleData.content"></mavon-editor>
+          <mavon-editor ref=md @imgAdd="$imgAdd" :ishljs="true" v-model="articleData.content"></mavon-editor>
         </el-form-item>
       </el-row>
       <el-row>
@@ -158,6 +158,17 @@
       },
       getImgUrl(val) {
         this.articleData.cover = val;
+      },
+      $imgAdd(pos, $file) {
+        let fd = new FormData();
+        fd.append('file', $file);
+        this.$http.post('/api/upload', fd, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(res => {
+          this.$refs.md.$img2Url(pos, res.data.path);
+        })
       }
     },
     components: {
