@@ -2,18 +2,22 @@
   <el-header>
     <div class="header-wrapper">
       <h2 class="navBar"><a href="/">小屋</a></h2>
-      <el-dropdown class="header-operations" @command="handleCommand">
-          <span class="el-dropdown-link">
-            <img class="image" :src="avatar" alt="" width="40" height="40"><i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="goAdmin">后台管理</el-dropdown-item>
-          <el-dropdown-item command="goSetting">设置</el-dropdown-item>
-          <el-dropdown-item command="resetPassword">重置密码</el-dropdown-item>
-          <el-dropdown-item command="logout">退出</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <el-button round icon="el-icon-edit" class="write" @click="write()">写文章</el-button>
+      <el-menu class="el-menu-demo" mode="horizontal" @select="handleSelect">
+        <el-menu-item index="write" v-if="currentUser">
+          <el-button size="small" round icon="el-icon-edit">写文章</el-button>
+        </el-menu-item>
+        <el-submenu index="user" v-if="currentUser">
+          <template slot="title">
+            <img class="image" :src="avatar" alt="" width="40" height="40">
+          </template>
+          <el-menu-item index="goAdmin">后台管理</el-menu-item>
+          <el-menu-item index="settings">设置</el-menu-item>
+          <el-menu-item index="reset">重置密码</el-menu-item>
+          <el-menu-item index="logout">退出</el-menu-item>
+        </el-submenu>
+        <el-menu-item index="login" v-if="!currentUser">登录</el-menu-item>
+        <el-menu-item index="register" v-if="!currentUser">注册</el-menu-item>
+      </el-menu>
     </div>
   </el-header>
 </template>
@@ -23,33 +27,39 @@
     name   : 'topNav',
     data() {
       return {
-        avatar: ''
+        currentUser: JSON.parse(localStorage.getItem('currentUser')),
+        avatar     : ''
       }
     },
     mounted: function () {
-      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      if (currentUser) {
-        this.avatar = currentUser.avatar;
+      if (this.currentUser) {
+        this.avatar = this.currentUser.avatar;
       }
     },
     methods: {
-      handleCommand(command) {
-        if (command === 'goAdmin') {
+      handleSelect(key) {
+        if (key === 'write') {
+          this.$router.push('/admin/articleManager/add');
+        }
+        if (key === 'goAdmin') {
           this.$router.push('/admin');
         }
-        if (command === 'goSetting') {
+        if (key === 'settings') {
           this.$router.push('/setting');
         }
-        if (command === 'resetPassword') {
+        if (key === 'reset') {
           this.$router.push('/password/reset');
         }
-        if (command === 'logout') {
+        if (key === 'logout') {
           this.$router.push('/login');
           localStorage.clear();
         }
-      },
-      write() {
-        this.$router.push('/admin/articleManager/add');
+        if (key === 'login') {
+          this.$router.push('/login');
+        }
+        if (key === 'register') {
+          this.$router.push('/register');
+        }
       }
     }
   }
@@ -60,7 +70,7 @@
     background-color #fff
     z-index 250
     border-bottom 1px solid #e0e0e0
-    padding .5rem 1rem !important
+    padding 0 1rem !important
     .header-wrapper {
       height 100%
       margin 0 auto
@@ -71,25 +81,31 @@
         cursor pointer
         padding-left 20px
         margin 0
-        height 100%
-        a {
+        height 60px
+        line-height 60px
+       a {
           text-decoration none
           color #606266
           font-size 1.25rem
         }
       }
-      .write {
-        float right
-        margin-right 20px
-        padding 12px 16px
-      }
-      .header-operations {
+      .el-menu-demo {
         float right
         height 100%
+        border none
         .image {
           -webkit-border-radius 50%
           -moz-border-radius 50%
           border-radius 50%
+        }
+        &:hover {
+          border none!important
+        }
+        li {
+          border none!important
+          &:hover {
+            border none!important
+          }
         }
       }
     }

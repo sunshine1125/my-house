@@ -3,7 +3,7 @@
     <top-nav></top-nav>
     <el-main>
       <div class="article" data-spy="scroll" data-target="#navbar-example">
-        <el-button v-if="currentUser.id === data.authId" size="small" type="info" plain round class="edit" @click="edit()">编辑文章</el-button>
+        <el-button v-if="currentUser && currentUser.id === data.authId" size="small" type="info" plain round class="edit" @click="edit()">编辑文章</el-button>
         <div class="header">
           <h1 class="title">{{data.title}}</h1>
         </div>

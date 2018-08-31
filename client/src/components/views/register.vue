@@ -4,13 +4,13 @@
       <h3>注 册</h3>
       <el-form :model="registerForm" ref="registerForm" class="demo-ruleForm">
         <el-form-item prop="username" :rules="validate_rules({required: true})">
-          <el-input v-model="registerForm.username" placeholder="用户名"></el-input>
+          <el-input v-model="registerForm.username" placeholder="用户名" @keyup.enter.native="register('registerForm')"></el-input>
         </el-form-item>
         <el-form-item prop="email" :rules="validate_rules({required: true, type: 'email'})">
-          <el-input v-model="registerForm.email" placeholder="邮箱"></el-input>
+          <el-input v-model="registerForm.email" placeholder="邮箱" @keyup.enter.native="register('registerForm')"></el-input>
         </el-form-item>
         <el-form-item prop="password" :rules="validate_rules({required: true, type: 'password'})">
-          <el-input type="password" v-model="registerForm.password" placeholder="密码"></el-input>
+          <el-input type="password" v-model="registerForm.password" placeholder="密码" @keyup.enter.native="register('registerForm')"></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" style="width: 100%" @click="register('registerForm')">注册</el-button>

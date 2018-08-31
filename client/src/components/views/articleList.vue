@@ -2,7 +2,7 @@
   <el-container class="wrapper is-vertical">
     <top-nav></top-nav>
     <el-main>
-      <h2>{{pageTitle}}</h2>
+      <h3>{{pageTitle}}</h3>
       <el-row v-if="articleLists.length === 0"><h5 style="margin-top: 20px;">您选择的分类下没有文章</h5></el-row>
       <el-row v-else class="article" :key="article.title" v-for="article in articleLists">
         <el-card :body-style="{ padding: '0px' }">
@@ -50,18 +50,14 @@
         limit        : 4,
         selectedTagId: 0,
         temp         : null,
-        pageTitle    : '全部文章'
+        pageTitle    : '全部文章',
+        currentUser  : JSON.parse(localStorage.getItem('currentUser'))
       }
     },
     mounted   : function () {
-      let currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      if (!currentUser) {
-        this.$router.push('/login');
-      } else {
-        this.getAllPosts(this.changeTag);
-        this.getAllTags();
-        window.addEventListener('scroll', this.handleScroll);
-      }
+      this.getAllPosts(this.changeTag);
+      this.getAllTags();
+      window.addEventListener('scroll', this.handleScroll);
     },
     methods   : {
       clickGetAll() {

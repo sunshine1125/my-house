@@ -4,10 +4,10 @@
       <h3>登 录</h3>
       <el-form :model="loginForm" ref="loginForm">
         <el-form-item prop="email" :rules="validate_rules({required: true, type: 'email'})">
-          <el-input v-model="loginForm.email" placeholder="手机号或邮箱"></el-input>
+          <el-input v-model="loginForm.email" placeholder="邮箱" @keyup.enter.native="login('loginForm')"></el-input>
         </el-form-item>
         <el-form-item prop="password" :rules="validate_rules({required: true, type: 'password'})">
-          <el-input type="password" v-model="loginForm.password" placeholder="密码"></el-input>
+          <el-input type="password" v-model="loginForm.password" placeholder="密码" @keyup.enter.native="login('loginForm')"></el-input>
         </el-form-item>
         <el-form-item label="">
           <el-button type="primary" style="width: 100%" @click="login('loginForm')">登录</el-button>
