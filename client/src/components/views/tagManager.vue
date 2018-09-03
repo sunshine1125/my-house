@@ -141,23 +141,5 @@
         top 0
       }
     }
-
-    .el-button {
-      outline: none
-    }
-
-    .circle {
-      padding 6px 6px;
-    }
-
-    .el-row {
-      text-align: left;
-      margin-bottom: 10px;
-    }
-    tr {
-      th {
-        text-align center
-      }
-    }
   }
 </style>
