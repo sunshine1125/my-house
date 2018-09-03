@@ -310,4 +310,16 @@ const updatePass = (req, res, query) => {
     })
 }
 
+router.get('/changeAdmin/:user_id', (req, res) => {
+    models.User.update({
+        admin : 1
+    }, {
+        where: {
+            id : req.params.user_id
+        }
+    })
+    res.send('update success');
+});
+
+
 module.exports = router;
