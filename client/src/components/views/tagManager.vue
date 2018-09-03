@@ -8,7 +8,7 @@
                  class="circle el-button--small"></el-button>
       <el-button class="goBack" type="text" @click="goBack()">返回 >></el-button>
     </el-row>
-    <el-table :data="tags" border style="width: 100%;">
+    <el-table :data="tags" stripe border style="width: 100%;">
       <el-table-column
         type="index"
         label="#">

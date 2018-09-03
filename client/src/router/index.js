@@ -68,6 +68,11 @@ export default new Router({
           path     : '/admin/articleManager/:type/:id?',
           name     : 'articleChange',
           component: resolve => require.ensure([], () => resolve(require('@/components/views/articleChange')), 'admin')
+        },
+        {
+          path     : '/admin/userManager',
+          name     : 'userManager',
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/userManager')), 'admin')
         }
       ]
     },

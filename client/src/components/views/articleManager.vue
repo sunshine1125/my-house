@@ -8,7 +8,7 @@
     </el-row>
     <el-row>
       <el-col :span="24">
-        <el-table :data="lists" border style="width: 100%;">
+        <el-table :data="lists" stripe border style="width: 100%;">
           <el-table-column
             type="index"
             label="#"

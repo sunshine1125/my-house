@@ -129,6 +129,8 @@ router.get('/github/:gitHubId', (req, res) => {
 router.post('/register', (req, res) => {
     let data = req.body;
     let password = data.password;
+    let phone = data.phone ? data.phone : '';
+    let admin = data.admin ? data.admin : false;
     let noop = () => {
     };
     // 生成salt并获取hash值
@@ -145,7 +147,9 @@ router.post('/register', (req, res) => {
                     models.User.create({
                         username: data.username,
                         email   : data.email,
-                        password: password
+                        password: password,
+                        phone   : phone,
+                        admin   : admin
                     }).then(() => {
                         res.status('200').json({success: true, msg: '注册成功'});
                     })
@@ -202,13 +206,25 @@ router.get('/:email', (req, res) => {
         }
     }).then(user => {
         let currentUser = currentUserInfo(user);
+        delete user.dataValues.password;
         res.status('200').json({success: true, user: currentUser});
     })
+});
+
+// 获取全部用户
+router.get('/', (req, res) => {
+    models.User.findAll().then(user => {
+        user.map(u => {
+            delete u.dataValues.password;
+        });
+        res.status('200').json({success: true, user: user});
+    });
 });
 
 // 获取某个用户
 router.get('/:user_id', (req, res) => {
     models.User.findById(req.params.user_id).then(user => {
+        delete user.dataValues.password;
         res.status('200').json({success: true, user: user});
     });
 });
@@ -227,11 +243,26 @@ router.delete('/:user_id', (req, res) => {
 //修改用户信息
 router.put('/:user_id', (req, res) => {
     let data = req.body;
-    models.User.update({
+    let updateUser = {
         username: data.username,
         phone   : data.phone,
         avatar  : data.avatar
-    }, {
+    };
+    if (data.password) {
+        let noop = () => {
+        };
+        // 生成salt并获取hash值
+        bcrypt.genSalt(SALT_ROUNDS, (err, salt) => {
+            bcrypt.hash(data.password, salt, noop, (err, hash) => {
+                updateUser.password = hash;
+            })
+        });
+    }
+    if (data.admin) {
+        updateUser.admin = data.admin;
+    }
+
+    models.User.update(updateUser, {
         where: {
             id: req.params.user_id
         }

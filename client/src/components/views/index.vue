@@ -7,6 +7,7 @@
           <el-menu-item class="goHome" index="/">回首页</el-menu-item>
           <el-menu-item index="/admin/articleManager">文章管理</el-menu-item>
           <el-menu-item v-if="currentUser.admin" index="/admin/tagManager">标签管理</el-menu-item>
+          <el-menu-item index="/admin/userManager">用户管理</el-menu-item>
         </el-menu>
       </div>
     </el-aside>
