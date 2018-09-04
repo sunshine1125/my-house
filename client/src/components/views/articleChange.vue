@@ -114,6 +114,11 @@
         this.edit = true;
       } else if (this.type === 'add') {
           this.edit = false;
+          this.articleData.cover = "https://pek3b.qingstor.com:443/my-house/15356234172779.jpg"
+          this.fileList.push({
+            name: 'default.jpg',
+            url: this.articleData.cover
+          })
           this.$router.push('/admin/articleManager/add');
       } else {
         this.articleData.content = null;
