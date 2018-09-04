@@ -70,7 +70,7 @@
         margin-bottom: 10px;
       }
       tr {
-        th {
+        th, td {
           text-align center
         }
       }

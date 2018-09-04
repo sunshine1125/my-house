@@ -64,7 +64,7 @@
           <el-input v-model="userForm.username"></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email" labelWidth="120px" :rules="validate_rules({required: true, type: 'email'})">
-          <el-input v-model="userForm.email"></el-input>
+          <el-input v-model="userForm.email" :disabled="edit"></el-input>
         </el-form-item>
         <el-form-item label="手机号" prop="phone" labelWidth="120px">
           <el-input v-model="userForm.phone"></el-input>
@@ -132,6 +132,11 @@
             } else {
               this.$http.put(`/api/user/${this.userForm.id}`, this.userForm).then((res) => {
                 this.refreshData();
+                if (this.userForm.id === this.userId) {
+                  localStorage.setItem('currentUser', JSON.stringify(this.users.find(u => {
+                    return u.id === this.userId;
+                  })))
+                }
                 this.edit = false;
                 this.$message({
                   type   : 'success',
@@ -153,6 +158,11 @@
         if (this.currentUser.admin) {
           this.dialogFormVisible = true;
           this.edit = false;
+          this.userForm.username = '';
+          this.userForm.email = '';
+          this.userForm.phone = '';
+          this.userForm.password = '';
+          this.userForm.admin = false;
         } else {
           this.$message.error('您没有操作权限，请联系管理员！')
         }

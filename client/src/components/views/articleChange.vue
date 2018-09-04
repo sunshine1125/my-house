@@ -34,13 +34,26 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item>
-            <upload-image @imgSrc="getImgUrl" :imgPath="articleData.cover" :edit="edit"></upload-image>
-          </el-form-item>
-        </el-col>
-        <el-col :span="4" :offset="5">
+        <el-col :span="4" :offset="13">
           <el-button type="text" @click="addTag()">去添加标签 >></el-button>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col>
+          <el-form-item label="封面" prop="cover">
+            <el-upload
+              class="upload-demo"
+              action="/api/upload"
+              :on-success="handleImgSuccess"
+              :on-remove="handleRemove"
+              :on-exceed="handleExceed"
+              :file-list="fileList"
+              list-type="picture"
+              :limit="limit">
+              <el-button size="small" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </el-form-item>
         </el-col>
       </el-row>
       <el-row>
@@ -60,7 +73,6 @@
 </template>
 
 <script>
-  import uploadImage from '../upLoadImage.vue'
 
   export default {
     name      : 'dataChange',
@@ -71,12 +83,14 @@
         tags       : [],
         postId     : this.$route.params.id,
         edit       : false,
+        limit      : 1,
         articleData: {
           title  : '',
           TagId  : '',
           content: '',
           cover  : ''
         },
+        fileList : [],
         rules      : {
           title: [
             {required: true, message: '请输入标题', trigger: 'blur'}
@@ -113,6 +127,10 @@
         this.$http.get(`/api/post/${this.postId}/true`).then(res => {
           if (res.data.success) {
             this.articleData = res.data.data;
+            this.fileList.push({
+              name: 'cover',
+              url: this.articleData.cover
+            })
           } else if (res.data.notFound) {
             this.$router.push('/404');
           }
@@ -127,26 +145,20 @@
       saveData(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            if (! this.articleData.cover) {
-              this.$alert('请上传文章封面', '警告', {
-                confirmButtonText: '确定'
-              });
+            this.articleData.create_at = this.$moment().format('YYYY-MM-DD HH:mm:ss');
+            if (this.type === 'add') {
+              this.$http.post(`/api/user/${this.userId}/post/create`, this.articleData).then(res => {
+                if (res.data.success) {
+                  this.$router.push('/admin/articleManager');
+                }
+              })
             } else {
-              this.articleData.create_at = this.$moment().format('YYYY-MM-DD HH:mm:ss');
-              if (this.type === 'add') {
-                this.$http.post(`/api/user/${this.userId}/post/create`, this.articleData).then(res => {
+              this.$http.put(`/api/post/${this.postId}/update`, this.articleData)
+                .then(res => {
                   if (res.data.success) {
-                    this.$router.push('/admin/articleManager');
+                    this.$router.push("/admin/articleManager");
                   }
-                })
-              } else {
-                this.$http.put(`/api/post/${this.postId}/update`, this.articleData)
-                  .then(res => {
-                    if (res.data.success) {
-                      this.$router.push("/admin/articleManager");
-                    }
-                  });
-              }
+                });
             }
           } else {
             return false;
@@ -155,9 +167,6 @@
       },
       cancelData() {
         this.$router.push('/admin/articleManager');
-      },
-      getImgUrl(val) {
-        this.articleData.cover = val;
       },
       $imgAdd(pos, $file) {
         let fd = new FormData();
@@ -169,51 +178,74 @@
         }).then(res => {
           this.$refs.md.$img2Url(pos, res.data.path);
         })
+      },
+      handleImgSuccess(res, file) {
+        this.articleData.cover = file.response.path;
+      },
+      handleRemove() {
+        this.articleData.cover = '';
+      },
+      handleExceed(files, fileList) {
+        this.$message.warning('只能同时上传一张图片');
       }
     },
     components: {
-      uploadImage
+
     }
   }
 </script>
-<style scoped lang="stylus">
-  h3 {
-    margin-top: 30px;
-  }
+<style lang="stylus">
+  .dataChange {
+    h3 {
+      margin-top 30px
+    }
 
-  #table {
-    width: 90%;
-    height: 100%;
-    margin: 20px auto;
-  }
+    #table {
+      width 90%
+      height 100%
+      margin 20px auto
+    }
 
-  .container {
-    margin-top: 25px;
-    max-width: 100%;
-  }
+    .container {
+      margin-top 25px
+      max-width 100%
+    }
 
-  .markdown-body {
-    width: 100%;
-    min-height: 600px;
-  }
+    .markdown-body {
+      width 100%
+      min-height 600px
+    }
 
-  .v-note-wrapper.fullscreen {
-    width: 100%;
-    height: 100%;
-  }
+    .v-note-wrapper.fullscreen {
+      width 100%
+      height 100%
+    }
 
-  .custom-select {
-    width: 80%;
-    text-align: left;
-  }
+    .custom-select {
+      width 80%
+      text-align left
+    }
 
-  .rowContainer {
-    padding: 20px;
-  }
+    .rowContainer {
+      padding 20px
+    }
 
-  .customInput {
-    width: 80%;
-    text-align: left;
+    .customInput {
+      width 80%
+      text-align left
+    }
+    .upload-demo {
+      position relative
+      .el-upload-list {
+        position absolute
+        left 25%
+        top 0px
+        li {
+          height auto
+          margin-top 0
+          paddgin 7px 10px 7px 90px
+        }
+      }
+    }
   }
-
 </style>
