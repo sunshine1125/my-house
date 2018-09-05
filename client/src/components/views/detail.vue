@@ -21,13 +21,16 @@
           <li v-show="toTop" @click="goTop()">返回顶部</li>
         </ul>
       </div>
+      <div class="writeComment">
+        <comment :post="postId"></comment>
+      </div>
     </el-main>
   </el-container>
 </template>
 
 <script>
   import topNav from '../topNav.vue';
-
+  import comment from './comment.vue';
   export default {
     name      : 'detail',
     data() {
@@ -90,7 +93,8 @@
       }
     },
     components: {
-      topNav
+      topNav,
+      comment
     }
   }
 </script>
@@ -175,6 +179,11 @@
           }
         }
       }
+      .writeComment {
+        width 80%
+        margin 60px auto
+        position relative
+      }
     }
   }
   @media screen and (max-width: 1300px)
@@ -225,6 +234,10 @@
               font-size 14px
             }
           }
+        }
+        .writeComment {
+          width 100%
+          margin 40px auto
         }
       }
     }

@@ -12,6 +12,7 @@ router.get('/post', (req, res) => {
     }).then(post => {
         post.forEach(item => {
             item.content = md.render(item.content);
+            delete item.User.dataValues.password;
         });
         res.status('200').json({success: true, data: post})
     })
@@ -45,6 +46,7 @@ router.get('/tag/:tag_id/post', (req, res) => {
         if (post) {
             post.forEach(item => {
                 item.content = md.render(item.content);
+                delete item.User.dataValues.password;
             });
         }
         res.status('200').json({success: true, data: post});
@@ -63,6 +65,7 @@ router.get('/post/:post_id/:edit?', (req, res) => {
            if (! req.params.edit) {
                post.content = md.render(post.content);
            }
+           delete post.User.dataValues.password;
            res.status('200').json({success: true, data: post});
        } else {
            res.status('202').json({success: false, notFound: true});

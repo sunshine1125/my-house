@@ -3,25 +3,29 @@ const express = require('express');
 const router = express.Router();
 
 // 获取单个文章的全部评论
-router.get('/post/:post_id/comment', (req, res) => {
+router.get('/get/post/:post_id/comment', (req, res) => {
     models.Comment.findAll({
         where: {
-            PostId: req.params.post_id
-        }
+            PostId : req.params.post_id
+        },
+        include: ['Post', 'User']
     }).then(comment => {
+        comment.forEach(c => {
+            delete c.User.dataValues.password;
+        });
         res.status('200').json({success: true, data: comment});
     })
 });
 
 // 获取单个评论
 router.get('/comment/:comment_id', (req, res) => {
-   models.findById(req.params.comment_id).then(comment => {
-       res.status('200').json({success: true, data: comment});
-   })
+    models.findById(req.params.comment_id).then(comment => {
+        res.status('200').json({success: true, data: comment});
+    })
 });
 
 // 发表评论
-router.post('user/:user_id/post/:post_id/comment/create', (req, res) => {
+router.post('/user/:user_id/post/:post_id/comment/create', (req, res) => {
     let data = req.body;
     models.Comment.create({
         content  : data.content,
@@ -37,7 +41,7 @@ router.post('user/:user_id/post/:post_id/comment/create', (req, res) => {
 router.put('/comment/:comment_id/update', (req, res) => {
     let data = req.body;
     models.Comment.update({
-        content  : data.content
+        content: data.content
     }, {
         where: {
             id: req.params.comment_id
