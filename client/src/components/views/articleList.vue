@@ -4,7 +4,7 @@
     <el-main>
       <h3>{{pageTitle}}</h3>
       <el-row v-if="articleLists.length === 0"><h5 style="margin-top: 20px;">您选择的分类下没有文章</h5></el-row>
-      <el-row v-else class="article" :key="article.title" v-for="article in articleLists">
+      <el-row v-else class="article" :key="article._id" v-for="article in articleLists">
         <el-card :body-style="{ padding: '0px' }">
           <img @click="readAll(article.id)" :src="article.cover" class="image">
           <div style="padding: 14px; text-align: left;">
@@ -25,7 +25,7 @@
               <el-button :type="selectedTagId === 0 ? 'primary' : null" :plain="selectedTagId === 0" @click="clickGetAll()" size="small">全部文章</el-button>
             </el-badge>
           </el-row>
-          <el-row v-for="tag in tagLists">
+          <el-row v-for="tag in tagLists" :key="tag.id">
             <el-badge class="item" :key="tag.id" :index="tag.id">
               <el-button :type="selectedTagId === tag.id ? 'primary' : null" :plain="selectedTagId === tag.id" @click="switchTag(tag.id, tag.title)" size="small">{{tag.title}}</el-button>
             </el-badge>

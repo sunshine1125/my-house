@@ -33,7 +33,7 @@
       <el-row class="top-title">
         <span>全部评论（{{commentLists.length}}）</span>
       </el-row>
-      <el-row class="comment-item" v-for="item in commentLists">
+      <el-row class="comment-item" v-for="item in commentLists" :key="item._id">
         <el-row>
           <el-row class="author">
             <el-col :span="3">

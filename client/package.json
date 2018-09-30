@@ -18,6 +18,8 @@
     "express": "^4.16.2",
     "jquery": "^3.3.1",
     "markdown-it": "^8.4.1",
+    "markdown-it-linkscheme": "^1.0.2",
+    "markdown-it-replace-link": "^1.0.1",
     "mavon-editor": "^2.6.17",
     "moment": "^2.22.1",
     "remove-markdown": "^0.2.2",
@@ -25,6 +27,7 @@
     "stylus-loader": "^3.0.2",
     "vue": "^2.5.2",
     "vue-axios": "^2.0.2",
+    "vue-photo-preview": "^1.0.9",
     "vue-router": "^3.0.1",
     "vue-social-sharing": "^2.3.3"
   },

@@ -14,7 +14,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import '../static/css/common.css';
 import 'mavon-editor/dist/css/index.css';
 import '../static/css/github-markdown.css';
-
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
 
 import App from './App'
 
@@ -23,6 +24,12 @@ Vue.use(VueAxios, axios);
 Vue.use(ElmentUI);
 Vue.use(Validate);
 Vue.use(mavonEditor);
+let options = {
+  fullscreenEl: false
+};
+Vue.use(preview, options)
+
+mavonEditor.markdownIt.set({ linkify : true })
 
 Vue.prototype.$moment = moment;
 
