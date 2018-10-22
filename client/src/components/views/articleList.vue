@@ -215,6 +215,14 @@
       }
     }
   }
+  @media screen and (max-width: 1280px)
+    .wrapper {
+      .el-main {
+        .tagList {
+          left: 78%
+        }
+      }
+    }
 
   @media screen and (max-width: 786px)
     .wrapper {

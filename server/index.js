@@ -9,6 +9,7 @@ const posts = require('./routes/posts');
 const comments = require('./routes/comment');
 const tags = require('./routes/tag');
 const upload = require('./routes/upload');
+const replies = require('./routes/reply');
 
 app.use(express.static('public'));
 
@@ -25,5 +26,6 @@ app.use(posts);
 app.use(comments);
 app.use(tags);
 app.use(upload);
+app.use(replies);
 
 module.exports = app;

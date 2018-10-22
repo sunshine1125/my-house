@@ -8,7 +8,10 @@ router.get('/get/post/:post_id/comment', (req, res) => {
         where: {
             PostId : req.params.post_id
         },
-        include: ['Post', 'User']
+        include: [
+            { model: models.User },
+            { model: models.Reply }
+        ]
     }).then(comment => {
         comment.forEach(c => {
             delete c.User.dataValues.password;
@@ -19,7 +22,13 @@ router.get('/get/post/:post_id/comment', (req, res) => {
 
 // 获取单个评论
 router.get('/comment/:comment_id', (req, res) => {
-    models.findById(req.params.comment_id).then(comment => {
+    models.Comment.findOne({
+        where: {id: req.params.comment_id},
+        include: [
+            { model: models.User },
+            { model: models.Reply }
+        ]
+    }).then(comment => {
         res.status('200').json({success: true, data: comment});
     })
 });
@@ -30,6 +39,7 @@ router.post('/user/:user_id/post/:post_id/comment/create', (req, res) => {
     models.Comment.create({
         content  : data.content,
         create_at: data.create_at,
+        floor    : data.floor,
         UserId   : req.params.user_id,
         PostId   : req.params.post_id,
     }).then(function () {

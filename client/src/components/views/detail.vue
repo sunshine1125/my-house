@@ -12,7 +12,7 @@
           <span>{{data.create_at}}</span>&nbsp;&nbsp;
           <el-tag type="info" size="small">{{data.tagTitle}}</el-tag>
         </div>
-        <div id="img_preview" ref="content" class="markdown-body content" v-html="data.content"></div>
+        <div ref="content" class="markdown-body content" v-html="data.content"></div>
       </div>
       <div id="navbar-example">
         <!-- 导航 a中href="#one" 来寻找锚点-->
@@ -66,6 +66,7 @@
           }).then(() => {
             this.addPreviewAttrForAllImages();
             this.rightSideBar();
+            this.$previewRefresh();
           });
         },
         rightSideBar() {
@@ -94,7 +95,7 @@
           this.$router.push(`/admin/articleManager/edit/${this.postId}`);
         },
         addPreviewAttrForAllImages() {
-          let imgDOMs = $('#img_preview').find('img');
+          let imgDOMs = this.$refs.content.querySelectorAll('img');
           for (let i = 0; i< imgDOMs.length; i++) {
             imgDOMs[i].setAttribute('preview', 1);
           }
@@ -174,7 +175,7 @@
           .tabLists {
             position fixed
             bottom 20px
-            left 72%
+            left 84%
             display block
             li {
               text-align left
@@ -194,18 +195,6 @@
         }
       }
     }
-    @media screen and (max-width: 1300px)
-      .articleDetail {
-        .el-main {
-          #navbar-example {
-            .tabLists {
-              left 2%
-              z-index 100
-              opacity 0.8
-            }
-          }
-        }
-      }
 
     @media screen and (max-width: 786px)
       .articleDetail {
@@ -246,6 +235,13 @@
           .writeComment {
             width 100%
             margin 40px auto
+          }
+          #navbar-example {
+            .tabLists {
+              left 2%
+              z-index 100
+              opacity 0.8
+            }
           }
         }
       }
