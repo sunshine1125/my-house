@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
         create_at: {
             type: DataTypes.DATE
         },
+        // 文章点赞数
+        like_num: {
+            type: DataTypes.INTEGER
+        }
     }, {
         freezeTableName: true,
         timestamps     : false
@@ -42,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false
             }
         });
+        models.Post.hasMany(models.P_like);
     };
 
     return Post;

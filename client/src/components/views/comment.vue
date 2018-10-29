@@ -32,6 +32,10 @@
     <el-row class="comment-list">
       <el-row class="top-title">
         <span>全部评论（{{commentLists.length}}）</span>
+        <el-row class="pull-right">
+          <a :class="sort ? 'active' : ''" @click="sortByTime()">按时间排序</a>
+          <a :class="sort ? '' : 'active'" @click="sortByLike()">按点赞排序</a>
+        </el-row>
       </el-row>
       <el-row class="comment-item" v-for="(item, i) in commentLists" :key="item._id">
         <el-row>
@@ -49,14 +53,15 @@
           <el-row class="comment-wrap">
             <p>{{item.content}}</p>
             <el-row class="tool-group">
-              <a class="like-button">
-                <span>赞</span>
+              <a class="like-button" :class="item.like ? 'do_like' : ''" @click="likeOrNot(i, item.id)">
+                <span v-if="item.like_num > 0">{{item.like_num}}人赞</span>
+                <span v-else>赞</span>
               </a>
               <a @click="reply(i, item.User.username)">
                 <i class="el-icon-edit-outline"></i>
                 <span>回复</span>
               </a>
-              <a class="comment-delete" @click="deleteComment(item.id)" v-if="item.UserId === currentUser.id">
+              <a class="comment-delete" @click="deleteComment(item.id)" v-if="currentUser && item.UserId === currentUser.id">
                 <span>删除</span>
               </a>
             </el-row>
@@ -122,10 +127,13 @@
         },
         canSend     : false,
         commentLists: [],
-        reply_username: null
+        reply_username: null,
+        comment_like: [],
+        sort        : true
       }
     },
     mounted   : function () {
+      this.getCurrentUserLike();
       this.getCommentLists();
     },
     methods   : {
@@ -147,12 +155,28 @@
           data.map(d => {
             d.reply = false;
             d.replyContent = '';
+            if (this.comment_like) {
+              this.comment_like.indexOf(d.id) > -1 ? d.like = true : d.like = false;
+            } else {
+              d.like = false;
+            }
           });
-          this.commentLists = data.sort(this.sortNumber)
+          this.commentLists = data.sort(this.sortNumberByTime)
         })
       },
-      sortNumber(a, b) {
+      sortNumberByTime(a, b) {
         return b.floor-a.floor;
+      },
+      sortNumberByLike(a, b) {
+        return b.like_num - a.like_num;
+      },
+      sortByTime() {
+        this.sort = false;
+        this.commentLists = this.commentLists.sort(this.sortNumberByTime)
+      },
+      sortByLike() {
+        this.sort = true;
+        this.commentLists = this.commentLists.sort(this.sortNumberByLike)
       },
       send() {
         if (! this.comment.content) return this.$message.warning('评论内容不能为空');
@@ -196,6 +220,40 @@
           this.getCommentLists();
           this.$message.success('删除成功');
         })
+      },
+      likeOrNot(i, id) {
+        if (this.currentUser) {
+          this.commentLists[i].like = ! this.commentLists[i].like;
+          this.commentLists[i].like === true ? this.commentLists[i].like_num++ : this.commentLists[i].like_num--;
+          this.$http.put(`/api/comment/${id}/like`, {
+            like_num: this.commentLists[i].like_num
+          }).then(() => {
+            if (this.commentLists[i].like) {
+              this.$http.post(`/api/user/${this.currentUser.id}/comment/${id}/like`).then(() => {
+                this.getCurrentUserLike();
+              });
+            } else {
+              this.$http.delete(`/api/user/${this.currentUser.id}/comment/${id}/like`).then(() => {
+                this.getCurrentUserLike();
+              });
+            }
+          });
+        } else {
+          this.$router.push('/login');
+        }
+      },
+      getCurrentUserLike() {
+        if (this.currentUser) {
+          this.$http.get(`/api/user/${this.currentUser.id}/comment_like`).then(res => {
+            if (res.data.data && res.data.data.length > 0) {
+              res.data.data.map(r => {
+                if (r.user_id === this.currentUser.id) {
+                  this.comment_like.push(r.comment_id);
+                }
+              })
+            }
+          })
+        }
       }
     },
     components: {}
@@ -257,6 +315,20 @@
         font-size 17px
         font-weight 700
         border-bottom 1px solid #d0d0d0
+        .pull-right {
+          float: right!important
+          a {
+            margin-left 10px
+            font-size 12px
+            font-weight 400
+            color #969696
+            display inline-block
+            cursor pointer
+            &.active, &:hover {
+              color #2f2f2f
+            }
+          }
+        }
       }
       .comment-item {
         padding 20px 0 30px
@@ -302,11 +374,16 @@
                   top -16px
                   width 50px
                   height 50px
-                  background-image url(../../../static/images/zan_animation.png)
+                  background-image url(../../assets/zan_animation.png)
                   background-position left
                   background-repeat no-repeat
                   -webkit-background-size 1050px 50px
                   background-size 1050px 50px
+                }
+              }
+              &.do_like {
+                &:before {
+                  background-position right
                 }
               }
               span {

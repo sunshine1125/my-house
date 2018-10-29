@@ -105,6 +105,19 @@ router.put('/post/:post_id/update', (req, res) => {
     });
 });
 
+// 点赞
+router.put('/post/:post_id/like', (req, res) => {
+    models.Post.update({
+        like_num : req.body.like_num
+    }, {
+        where: {
+            id: req.params.post_id
+        }
+    }).then(function () {
+        res.status('200').json({success: true, msg: '操作成功'});
+    });
+});
+
 //删除文章
 router.delete('/post/:post_id/destroy', function (req, res) {
     models.Post.destroy({

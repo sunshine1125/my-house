@@ -62,7 +62,7 @@ router.put('/comment/:comment_id/update', (req, res) => {
 });
 
 //删除评论
-router.delete('/comment/:comment_id/destroy', function (req, res) {
+router.delete('/comment/:comment_id/destroy',  (req, res)=> {
     models.Comment.destroy({
         where: {
             id: req.params.comment_id
@@ -72,5 +72,18 @@ router.delete('/comment/:comment_id/destroy', function (req, res) {
     })
 });
 
+
+// 点赞
+router.put('/comment/:comment_id/like', (req, res) => {
+    models.Comment.update({
+        like_num : req.body.like_num
+    }, {
+        where: {
+            id: req.params.comment_id
+        }
+    }).then(function () {
+        res.status('200').json({success: true, msg: '操作成功'});
+    });
+});
 
 module.exports = router;
