@@ -119,7 +119,7 @@ router.put('/post/:post_id/like', (req, res) => {
 });
 
 //删除文章
-router.delete('/post/:post_id/destroy', function (req, res) {
+router.delete('/post/:post_id/destroy', (req, res) => {
     models.Post.destroy({
         where: {
             id: req.params.post_id
@@ -129,5 +129,17 @@ router.delete('/post/:post_id/destroy', function (req, res) {
     })
 });
 
+// 评论数
+router.put('/post/:post_id/comment', (req, res) => {
+    models.Post.update({
+        comment_num: req.body.comment_num
+    },{
+        where: {
+            id: req.params.post_id
+        }
+    }).then(function () {
+        res.status('200').json({success: true, msg: '操作成功'});
+    });
+});
 
 module.exports = router;

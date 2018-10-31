@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         // 关注者id
         user_id: {
-            type: DataTypes.STRING
+            type: DataTypes.INTEGER
         },
     }, {
         freezeTableName: true,

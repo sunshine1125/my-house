@@ -1,14 +1,19 @@
 const models = require('../models');
 const express = require('express');
 const router = express.Router();
+const md = require('markdown-it')();
 
 // 获取用户赞过的文章
 router.get('/user/:user_id/post_like', (req, res) => {
     models.P_like.findAll({
         where: {
             UserId: req.params.user_id
-        }
+        },
+        include: ['Post']
     }).then(function (data) {
+        data.forEach(item => {
+            item.Post.content = md.render(item.Post.content);
+        });
         res.status('200').json({success: true, msg: '操作成功', data: data});
     });
 });

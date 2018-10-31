@@ -47,7 +47,7 @@
         </ul>
       </div>
       <div class="writeComment">
-        <comment :post="postId"></comment>
+        <comment :commentNum="comment_num" :post="postId"></comment>
       </div>
     </el-main>
   </el-container>
@@ -70,7 +70,8 @@
         likePost     : false,
         post_like_num: 0,
         followActive : true,
-        authId       : null
+        authId       : null,
+        comment_num  : 0
       }
     },
     mounted   : function () {
@@ -100,6 +101,7 @@
             this.data.tagTitle = res.data.data.Tag.title;
             this.post_like_num = res.data.data.like_num;
             this.authId = res.data.data.UserId;
+            this.comment_num = res.data.data.comment_num;
           } else if (res.data.notFound) {
             this.$router.push('/404');
           }

@@ -29,6 +29,7 @@
               <template slot="title">
                 <img class="image" :src="avatar" alt="" width="40" height="40">
               </template>
+              <el-menu-item index="profile">我的主页</el-menu-item>
               <el-menu-item index="goAdmin">后台管理</el-menu-item>
               <el-menu-item index="settings">设置</el-menu-item>
               <el-menu-item index="reset">重置密码</el-menu-item>
@@ -69,7 +70,7 @@
           localStorage.setItem('currentTab', key);
         }
         if (key === 'follow') {
-          this.$router.push('/');
+          this.$router.push('/follow');
           localStorage.setItem('currentTab', key);
         }
         if (key === 'news') {
@@ -78,6 +79,10 @@
         }
         if (key === 'write') {
           this.$router.push('/admin/articleManager/add');
+          localStorage.setItem('currentTab', key);
+        }
+        if (key === 'profile') {
+          this.$router.push(`/u/${this.currentUser.id}`);
           localStorage.setItem('currentTab', key);
         }
         if (key === 'goAdmin') {

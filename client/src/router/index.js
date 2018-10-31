@@ -9,6 +9,8 @@ import callback from '@/components/callback'
 import setting from '@/components/views/setting'
 import password from '@/components/views/password'
 import NotFoundComponent from '@/components/notFound'
+import profile from '@/components/views/profile'
+import follow from '@/components/views/follow'
 
 Vue.use(Router)
 
@@ -34,6 +36,16 @@ export default new Router({
       path     : '/detail/:id',
       name     : 'detail',
       component: detail
+    },
+    {
+      path     : '/u/:id',
+      name     : 'profile',
+      component: profile
+    },
+    {
+      path     : '/follow',
+      name     : 'follow',
+      component: follow
     },
     {
       path     : '/setting',

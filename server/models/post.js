@@ -2,30 +2,36 @@
 module.exports = (sequelize, DataTypes) => {
     const Post = sequelize.define('Post', {
         //文章id
-        id       : {
+        id         : {
             type         : DataTypes.INTEGER,
             primaryKey   : true,
             autoIncrement: true
         },
         // 文章封面
-        cover    : {
+        cover      : {
             type: DataTypes.STRING
         },
         // 文章标题
-        title    : {
+        title      : {
             type: DataTypes.STRING
         },
         // 文章内容
-        content  : {
+        content    : {
             type: DataTypes.TEXT
         },
         // 文章发表时间
-        create_at: {
+        create_at  : {
             type: DataTypes.DATE
         },
         // 文章点赞数
-        like_num: {
-            type: DataTypes.INTEGER
+        like_num   : {
+            type        : DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        // 文章评论数
+        comment_num: {
+            type        : DataTypes.INTEGER,
+            defaultValue: 0
         }
     }, {
         freezeTableName: true,

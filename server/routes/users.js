@@ -222,8 +222,12 @@ router.get('/', (req, res) => {
 });
 
 // 获取某个用户
-router.get('/:user_id', (req, res) => {
-    models.User.findById(req.params.user_id).then(user => {
+router.get('/get/:user_id', (req, res) => {
+    models.User.findOne({
+        where: {
+            id : req.params.user_id
+        }
+    }).then(user => {
         delete user.dataValues.password;
         res.status('200').json({success: true, user: user});
     });

@@ -117,7 +117,7 @@
 <script>
   export default {
     name      : 'comment',
-    props     : ['post'],
+    props     : ['post', 'commentNum'],
     data() {
       return {
         currentUser : JSON.parse(localStorage.getItem('currentUser')),
@@ -186,6 +186,9 @@
           this.comment.content = '';
           this.canSend = false;
           this.$message.success('评论成功');
+          this.$http.put(`/api/post/${this.post}/comment`, {
+            comment_num: this.commentNum + 1
+          });
         })
       },
       formatDate(date) {
@@ -195,6 +198,9 @@
         this.$http.delete(`/api/comment/${id}/destroy`).then(() => {
           this.getCommentLists();
           this.$message.success('删除成功');
+          this.$http.put(`/api/post/${this.post}/comment`, {
+            comment_num: this.commentNum - 1
+          });
         })
       },
       reply(index, username) {
