@@ -4,7 +4,7 @@
       <!--左侧导航-->
       <div class="main-left">
         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true">
-          <el-menu-item class="goHome" index="/">回首页</el-menu-item>
+          <el-menu-item class="goHome" index="/" @click="goHome()">回首页</el-menu-item>
           <el-menu-item index="/admin/articleManager">文章管理</el-menu-item>
           <el-menu-item v-if="currentUser.admin" index="/admin/tagManager">标签管理</el-menu-item>
           <el-menu-item index="/admin/userManager">用户管理</el-menu-item>
@@ -28,6 +28,12 @@
     mounted: function() {
       if (!this.currentUser) {
         this.$router.push('/login');
+        localStorage.setItem('currentTab', 'discover');
+      }
+    },
+    methods: {
+      goHome() {
+        localStorage.setItem('currentTab', 'discover');
       }
     }
   }

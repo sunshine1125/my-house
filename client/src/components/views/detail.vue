@@ -3,16 +3,26 @@
     <top-nav></top-nav>
     <el-main>
       <div class="article" data-spy="scroll" data-target="#navbar-example">
-        <el-button v-if="currentUser && currentUser.id === data.authId" size="small" type="info" plain round
-                   class="edit" @click="edit()">编辑文章
-        </el-button>
-        <div class="header">
-          <h1 class="title">{{data.title}}</h1>
-        </div>
-        <div class="time">
-          <span class="auth">{{data.auth}}</span>&nbsp;&nbsp;
-          <span>{{data.create_at}}</span>&nbsp;&nbsp;
-          <el-tag type="info" size="small">{{data.tagTitle}}</el-tag>
+        <h1 class="title">{{data.title}}</h1>
+        <div class="author">
+          <a class="avatar">
+            <img :src="data.avatar" alt="avatar">
+          </a>
+          <div class="info">
+            <span class="name">
+              <a>{{data.auth}}</a>
+            </span>
+            <a class="btn btn-success" :class="{follow: followActive, following: !followActive}" v-if="displayFollowBtn(data.authId)">
+              <span v-if="followActive" @click="addFollow(data.authId)">+ 关注</span>
+              <span class="hasFollow" v-else>已关注</span>
+              <span class="removeFollow" @click="removeFollow(data.authId)">取消关注</span>
+            </a>
+            <div class="meta">
+              <span class="publish-time">{{data.create_at}}</span>
+              <span>标签： {{data.tagTitle}}</span>
+            </div>
+          </div>
+          <a v-if="currentUser && currentUser.id === data.authId" class="edit" @click="edit()">编辑文章</a>
         </div>
         <div ref="content" class="markdown-body content" v-html="data.content"></div>
       </div>
@@ -58,24 +68,38 @@
         toTop        : false,
         scrollTop    : document.body.scrollTop || document.documentElement.scrollTop,
         likePost     : false,
-        post_like_num: 0
+        post_like_num: 0,
+        followActive : true,
+        authId       : null
       }
     },
     mounted   : function () {
       this.getArticle();
       window.addEventListener('scroll', this.handleScroll);
       this.getUserLikePosts();
+      this.getUserFollow();
     },
     methods   : {
+      displayFollowBtn(authId) {
+        if (this.currentUser) {
+          if (this.currentUser.id === authId) {
+            return false;
+          }
+          return true;
+        }
+        return true;
+      },
       getArticle() {
         this.$http.get(`/api/post/${this.postId}`).then(res => {
           if (res.data.success) {
             this.data = res.data.data;
             this.data.create_at = this.$moment(this.data.create_at).format('YYYY.MM.DD HH:mm:ss');
             this.data.auth = res.data.data.User.username;
+            this.data.avatar = res.data.data.User.avatar;
             this.data.authId = res.data.data.UserId;
             this.data.tagTitle = res.data.data.Tag.title;
             this.post_like_num = res.data.data.like_num;
+            this.authId = res.data.data.UserId;
           } else if (res.data.notFound) {
             this.$router.push('/404');
           }
@@ -139,6 +163,31 @@
             })
           })
         }
+      },
+      getUserFollow() {
+        if (this.currentUser) {
+          this.$http.get(`/api/user/${this.currentUser.id}/followUser`).then(res => {
+            res.data.data.forEach(d => {
+              if (d.follow_id === this.authId) {
+                this.followActive = false;
+              }
+            })
+          })
+        }
+      },
+      addFollow(authId) {
+        if (this.currentUser) {
+          this.$http.post(`/api/user/${this.currentUser.id}/followUser/${authId}`).then(res => {
+            this.followActive = false;
+          });
+        } else {
+          this.$router.push('/login')
+        }
+      },
+      removeFollow(authId) {
+        this.$http.delete(`/api/user/${this.currentUser.id}/followUser/${authId}`).then(res => {
+          this.followActive = true;
+        });
       }
     },
     components: {
@@ -165,24 +214,89 @@
         background #fff
         box-shadow 0 0 2px 0 rgba(0, 0, 0, .36)
         position relative
-        .edit {
-          position absolute
-          top 0.5%
-          right 2%
+        .title {
+          font-size 34px
+          font-weight 700
+          line-height 34px
+          padding-bottom 20px
         }
-        .header {
-          .title {
-            font-size 34px
-            font-weight 700
-            line-height 34px
-            padding-bottom 20px
+        .author {
+          text-align left
+          margin 30px 0 40px
+          .avatar {
+            cursor pointer
+            width 48px
+            height 48px
+            vertical-align middle
+            display inline-block
+            img {
+              width 100%
+              height 100%
+              border 1px solid #ddd
+              border-radius 50%
+            }
           }
-          .time {
+          .info {
+            vertical-align middle
+            display inline-block
+            margin-left 8px
+            .name {
+              margin-right 3px
+              font-size 16px
+              vertical-align middle
+            }
+            .btn {
+              font-weight 400
+              line-height normal
+              border-color #42c02e
+              padding 0 7px 0 5px
+              font-size 12px
+              border-radius 40px
+            }
+            .follow {
+              border-color #42c02e
+              color #ffffff
+              background-color #42c02e
+            }
+            .following {
+              background none
+              color #8c8c8c
+              border 1px solid hsla(0, 0%, 59%, .6)
+              &:hover {
+                .hasFollow {
+                  display none
+                }
+                .removeFollow {
+                  display inline-block
+                }
+              }
+            }
+            a {
+              color #333
+              cursor pointer
+            }
+            .meta {
+              margin-top 5px
+              font-size 12px
+              color #969696
+              span {
+                padding-right 5px
+              }
+            }
+            .removeFollow {
+              display none
+            }
+          }
+          .edit {
+            float right
+            margin-top 8px
+            padding 0 12px
             font-size 14px
-            margin-bottom 20px
-          }
-          .auth {
-            margin-right 10px
+            border 1px solid #dcdcdc
+            color #9b9b9b
+            line-height 30px
+            border-radius 50px
+            cursor pointer
           }
         }
         .content {
