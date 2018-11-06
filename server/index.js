@@ -13,6 +13,7 @@ const replies = require('./routes/reply');
 const comment_like = require('./routes/comment_like');
 const post_like = require('./routes/post_like');
 const users_follow = require('./routes/users_follow');
+const message = require('./routes/message')
 
 app.use(express.static('public'));
 
@@ -33,5 +34,6 @@ app.use(replies);
 app.use(comment_like);
 app.use(post_like);
 app.use(users_follow);
+app.use(message);
 
 module.exports = app;

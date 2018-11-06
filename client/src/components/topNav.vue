@@ -74,7 +74,7 @@
           localStorage.setItem('currentTab', key);
         }
         if (key === 'news') {
-          this.$router.push('/');
+          this.$router.push('/news');
           localStorage.setItem('currentTab', key);
         }
         if (key === 'write') {

@@ -23,8 +23,8 @@ router.post('/user/:user_id/post/:post_id/like', (req, res) => {
     models.P_like.create({
         UserId: req.params.user_id,
         PostId: req.params.post_id
-    }).then(function () {
-        res.status('200').json({success: true, msg: '操作成功'});
+    }).then(function (result) {
+        res.status('200').json({success: true, msg: '操作成功', messageId: result.dataValues.id});
     });
 });
 

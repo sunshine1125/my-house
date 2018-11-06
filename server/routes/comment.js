@@ -42,8 +42,8 @@ router.post('/user/:user_id/post/:post_id/comment/create', (req, res) => {
         floor    : data.floor,
         UserId   : req.params.user_id,
         PostId   : req.params.post_id,
-    }).then(function () {
-        res.status('200').json({success: true, msg: '发表成功'});
+    }).then(function (result) {
+        res.status('200').json({success: true, msg: '发表成功', messageId: result.dataValues.id});
     });
 });
 

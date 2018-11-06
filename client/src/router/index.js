@@ -11,6 +11,7 @@ import password from '@/components/views/password'
 import NotFoundComponent from '@/components/notFound'
 import profile from '@/components/views/profile'
 import follow from '@/components/views/follow'
+import news from '@/components/views/news'
 
 Vue.use(Router)
 
@@ -46,6 +47,30 @@ export default new Router({
       path     : '/follow',
       name     : 'follow',
       component: follow
+    },
+    {
+      path     : '/news',
+      name     : 'news',
+      component: news,
+      redirect : '/news/comments',
+      children : [
+        {
+          path     : '/news/comments',
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/n_comment')), 'news')
+        },
+        {
+          path     : '/news/write',
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/n_write')), 'news')
+        },
+        {
+          path     : '/news/like',
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/n_like')), 'news')
+        },
+        {
+          path     : '/news/follow',
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/n_follow')), 'news')
+        }
+      ]
     },
     {
       path     : '/setting',

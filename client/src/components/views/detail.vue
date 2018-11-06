@@ -47,7 +47,7 @@
         </ul>
       </div>
       <div class="writeComment">
-        <comment :commentNum="comment_num" :post="postId"></comment>
+        <comment :commentNum="comment_num" :post="postId" :authId="data.authId"></comment>
       </div>
     </el-main>
   </el-container>
@@ -149,7 +149,9 @@
           like_num: this.post_like_num
         }).then(() => {
           if (this.likePost) {
-            this.$http.post(`/api/user/${this.currentUser.id}/post/${this.postId}/like`);
+            this.$http.post(`/api/user/${this.currentUser.id}/post/${this.postId}/like`).then(res => {
+              this.$http.post(`/api/send/${this.currentUser.id}/rec/${this.authId}/message/${res.data.messageId}/like`);
+            });
           } else {
             this.$http.delete(`/api/user/${this.currentUser.id}/post/${this.postId}/like`);
           }
@@ -181,6 +183,7 @@
         if (this.currentUser) {
           this.$http.post(`/api/user/${this.currentUser.id}/followUser/${authId}`).then(res => {
             this.followActive = false;
+            this.$http.post(`/api/send/${this.currentUser.id}/rec/${authId}/message/${res.data.messageId}/follow`);
           });
         } else {
           this.$router.push('/login')

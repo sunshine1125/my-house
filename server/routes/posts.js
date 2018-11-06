@@ -73,6 +73,17 @@ router.get('/post/:post_id/:edit?', (req, res) => {
    })
 });
 
+// 获取文章标题
+router.get('/post/:post_id/msg', (req, res) => {
+    models.Post.findOne({
+        where: {
+            id: req.params.post_id
+        },
+    }).then(post => {
+        res.status('200').json({success: true, data: post});
+    })
+});
+
 // 发表文章
 router.post('/user/:user_id/post/create', (req, res) => {
     let data = req.body;

@@ -117,7 +117,7 @@
 <script>
   export default {
     name      : 'comment',
-    props     : ['post', 'commentNum'],
+    props     : ['post', 'commentNum', 'authId'],
     data() {
       return {
         currentUser : JSON.parse(localStorage.getItem('currentUser')),
@@ -182,13 +182,16 @@
         if (! this.comment.content) return this.$message.warning('评论内容不能为空');
         this.comment.floor = this.commentLists.length + 1;
         this.$http.post(`/api/user/${this.currentUser.id}/post/${this.post}/comment/create`, this.comment).then(res => {
-          this.getCommentLists();
-          this.comment.content = '';
-          this.canSend = false;
-          this.$message.success('评论成功');
-          this.$http.put(`/api/post/${this.post}/comment`, {
-            comment_num: this.commentNum + 1
-          });
+          if (res.data.success) {
+            this.getCommentLists();
+            this.comment.content = '';
+            this.canSend = false;
+            this.$message.success(res.data.msg);
+            this.$http.put(`/api/post/${this.post}/comment`, {
+              comment_num: this.commentNum + 1
+            });
+            this.$http.post(`/api/send/${this.currentUser.id}/rec/${this.authId}/message/${res.data.messageId}/comment`);
+          }
         })
       },
       formatDate(date) {
@@ -235,8 +238,9 @@
             like_num: this.commentLists[i].like_num
           }).then(() => {
             if (this.commentLists[i].like) {
-              this.$http.post(`/api/user/${this.currentUser.id}/comment/${id}/like`).then(() => {
+              this.$http.post(`/api/user/${this.currentUser.id}/comment/${id}/like`).then((res) => {
                 this.getCurrentUserLike();
+                this.$http.post(`/api/send/${this.currentUser.id}/rec/${this.authId}/message/${res.data.messageId}/like/c`);
               });
             } else {
               this.$http.delete(`/api/user/${this.currentUser.id}/comment/${id}/like`).then(() => {
