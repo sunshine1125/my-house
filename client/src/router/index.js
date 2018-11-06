@@ -69,6 +69,10 @@ export default new Router({
         {
           path     : '/news/follow',
           component: resolve => require.ensure([], () => resolve(require('@/components/views/n_follow')), 'news')
+        },
+        {
+          path     : '/news/other',
+          component: resolve => require.ensure([], () => resolve(require('@/components/views/n_other')), 'news')
         }
       ]
     },

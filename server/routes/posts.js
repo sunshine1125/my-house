@@ -94,8 +94,8 @@ router.post('/user/:user_id/post/create', (req, res) => {
         create_at: data.create_at,
         UserId   : req.params.user_id,
         TagId    : data.TagId
-    }).then(function () {
-        res.status('200').json({success: true, msg: '添加成功'});
+    }).then(function (result) {
+        res.status('200').json({success: true, msg: '添加成功', messageId: result.dataValues.id});
     });
 });
 

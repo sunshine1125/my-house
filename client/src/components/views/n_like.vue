@@ -7,7 +7,7 @@
     </el-row>
     <el-row class="list-container">
       <el-row class="note-list">
-        <el-row v-for="list in lists" class="list">
+        <el-row v-if="lists.length > 0" v-for="list in lists" class="list">
           <el-col :span="2">
             <a :href="`/u/${list.send.id}`" class="avatar">
               <img :src="list.send.avatar" alt="头像">
@@ -23,6 +23,10 @@
             </el-row>
             <el-row class="time">{{getTime(list.createdAt)}}</el-row>
           </el-col>
+        </el-row>
+        <el-row v-if="lists.length === 0" class="findNothing">
+          <img src="../../assets/nothing.png" alt="nothing">
+          <el-row class="p">这里还没有内容哦~</el-row>
         </el-row>
       </el-row>
     </el-row>

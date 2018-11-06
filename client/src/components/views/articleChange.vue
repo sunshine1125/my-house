@@ -104,7 +104,8 @@
           content : [
             {required: true, message: '请输入内容', trigger: 'blur'}
           ]
-        }
+        },
+        followers: []
       }
     },
     mounted   : function () {
@@ -120,6 +121,7 @@
             url: this.articleData.cover
           })
           this.$router.push('/admin/articleManager/add');
+          this.getCurrentUserFollower();
       } else {
         this.articleData.content = null;
         this.edit = false;
@@ -155,6 +157,9 @@
               this.$http.post(`/api/user/${this.userId}/post/create`, this.articleData).then(res => {
                 if (res.data.success) {
                   this.$router.push('/admin/articleManager');
+                  this.followers.map(f => {
+                    this.$http.post(`/api/send/${this.userId}/rec/${f.user_id}/message/${res.data.messageId}/post`);
+                  })
                 }
               })
             } else {
@@ -192,6 +197,13 @@
       },
       handleExceed(files, fileList) {
         this.$message.warning('只能同时上传一张图片');
+      },
+      getCurrentUserFollower() {
+        if (this.userId) {
+          this.$http.get(`/api/user/${this.userId}/follow_me`).then(res => {
+            this.followers = res.data.data;
+          })
+        }
       }
     },
     components: {

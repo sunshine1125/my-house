@@ -29,9 +29,10 @@ router.get('/user/:user_id/message/:type', async(req, res) => {
             rec_id: req.params.user_id,
             type  : req.params.type
         },
-        include: ['send', 'comment', 'c_like', 'post', 'like', 'follow']
+        include: ['send', 'comment', 'c_like', 'post', 'like', 'follow', 'p_post']
     });
     for (let m of msg) {
+        console.log(m);
         delete m.send.dataValues.password;
         if (req.params.type === 'comment' || req.params.type === 'like') {
             let title = '';
@@ -42,6 +43,11 @@ router.get('/user/:user_id/message/:type', async(req, res) => {
             }
             m.dataValues.type_title = title.dataValues.title || title.dataValues.content;
             if (m.c_like) m.dataValues.post_id = title.dataValues.PostId;
+        } else if (req.params.type === 'post') {
+            if (m.p_post) {
+                title  = await getTypeTitle(m.p_post.PostId);
+                m.dataValues.type_title = title.dataValues.title;
+            }
         }
     }
     res.status('200').json({success: true, data: msg});

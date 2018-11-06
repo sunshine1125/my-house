@@ -26,6 +26,17 @@ router.get('/user/:user_id/followUser', (req, res) => {
     });
 });
 
+// 获取当前用户的所有跟随者
+router.get('/user/:user_id/follow_me', (req, res) => {
+    models.User_Follow.findAll({
+        where: {
+            follow_id   : req.params.user_id
+        }
+    }).then(function (data) {
+        res.status('200').json({success: true, msg: '操作成功', data: data});
+    });
+});
+
 router.delete('/user/:user_id/followUser/:follow_id', (req, res) => {
     models.User_Follow.destroy({
         where: {

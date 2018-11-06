@@ -61,6 +61,14 @@ module.exports = (sequelize, DataTypes) => {
             }
         });
         models.Message.belongsTo(models.P_like, {
+            as        : 'p_post',
+            onDelete  : 'CASCADE',
+            foreignKey: {
+                allowNull: true,
+                name     : 'p_post_id'
+            }
+        });
+        models.Message.belongsTo(models.P_like, {
             as        : 'like',
             onDelete  : 'CASCADE',
             foreignKey: {

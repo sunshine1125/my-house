@@ -25,6 +25,11 @@
               <span slot="title">关注</span>
               <el-badge class="marked" :value="typeObj['follow']"></el-badge>
             </el-menu-item>
+            <el-menu-item class="item-nav" index="/news/other" @click="getCurTypeMsg('post')">
+              <i class="el-icon-menu"></i>
+              <span slot="title">其他</span>
+              <el-badge class="marked" :value="typeObj['post']"></el-badge>
+            </el-menu-item>
           </el-menu>
         </el-col>
         <el-col :offset="2" :span="16" class="main">
@@ -47,7 +52,8 @@
           'comment': null,
           'write'  : null,
           'like'   : null,
-          'follow' : null
+          'follow' : null,
+          'post'   : null
         },
         lists      : [],
         initTab    : localStorage.getItem('currentNewsType')
@@ -198,6 +204,19 @@
                   }
                 }
               }
+            }
+          }
+          .findNothing {
+            text-align center
+            margin-top 100px
+            img {
+              width 180px
+            }
+            .p {
+              margin-top 20px
+              font-size 14px
+              font-weight 700
+              text-align center
             }
           }
         }

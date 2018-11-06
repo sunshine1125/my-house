@@ -1,8 +1,8 @@
 <template>
-  <el-row class="follow">
+  <el-row class="other">
     <el-row class="trigger-menu">
       <el-row class="item active">
-        <a>全部关注</a>
+        <a>关注者消息</a>
       </el-row>
     </el-row>
     <el-row class="list-container">
@@ -16,8 +16,12 @@
             </el-col>
             <el-col :span="22" class="info">
               <el-row>
+                <span class="comment-slogan">你关注的</span>
                 <a :href="`/u/${list.send.id}`" class="user">{{list.send.username}}</a>
-                <span class="comment-slogan">关注了你</span>
+                <span v-if="!list.p_post && list.post" class="comment-slogan">发布了文章</span>
+                <span v-else class="comment-slogan">喜欢了文章</span>
+                <a v-if="!list.p_post && list.post" :href="`/detail/${list.post.id}`">《{{list.post.title}}》</a>
+                <a v-else :href="`/detail/${list.p_post.PostId}`">《{{list.type_title}}》</a>
               </el-row>
               <el-row class="time">{{getTime(list.createdAt)}}</el-row>
             </el-col>
@@ -35,7 +39,7 @@
 <script>
 
   export default {
-    name      : 'n_comment',
+    name      : 'n_other',
     props     : ['lists'],
     data() {
       return {

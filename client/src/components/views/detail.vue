@@ -71,7 +71,8 @@
         post_like_num: 0,
         followActive : true,
         authId       : null,
-        comment_num  : 0
+        comment_num  : 0,
+        followers    : []
       }
     },
     mounted   : function () {
@@ -79,6 +80,7 @@
       window.addEventListener('scroll', this.handleScroll);
       this.getUserLikePosts();
       this.getUserFollow();
+      this.getCurrentUserFollower();
     },
     methods   : {
       displayFollowBtn(authId) {
@@ -151,6 +153,9 @@
           if (this.likePost) {
             this.$http.post(`/api/user/${this.currentUser.id}/post/${this.postId}/like`).then(res => {
               this.$http.post(`/api/send/${this.currentUser.id}/rec/${this.authId}/message/${res.data.messageId}/like`);
+              this.followers.map(f => {
+                this.$http.post(`/api/send/${this.currentUser.id}/rec/${f.user_id}/message/${res.data.messageId}/post/p`);
+              })
             });
           } else {
             this.$http.delete(`/api/user/${this.currentUser.id}/post/${this.postId}/like`);
@@ -193,6 +198,14 @@
         this.$http.delete(`/api/user/${this.currentUser.id}/followUser/${authId}`).then(res => {
           this.followActive = true;
         });
+      },
+      // 获取当前用户的跟随者
+      getCurrentUserFollower() {
+        if (this.currentUser) {
+          this.$http.get(`/api/user/${this.currentUser.id}/follow_me`).then(res => {
+            this.followers = res.data.data;
+          })
+        }
       }
     },
     components: {

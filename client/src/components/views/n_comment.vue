@@ -2,12 +2,12 @@
   <el-row class="comment">
     <el-row class="trigger-menu">
       <el-row class="item active">
-        <a>评论列表</a>
+        <a>收到的评论</a>
       </el-row>
     </el-row>
     <el-row class="list-container">
       <el-row class="note-list">
-        <el-row v-for="list in lists" class="list">
+        <el-row v-if="lists.length > 0" v-for="list in lists" class="list">
           <el-row>
             <el-col :span="2">
               <a :href="`/u/${list.send.id}`" class="avatar">
@@ -18,12 +18,16 @@
               <el-row>
                 <a :href="`/u/${list.send.id}`" class="user">{{list.send.username}}</a>
                 <span class="comment-slogan">评论了你的文章</span>
-                <a :href="`/detail/${list.comment.PostId}`">《{{list.type_title}}》</a>
+                <a v-if="list" :href="`/detail/${list.comment.PostId}`">《{{list.type_title}}》</a>
               </el-row>
               <el-row class="time">{{getTime(list.createdAt)}}</el-row>
             </el-col>
           </el-row>
           <el-row class="news_content">{{list.comment.content}}</el-row>
+        </el-row>
+        <el-row v-if="lists.length === 0" class="findNothing">
+          <img src="../../assets/nothing.png" alt="nothing">
+          <el-row class="p">这里还没有内容哦~</el-row>
         </el-row>
       </el-row>
     </el-row>
@@ -34,7 +38,7 @@
 
   export default {
     name      : 'n_comment',
-    props     : ['lists'],
+    props     : ['lists', 'length'],
     data() {
       return {
 
