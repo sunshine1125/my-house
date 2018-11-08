@@ -21,7 +21,7 @@
                   <a :href="`/u/${f.follow_id}`" class="name">{{f.follow.username}}</a>
                 </el-col>
                 <el-col class="btn-hollow" :span="8">
-                  <el-button type="success" round plain>发私信</el-button>
+                  <el-button type="success" round plain @click="sendMsg(f.follow_id)">发私信</el-button>
                   <el-button type="success" round plain @click="goProfile(f.follow_id)">个人主页 > </el-button>
                 </el-col>
               </el-row>
@@ -84,6 +84,12 @@
       },
       goProfile(id) {
         this.$router.push(`/u/${id}`);
+        localStorage.setItem('currentTab', 'profile');
+      },
+      sendMsg(id) {
+        this.$router.push(`/news/write/${id}`);
+        localStorage.setItem('currentTab', 'news');
+        localStorage.setItem('currentNewsType', 'write');
       }
     },
     components: {

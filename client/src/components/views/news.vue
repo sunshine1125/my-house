@@ -12,7 +12,7 @@
             </el-menu-item>
             <el-menu-item class="item-nav" index="/news/write" @click="getCurTypeMsg('write')">
               <i class="el-icon-menu"></i>
-              <span slot="title">简信</span>
+              <span slot="title">私信</span>
               <el-badge class="marked" :value="typeObj['write']"></el-badge>
             </el-menu-item>
             <el-menu-item class="item-nav" index="/news/like" @click="getCurTypeMsg('like')">
@@ -81,7 +81,6 @@
         this.$http.get(`/api/user/${this.currentUser.id}/message/${type}`).then(msg => {
           this.lists = msg.data.data;
           localStorage.setItem('currentNewsType', type);
-          console.log(this.lists);
           this.$http.put(`/api/user/${this.currentUser.id}/${type}`).then(() => {
             this.typeObj[type] = null;
           })

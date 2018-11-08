@@ -1,6 +1,8 @@
 const models = require('../models');
 const express = require('express');
 const router = express.Router();
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 // 获取同一个接收者的全部消息
 router.get('/user/:user_id/msg', (req, res) => {
@@ -24,15 +26,26 @@ const getCommentTitle = async(id) => {
 
 // 获取单个类型的消息
 router.get('/user/:user_id/message/:type', async(req, res) => {
-    let msg = await models.Message.findAll({
-        where  : {
-            rec_id: req.params.user_id,
-            type  : req.params.type
-        },
-        include: ['send', 'comment', 'c_like', 'post', 'like', 'follow', 'p_post']
-    });
+    let query = {};
+    if (req.params.type === 'write') {
+        query = {
+            where  : {
+                [Op.or]: [{rec_id: req.params.user_id}, {send_id: req.params.user_id}],
+                type  : req.params.type
+            },
+            include: ['send', 'write']
+        }
+    } else {
+        query = {
+            where  : {
+                rec_id: req.params.user_id,
+                type  : req.params.type
+            },
+            include: ['send', 'comment', 'c_like', 'post', 'like', 'follow', 'p_post']
+        }
+    }
+    let msg = await models.Message.findAll(query);
     for (let m of msg) {
-        console.log(m);
         delete m.send.dataValues.password;
         if (req.params.type === 'comment' || req.params.type === 'like') {
             let title = '';

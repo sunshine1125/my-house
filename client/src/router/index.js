@@ -59,7 +59,7 @@ export default new Router({
           component: resolve => require.ensure([], () => resolve(require('@/components/views/n_comment')), 'news')
         },
         {
-          path     : '/news/write',
+          path     : '/news/write/:id?',
           component: resolve => require.ensure([], () => resolve(require('@/components/views/n_write')), 'news')
         },
         {

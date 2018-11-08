@@ -141,6 +141,9 @@
         }
       }
       .el-menu-demo {
+        .image {
+          border-radius 50%
+        }
       }
     }
   }

@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     User_Follow.associate = function (models) {
         models.User_Follow.belongsTo(models.User, {
             as        : 'follow',
-            onDelete  : "SET NULL",
+            onDelete  : "CASCADE",
             foreignKey: 'follow_id'
         });
     };

@@ -50,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
         models.User.hasMany(models.User_Follow, {
             foreignKey: 'follow_id'
         });
+        models.User.hasMany(models.P_message, {
+            as        : 'send',
+            foreignKey: 'send_id'
+        });
     };
 
     return User;

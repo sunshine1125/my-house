@@ -84,6 +84,14 @@ module.exports = (sequelize, DataTypes) => {
                 name     : 'follow_id'
             }
         });
+        models.Message.belongsTo(models.P_message, {
+            as        : 'write',
+            onDelete  : 'CASCADE',
+            foreignKey: {
+                allowNull: true,
+                name     : 'write_id'
+            }
+        });
     };
 
     return Message;
