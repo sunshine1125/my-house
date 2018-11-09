@@ -310,20 +310,21 @@
           li {
             margin-bottom 10px
             line-height 20px
-            text-align center
+            text-align left
             a {
               font-size 14px
               color #333
               line-height 30px
               display inline-block
+              padding-left 10px
               span {
                 vertical-align middle
               }
             }
             &.active {
-              border-bottom 2px solid #ea6f5a
+              border-bottom 2px solid #409EFF
               a {
-                color #ea6f5a
+                color #409EFF
               }
             }
           }
