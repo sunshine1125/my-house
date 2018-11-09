@@ -6,34 +6,34 @@
         <el-col :span="6" class="aside">
           <el-menu :default-active="$route.path" class="el-menu-vertical-demo" :router="true">
             <el-menu-item class="item-nav" index="/news/comments" @click="getCurTypeMsg('comment')">
-              <i class="el-icon-menu"></i>
+              <i class="iconfont icon-comment"></i>
               <span slot="title">评论</span>
               <el-badge class="marked" :value="typeObj['comment']"></el-badge>
             </el-menu-item>
             <el-menu-item class="item-nav" index="/news/write" @click="getCurTypeMsg('write')">
-              <i class="el-icon-menu"></i>
+              <i class="iconfont icon-sixin"></i>
               <span slot="title">私信</span>
               <el-badge class="marked" :value="typeObj['write']"></el-badge>
             </el-menu-item>
             <el-menu-item class="item-nav" index="/news/like" @click="getCurTypeMsg('like')">
-              <i class="el-icon-menu"></i>
+              <i class="iconfont icon-xihuan"></i>
               <span slot="title">喜欢和赞</span>
               <el-badge class="marked" :value="typeObj['like']"></el-badge>
             </el-menu-item>
             <el-menu-item class="item-nav" index="/news/follow" @click="getCurTypeMsg('follow')">
-              <i class="el-icon-menu"></i>
+              <i class="iconfont icon-concern"></i>
               <span slot="title">关注</span>
               <el-badge class="marked" :value="typeObj['follow']"></el-badge>
             </el-menu-item>
             <el-menu-item class="item-nav" index="/news/other" @click="getCurTypeMsg('post')">
-              <i class="el-icon-menu"></i>
+              <i class="iconfont icon-shouji66"></i>
               <span slot="title">其他</span>
               <el-badge class="marked" :value="typeObj['post']"></el-badge>
             </el-menu-item>
           </el-menu>
         </el-col>
         <el-col :offset="2" :span="16" class="main">
-          <router-view :lists="lists"></router-view>
+          <router-view :lists="lists" @write="reWrite(data)"></router-view>
         </el-col>
       </el-row>
     </el-main>
@@ -60,10 +60,6 @@
       }
     },
     mounted   : function () {
-      if (!this.initTab) {
-        localStorage.setItem('currentNewsType', 'comment');
-        this.initTab = 'comment'
-      }
       this.getMessage();
       this.getCurTypeMsg(this.initTab);
     },
@@ -86,6 +82,11 @@
           })
         })
       },
+      reWrite(data) {
+        if (data) {
+          this.getCurTypeMsg(data);
+        }
+      }
     },
     components: {
       topNav
@@ -121,6 +122,16 @@
         .aside {
           .item-nav {
             position relative
+            .iconfont {
+              font-size 24px
+              margin-right 15px
+              vertical-align middle
+              font-weight 500!important
+            }
+            span {
+              font-size 15px
+              vertical-align middle
+            }
             .marked {
               float right
             }

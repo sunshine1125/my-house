@@ -56,6 +56,7 @@
                 });
                 this.$http.get(`/api/user/${this.registerForm.email}`).then(response => {
                   localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+                  localStorage.setItem('currentTab', 'discover');
                   this.$router.push('/');
                 });
               } else {

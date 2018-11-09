@@ -57,6 +57,7 @@
                   type   : 'success'
                 });
                 localStorage.setItem('currentUser', JSON.stringify(res.data.user));
+                localStorage.setItem('currentTab', 'discover');
                 this.$router.push('/');
               } else {
                 this.$message.error(res.data.msg);

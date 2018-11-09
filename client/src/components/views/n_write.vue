@@ -8,7 +8,7 @@
       </el-row>
       <el-row class="list-container">
         <el-row class="note-list">
-          <el-row v-if="lists.length > 0" v-for="list in lists" class="list" @click="toDetail()">
+          <el-row v-if="lists.length > 0" v-for="list in lists" class="list" @click.native="goDetail(list.send_id, list.rec_id)">
             <el-col :span="2">
               <a :href="`/u/${list.send.id}`" class="avatar">
                 <img :src="list.send.avatar" alt="头像">
@@ -16,9 +16,12 @@
             </el-col>
             <el-col :span="22" class="info">
               <el-row>
-                <a :href="`/u/${list.send.id}`" class="user">{{list.send.username}}</a>
-                <a>{{list.write.content}}</a>
+                <el-col :span="10">
+                  <a :href="`/u/${list.send.id}`" class="user">{{list.send.username}}</a>
+                </el-col>
+                <el-col :offset="11" :span="3" class="time">{{getTime(list.createdAt)}}</el-col>
               </el-row>
+              <el-row class="msg-content">{{list.write.content}}</el-row>
             </el-col>
           </el-row>
           <el-row v-if="lists.length === 0" class="findNothing">
@@ -109,17 +112,37 @@
         })
       },
       getTime(time) {
-        return this.$moment(time).format('YYYY.MM.DD HH:mm:ss')
+        return this.$moment(time).format('MM.DD HH:mm');
       },
       sortNumberByTime(a, b) {
         return a.floor - b.floor;
       },
-      toDetail() {
+      goDetail(sendId, recId) {
+        let id = null;
+        if (sendId === this.currentUser.id) {
+          id = recId;
+        } else {
+          id = sendId;
+        }
         this.showLists = false;
+        this.$router.push(`/news/write/${id}`);
       },
       goLists() {
-        this.$router.push('/write');
+        this.$emit('goWrite', 'write');
+        this.$router.push('/news/write');
         this.showLists = true;
+      }
+    },
+    watch: {
+      "$route" (to, from) {
+        if (to.path.length > 11) {
+          this.showLists = false;
+          this.rec_id = to.path.substr(to.path.lastIndexOf('/') + 1);
+          this.getRecName();
+          this.getDetailPersonMsg();
+        } else {
+          this.goLists();
+        }
       }
     },
     components: {}
@@ -128,8 +151,23 @@
 <style lang="stylus">
   .write {
     .lists {
-      .user {
-        font-size 15px
+      .note-list {
+        .list {
+          cursor pointer
+          .user {
+            font-size 15px
+          }
+          .time {
+            margin-top 8px !important
+          }
+          .msg-content {
+            font-size 12px
+            color #999
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+          }
+        }
       }
     }
     .chat {

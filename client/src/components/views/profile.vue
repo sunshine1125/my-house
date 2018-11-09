@@ -35,9 +35,11 @@
                 </div>
                 <div class="meta">
                   <span>
+                    <i class="iconfont icon-comment"></i>
                     {{p.comment_num}}
                   </span>
                   <span>
+                    <i class="iconfont icon-xihuan"></i>
                     {{p.like_num}}
                   </span>
                   <span class="time">{{getTime(p.create_at)}}</span>

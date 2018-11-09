@@ -70,12 +70,21 @@
           localStorage.setItem('currentTab', key);
         }
         if (key === 'follow') {
-          this.$router.push('/follow');
-          localStorage.setItem('currentTab', key);
+          if (this.currentUser) {
+            this.$router.push('/follow');
+            localStorage.setItem('currentTab', key);
+          } else {
+            this.$router.push('/login');
+          }
         }
         if (key === 'news') {
-          this.$router.push('/news');
-          localStorage.setItem('currentTab', key);
+          if (this.currentUser) {
+            this.$router.push('/news');
+            localStorage.setItem('currentTab', key);
+            localStorage.setItem('currentNewsType', 'comment')
+          } else {
+            this.$router.push('/login');
+          }
         }
         if (key === 'write') {
           this.$router.push('/admin/articleManager/add');

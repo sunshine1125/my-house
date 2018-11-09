@@ -16,6 +16,7 @@ import 'mavon-editor/dist/css/index.css';
 import '../static/css/github-markdown.css';
 import preview from 'vue-photo-preview'
 import 'vue-photo-preview/dist/skin.css'
+import './iconfont/iconfont.css'
 
 import App from './App'
 

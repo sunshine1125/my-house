@@ -10,7 +10,7 @@
             </el-row>
           </el-row>
           <el-row class="list-container">
-            <el-row class="note-list">
+            <el-row v-if="followers.length > 0" class="note-list">
               <el-row v-for="f in followers" class="list">
                 <el-col :span="2">
                   <a :href="`/u/${f.follow_id}`" class="avatar">
@@ -25,6 +25,10 @@
                   <el-button type="success" round plain @click="goProfile(f.follow_id)">个人主页 > </el-button>
                 </el-col>
               </el-row>
+            </el-row>
+            <el-row v-if="followers.length === 0" class="findNothing">
+              <img src="../../assets/nothing.png" alt="nothing">
+              <el-row class="p">这里还没有内容哦~</el-row>
             </el-row>
           </el-row>
         </el-col>
@@ -180,6 +184,19 @@
                   vertical-align middle
                 }
               }
+            }
+          }
+          .findNothing {
+            text-align center
+            margin-top 100px
+            img {
+              width 180px
+            }
+            .p {
+              margin-top 20px
+              font-size 14px
+              font-weight 700
+              text-align center
             }
           }
         }
